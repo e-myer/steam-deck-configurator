@@ -7,6 +7,6 @@ sudo pacman -Syu
 flatpak update -y
 
 #install apps
-flatpak install org.cubocore.CoreKeyboard # CoreKeyboard
-flatpak install flathub com.github.debauchee.barrier # Barrier
-flatpak install flathub com.heroicgameslauncher.hgl #Heroic Launcher
+flatpak install org.cubocore.CoreKeyboard -y # CoreKeyboard
+flatpak install flathub com.github.debauchee.barrier -y # Barrier
+flatpak install flathub com.heroicgameslauncher.hgl -y #Heroic Launcher
