@@ -48,3 +48,13 @@ else
 echo "cryoutilities is already installed"
 fi
 
+#Install Latest verison of protonGE
+protonup -d "~/.local/share/Steam/compatibilitytools.d/" #set installation directory of protonge to steam
+protonup -y # install ProtonGE to steam
+
+if [[ "$(flatpak list | grep 'com.heroicgameslauncher.hgl')" == *com.heroicgameslauncher.hgl* ]]; #if Heroic flatpak is installed, install proton for it
+then
+protonup -d "~/home/amirs-kde/.var/app/com.heroicgameslauncher.hgl/config/heroic/tools/proton" # set installation directory of protonge to Heroic
+protonup -y #install ProtonGE to Heroic
+fi
+
