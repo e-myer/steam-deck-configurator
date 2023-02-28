@@ -48,3 +48,5 @@ else
 echo "cryoutilities is already installed"
 fi
 
+#run cryoutilities with reccomended settings
+$HOME/.cryo_utilities/cryo_utilities reccommended
