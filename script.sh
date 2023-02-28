@@ -11,9 +11,12 @@ flatpak update -y
 flatpak install org.cubocore.CoreKeyboard -y # CoreKeyboard
 flatpak install flathub com.github.debauchee.barrier -y # Barrier
 flatpak install flathub com.heroicgameslauncher.hgl -y #Heroic Launcher
-flatpak install flathub net.davidotek.pupgui2 -y #Proton GE
+flatpak install flathub net.davidotek.pupgui2 -y #Proton-Up Qt
 flatpak install flathub io.github.philipk.boilr -y #BoilR
 flatpak install flathub com.github.tchx84.Flatseal -y #Flatseal
+
+#pip
+pip3 install protonup
 
 #scripts
 
@@ -49,4 +52,4 @@ echo "cryoutilities is already installed"
 fi
 
 #run cryoutilities with reccomended settings
-$HOME/.cryo_utilities/cryo_utilities recommended
+#$HOME/.cryo_utilities/cryo_utilities recommended
