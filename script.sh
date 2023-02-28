@@ -48,3 +48,5 @@ else
 echo "cryoutilities is already installed"
 fi
 
+#Install Emudeck
+sh -c 'curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh | bash'
