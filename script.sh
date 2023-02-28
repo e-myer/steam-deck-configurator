@@ -42,6 +42,7 @@ fi
 
 #install cryoutilities if not installed
 if [ ! -d $HOME/.cryo_utilities ]
+then
 curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh | bash -s --
 else
 echo "cryoutilities is installed"
