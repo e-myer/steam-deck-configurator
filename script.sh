@@ -16,6 +16,7 @@ flatpak install flathub io.github.philipk.boilr -y #BoilR
 flatpak install flathub com.github.tchx84.Flatseal -y #Flatseal
 
 #scripts
+
 #install deckyloader if latest version isn't installed
 RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
 VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
@@ -39,6 +40,10 @@ else
   echo $VERSION > ~/deckyloader_installed_version
 fi
 
-#install or update cryoutilities
+#install cryoutilities if not installed
+if [ ! -d $HOME/.cryo_utilities ]
 curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh | bash -s --
+else
+echo "cryoutilities is installed"
+fi
 
