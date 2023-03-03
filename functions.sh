@@ -58,3 +58,38 @@ install_refind() {
     chmod +x $HOME/deck_setup/build/SteamDeck_rEFInd/install-GUI.sh
     $HOME/deck_setup/build/SteamDeck_rEFInd/install-GUI.sh
 }
+
+fix_barrier() {
+echo "Are you using auto config for the ip address? (y/n)"
+read barrier_auto_config
+if [ $barrier_auto_config != y ] || [ $barrier_auto_config != n ]
+then
+echo "error, invalid input"
+elif [ $barrier_auto_config == n ]
+ip_address=$(read -p "input server ip address from the barrier app") #do these with kde dialogs later
+fi
+
+touch $HOME/.config/systemd/user/barrier.service
+cat > $HOME/.config/systemd/user/barrier.service << EOL
+[Unit]
+Description=Barrier
+After=graphical.target
+StartLimitIntervalSec=400
+StartLimitBurst=3
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/flatpak run -p --command="barrierc" com.github.debauchee.barrier --no-restart --no-tray --no-daemon --debug INFO --name steamdeck${ip_address}
+Restart=always
+RestartSec=20
+
+[Install]
+WantedBy=default.target
+EOL
+
+systemctl --user enable barrier
+systemctl --user start barrier
+barrier_status=$(systemctl --user status barrier)
+
+echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, chck if you are connected on the same wifi network, and set windows resolution to 100%"
+}

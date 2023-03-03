@@ -21,3 +21,4 @@ install_deckyloader
 install_cryoutilities
 install_emudeck
 install_refind
+#fix_barrier
