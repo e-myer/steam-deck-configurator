@@ -1,5 +1,7 @@
 #! /usr/bin/bash
 
+source ./functions.sh
+
 #update all apps
 sudo pacman -Syu
 
@@ -14,5 +16,3 @@ flatpak install flathub com.heroicgameslauncher.hgl -y #Heroic Launcher
 flatpak install flathub net.davidotek.pupgui2 -y #Proton GE
 flatpak install flathub io.github.philipk.boilr -y #BoilR
 flatpak install flathub com.github.tchx84.Flatseal -y #Flatseal
-
-source ./functions.sh
