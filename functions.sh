@@ -1,3 +1,5 @@
+#! /usr/bin/bash
+
 install_deckyloader() {
     #install deckyloader if latest version isn't installed
     RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
