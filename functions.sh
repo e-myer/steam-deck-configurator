@@ -39,3 +39,7 @@ install_emudeck() {
     echo "emudeck is already installed"
     fi
 }
+
+test_function() {
+    echo this is a test function
+}
