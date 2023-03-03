@@ -20,3 +20,4 @@ flatpak install flathub com.github.tchx84.Flatseal -y #Flatseal
 install_deckyloader
 install_cryoutilities
 install_emudeck
+install_refind
