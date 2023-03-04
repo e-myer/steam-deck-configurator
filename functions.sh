@@ -93,3 +93,11 @@ barrier_status=$(systemctl --user status barrier)
 
 echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, chck if you are connected on the same wifi network, and set windows resolution to 100%"
 }
+
+#apps
+install_corekeyboard="flatpak install org.cubocore.CoreKeyboard -y" # CoreKeyboard
+install_barrier="flatpak install flathub com.github.debauchee.barrier -y" # Barrier
+install_heroic_games="flatpak install flathub com.heroicgameslauncher.hgl -y" #Heroic Launcher
+install_ProtonUp-QT="flatpak install flathub net.davidotek.pupgui2 -y" #Proton GE
+install_BoilR="flatpak install flathub io.github.philipk.boilr -y" #BoilR
+install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal -y" #Flatseal
