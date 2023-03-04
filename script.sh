@@ -9,12 +9,12 @@ sudo pacman -Syu
 flatpak update -y
 
 #install apps
-install_corekeyboard
-install_barrier
-install_heroic_games
-install_ProtonUp
-install_BoilR
-install_Flatseal
+install_corekeyboard -y
+install_barrier -y
+install_heroic_games -y
+install_ProtonUp -y
+install_BoilR -y
+install_Flatseal -y
 
 install_deckyloader
 install_cryoutilities
