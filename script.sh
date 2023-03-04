@@ -40,13 +40,12 @@ sudo pacman -Syu
 flatpak update -y
 
 #install apps
-#flatpaks
-flatpak install org.cubocore.CoreKeyboard -y # CoreKeyboard
-flatpak install flathub com.github.debauchee.barrier -y # Barrier
-flatpak install flathub com.heroicgameslauncher.hgl -y #Heroic Launcher
-flatpak install flathub net.davidotek.pupgui2 -y #Proton GE
-flatpak install flathub io.github.philipk.boilr -y #BoilR
-flatpak install flathub com.github.tchx84.Flatseal -y #Flatseal
+install_corekeyboard -y
+install_barrier -y
+install_heroic_games -y
+install_ProtonUp -y
+install_BoilR -y
+install_Flatseal -y
 
 install_deckyloader
 install_cryoutilities
