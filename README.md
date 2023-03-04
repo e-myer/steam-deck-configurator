@@ -8,6 +8,7 @@ This project auto configures
 - Barrier
 - rEFInd Bootloader
 
+
 # General Steam Deck Notes
 
 ## Installing SteamOS
