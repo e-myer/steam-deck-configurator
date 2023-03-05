@@ -99,6 +99,6 @@ echo "Applied fix, turn off SSL on both the server and host, if Barrier still do
 install_corekeyboard="flatpak install org.cubocore.CoreKeyboard" # CoreKeyboard
 install_barrier="flatpak install flathub com.github.debauchee.barrier" # Barrier
 install_heroic_games="flatpak install flathub com.heroicgameslauncher.hgl" #Heroic Launcher
-install_ProtonUp-QT="flatpak install flathub net.davidotek.pupgui2" #Proton GE
+install_ProtonUp_QT="flatpak install flathub net.davidotek.pupgui2" #Proton GE
 install_BoilR="flatpak install flathub io.github.philipk.boilr" #BoilR
 install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal" #Flatseal

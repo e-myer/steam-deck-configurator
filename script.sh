@@ -43,7 +43,7 @@ flatpak update -y
 install_corekeyboard -y
 install_barrier -y
 install_heroic_games -y
-install_ProtonUp -y
+install_ProtonUp_QT -y
 install_BoilR -y
 install_Flatseal -y
 
