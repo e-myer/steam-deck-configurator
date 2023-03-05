@@ -14,13 +14,13 @@ install_deckyloader() {
             then
                 echo "Installing Latest Version"
                 curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh | sh
-                echo "$VERSION" > ~/deckyloader_installed_version
+                echo "$VERSION" > "$HOME/deckyloader_installed_version"
             else
                echo "Latest Version of DeckyLoader is already installed"
             fi
     else
         curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh | sh
-        echo "$VERSION" > ~/deckyloader_installed_version
+        echo "$VERSION" > "$HOME/deckyloader_installed_version"
     fi
 }
 
