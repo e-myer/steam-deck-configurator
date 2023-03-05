@@ -59,6 +59,13 @@ install_refind() {
     "$HOME/deck_setup/build/SteamDeck_rEFInd/install-GUI.sh"
 }
 
+configure_refind() {
+    cp config1/refind.conf $HOME/.SteamDeck_rEFInd/GUI/refind.conf
+    cp config1/background.png $HOME/.SteamDeck_rEFInd/GUI/background.png
+    cp config1/os_icon1 $HOME/home/deck/.SteamDeck_rEFInd/GUI/os_icon1.png
+    $HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh
+}
+
 fix_barrier() {
 echo "Are you using auto config for the ip address? (y/n)"
 read barrier_auto_config
