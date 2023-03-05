@@ -44,18 +44,7 @@ install_emudeck() {
 
 install_refind() {
     #Install and set up rEFInd botloader
-    mkdir -p "$HOME/.deck_setup/build"
-    cd "$HOME/.deck_setup/build" || exit
-
-    #check for a folder called "SteamDeck_rEFInd"
-    if [ -d "$HOME/.deck_setup/build/SteamDeck_rEFInd" ] #if the folder SteamDeck_rEFInd exists
-    then
-        git -C "$HOME/.deck_setup/build/SteamDeck_rEFInd" pull #update refind git, the rEFInd readme reccomends doing git status  instead, but I think that that is wrong
-    else
-        git -C "$HOME/.deck_setup/build/SteamDeck_rEFInd" clone https://github.com/jlobue10/SteamDeck_rEFInd/
-    fi
-    
-    chmod +x "$HOME/deck_setup/build/SteamDeck_rEFInd/install-GUI.sh"
+    chmod +x "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
     "$HOME/.deck_setup/build/SteamDeck_rEFInd/install-GUI.sh"
 }
 

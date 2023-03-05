@@ -3,25 +3,27 @@
 source ./functions.sh
 
 echo "
-The following changes will be made with this script (hashtag means it is disabled)
+The following changes will be made with this script (hashtag means it is a comment or is disabled)
 
-Update all apps
-Update all flatpaks
+#update all apps
+sudo pacman -Syu
 
-Install the following flatpaks:
-CoreKeyboard
-Barrier
-Heroic Launcher
-ProtonGE
-BoilR
-Flatseal
+#update flatpaks
+flatpak update -y
 
-Install & set up the following apps:
-deckyloader
-cryoutilities
-emudeck
-refind
-#barrier patch
+#install apps
+install_corekeyboard -y
+install_barrier -y
+install_heroic_games -y
+install_ProtonUp_QT -y
+install_BoilR -y
+install_Flatseal -y
+
+install_deckyloader
+install_cryoutilities
+install_emudeck
+install_refind
+#fix_barrier
 
 continue? (y/n)"
 
