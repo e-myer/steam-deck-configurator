@@ -2,8 +2,8 @@
 
 source ./functions.sh
 
-echo "These are the commands that will be run, continue?"
 cat ./script.sh
+echo -e "\n\n These are the commands that will be run, continue (y/n)?"
 read continue
 
 if [[ "$continue" == "n" || ! "$continue" == "y" ]];
@@ -11,7 +11,7 @@ then
     echo "exiting..."
     exit 0
 fi
-
+exit 0
 #update all apps
 sudo pacman -Syu
 
