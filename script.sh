@@ -2,9 +2,8 @@
 
 source ./functions.sh
 
-echo "These are the commands that will be run"
+echo "These are the commands that will be run, continue?"
 cat ./script.sh
-echo "continue? (y/n)"
 read continue
 
 if [[ "$continue" == "n" || ! "$continue" == "y" ]];
