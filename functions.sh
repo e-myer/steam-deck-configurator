@@ -86,6 +86,7 @@ echo "Applied fix, turn off SSL on both the server and host, if Barrier still do
 }
 
 #apps
+install_firefox="flatpak install flathub org.mozilla.firefox" # Firefox
 install_corekeyboard="flatpak install org.cubocore.CoreKeyboard" # CoreKeyboard
 install_barrier="flatpak install flathub com.github.debauchee.barrier" # Barrier
 install_heroic_games="flatpak install flathub com.heroicgameslauncher.hgl" #Heroic Launcher

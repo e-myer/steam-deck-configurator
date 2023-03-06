@@ -41,6 +41,7 @@ flatpak update -y
 
 #install apps
 #variables
+$install_firefox
 $install_corekeyboard -y
 $install_barrier -y
 $install_heroic_games -y
