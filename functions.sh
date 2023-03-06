@@ -45,7 +45,7 @@ install_emudeck() {
 install_refind() {
     #Install and set up rEFInd botloader
     chmod +x "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
-    "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh $pwd/SteamDeck_rEFInd"
+    "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh $PWD/SteamDeck_rEFInd"
 }
 
 fix_barrier() {
