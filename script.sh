@@ -40,13 +40,15 @@ sudo pacman -Syu
 flatpak update -y
 
 #install apps
-install_corekeyboard -y
-install_barrier -y
-install_heroic_games -y
-install_ProtonUp_QT -y
-install_BoilR -y
-install_Flatseal -y
+#variables
+$install_corekeyboard -y
+$install_barrier -y
+$install_heroic_games -y
+$install_ProtonUp_QT -y
+$install_BoilR -y
+$install_Flatseal -y
 
+#functions
 install_deckyloader
 install_cryoutilities
 install_emudeck
