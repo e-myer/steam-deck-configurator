@@ -1,7 +1,5 @@
 #! /usr/bin/bash
 
-source ./functions.sh
-
 cat ./script.sh
 echo -e "\n\n These are the commands that will be run, continue (y/n)?"
 read continue
@@ -11,7 +9,9 @@ then
     echo "exiting..."
     exit 0
 fi
-exit 0
+
+source ./functions.sh
+
 #update all apps
 sudo pacman -Syu
 
