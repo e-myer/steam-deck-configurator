@@ -2,29 +2,9 @@
 
 source ./functions.sh
 
-echo "
-The following changes will be made with this script (hashtag means it is disabled)
-
-Update all apps
-Update all flatpaks
-
-Install the following flatpaks:
-CoreKeyboard
-Barrier
-Heroic Launcher
-ProtonGE
-BoilR
-Flatseal
-
-Install & set up the following apps:
-deckyloader
-cryoutilities
-emudeck
-refind
-#barrier patch
-
-continue? (y/n)"
-
+echo "These are the commands that will be run"
+cat ./script.sh
+echo "continue? (y/n)"
 read continue
 
 if [[ "$continue" == "n" || ! "$continue" == "y" ]];
