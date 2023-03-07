@@ -4,9 +4,20 @@ This is a project to assist in installing and configuring various programs in th
 
 This project auto configures
 
+- DeckyLoader
 - CryoUtilities
-- Barrier
+- Emudeck
 - rEFInd Bootloader
+- Barrier
+
+And installs
+
+- Firefox
+- CoreKeyboard
+- Heroic Games
+- ProtonUp-QT
+- BoilR
+- Flatseal
 
 
 # General Steam Deck Notes
