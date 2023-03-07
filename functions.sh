@@ -45,8 +45,7 @@ install_emudeck() {
 install_refind() {
     #Install and set up rEFInd botloader
     chmod +x "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
-    cd "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd" || exit
-    "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
+    "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd"
 }
 
 fix_barrier() {
@@ -86,6 +85,7 @@ echo "Applied fix, turn off SSL on both the server and host, if Barrier still do
 }
 
 #apps
+install_firefox="flatpak install flathub org.mozilla.firefox" # Firefox
 install_corekeyboard="flatpak install org.cubocore.CoreKeyboard" # CoreKeyboard
 install_barrier="flatpak install flathub com.github.debauchee.barrier" # Barrier
 install_heroic_games="flatpak install flathub com.heroicgameslauncher.hgl" #Heroic Launcher
