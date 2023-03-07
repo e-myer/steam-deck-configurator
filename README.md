@@ -19,6 +19,16 @@ And installs
 - BoilR
 - Flatseal
 
+# Installation Instrictions
+```
+git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git
+cd steam-deck-configurator
+chmod +x ./script.sh
+```
+
+# Run instructions
+Go to the repo and run
+`./script.sh`
 
 # General Steam Deck Notes
 
