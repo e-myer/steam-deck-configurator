@@ -85,14 +85,14 @@ echo "Applied fix, turn off SSL on both the server and host, if Barrier still do
 }
 
 install_steam_rom_manager() {
-    mkdir "$HOME/AppImages"
-    if [ -f "$HOME/.deck_setup/AppImages/Steam-ROM-Manager-2.3.40.AppImage" ]
+    mkdir "$HOME/Applications"
+    if [ -f "$HOME/.deck_setup/applications/Steam-ROM-Manager-2.3.40.AppImage" ]
     then
-    cp "$HOME/.deck_setup/AppImages/Steam-ROM-Manager-2.3.40.AppImage" "$HOME/AppImages"
-    chmod u+x "$HOME/AppImages/Steam-ROM-Manager-2.3.40.AppImage"
-    cp "$HOME/.deck_setup/steam-deck-configurator/steam-rom-manager.desktop" "$HOME/.local/share/applications"
+    cp -v "$HOME/.deck_setup/applications/Steam-ROM-Manager-2.3.40.AppImage" "$HOME/Applications"
+    chmod u+x "$HOME/Applications/Steam-ROM-Manager-2.3.40.AppImage"
+    cp -vr "$HOME/.deck_setup/steam-deck-configurator/steam-rom-manager.desktop" "$HOME/.local/share/applications"
     else
-    echo "SteamRomManager AppImage doesn't exist, download and save it to $HOME/.deck_setup/AppImages first"
+    echo "SteamRomManager AppImage doesn't exist, download and save it to $HOME/.deck_setup/applications first"
     fi
 }
 
