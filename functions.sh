@@ -84,6 +84,18 @@ systemctl --user status barrier
 echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, chck if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
+install_steam_rom_manager() {
+    mkdir "$HOME/AppImages"
+    if [ -f "$HOME/.deck_setup/AppImages/Steam-ROM-Manager-2.3.40.AppImage" ]
+    then
+    cp "$HOME/.deck_setup/AppImages/Steam-ROM-Manager-2.3.40.AppImage" "$HOME/AppImages"
+    chmod u+x "$HOME/AppImages/Steam-ROM-Manager-2.3.40.AppImage"
+    cp "$HOME/.deck_setup/steam-deck-configurator/steam-rom-manager.desktop" "$HOME/.local/share/applications"
+    else
+    echo "SteamRomManager AppImage doesn't exist, download and save it to $HOME/.deck_setup/AppImages first"
+    fi
+}
+
 #apps
 install_firefox="flatpak install flathub org.mozilla.firefox" # Firefox
 install_corekeyboard="flatpak install org.cubocore.CoreKeyboard" # CoreKeyboard

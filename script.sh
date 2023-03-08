@@ -53,7 +53,7 @@ $install_corekeyboard -y
 $install_barrier -y
 $install_heroic_games -y
 $install_ProtonUp_QT -y
-$install_BoilR -y
+#$install_BoilR -y # comment this out if install_steam_rom_manager is uncommented, install one or the other
 $install_Flatseal -y
 
 #functions
@@ -61,4 +61,5 @@ install_deckyloader
 install_cryoutilities
 install_emudeck
 install_refind
+install_steam_rom_manager # comment this out if $install_BoilR is uncommented, install one or the other
 #fix_barrier
