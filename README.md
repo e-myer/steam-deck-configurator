@@ -18,6 +18,7 @@ And installs
 - ProtonUp-QT
 - BoilR
 - Flatseal
+- Steam Rom Manager
 
 # Installation Instrictions
 ```
