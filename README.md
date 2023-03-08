@@ -27,8 +27,9 @@ chmod +x ./script.sh
 ```
 
 # Run instructions
-Go to the repo and run
-`./script.sh`
+Go to the repo and edit the script.sh file, with something like `nano ./script.sh`, add a hashtag before the tasks that you don't want to run, and remove the hashtag, if it exists, before the tasks that you do want to run.
+
+then run `./script.sh` in a terminal
 
 # General Steam Deck Notes
 
