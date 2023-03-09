@@ -21,6 +21,8 @@ And installs
 
 # Installation Instrictions
 ```
+mkdir -p "$HOME/.deck_setup"
+cd "$HOME/.deck_setup"
 git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git
 cd steam-deck-configurator
 chmod +x ./script.sh
