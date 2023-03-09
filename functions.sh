@@ -64,6 +64,13 @@ apply_refind_config() {
     fi
 }
 
+install_refind_all() {
+    #Install and set up rEFInd botloader
+    install_refind_GUI
+    install_refind_bootloader
+    apply_refind_config
+}
+
 refind_uninstall_gui() {
     rm -rf ~/SteamDeck_rEFInd
     rm -rf ~/.SteamDeck_rEFInd
