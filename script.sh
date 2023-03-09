@@ -61,4 +61,5 @@ install_deckyloader
 install_cryoutilities
 install_emudeck
 install_refind
+#uninstall_deckyloader
 #fix_barrier
