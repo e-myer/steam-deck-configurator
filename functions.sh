@@ -48,22 +48,22 @@ install_emudeck() {
 }
 
 install_refind_GUI() {
-    chmod +x "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
-    "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd" # install the GUI, run the script with the argument "path for SteamDeck_rEFInd folder is $PWD/SteamDeck_rEFInd"
+    chmod +x "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
+    "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd" # install the GUI, run the script with the argument "path for SteamDeck_rEFInd folder is $PWD/SteamDeck_rEFInd"
 }
 
 install_refind_bootloader() {
-    "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/SteamDeck_rEFInd_install.sh" "$PWD/SteamDeck_rEFInd" #install rEFInd bootloader
+    "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/SteamDeck_rEFInd_install.sh" "$PWD/SteamDeck_rEFInd" #install rEFInd bootloader
 }
 
 apply_refind_config() {
-    cat "$HOME/.deck_setup/build/steam-deck-configurator/rEFInd_config/refind.conf" # display the config file and ask the user to confirm
+    cat "$HOME/.deck_setup/steam-deck-configurator/rEFInd_config/refind.conf" # display the config file and ask the user to confirm
     echo "This config will be applied, confirm? (y/n)"
     read confirm
     if [ "$confirm" == y ]
     then
-    cp "$HOME/.deck_setup/build/steam-deck-configurator/rEFInd_config/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
-    "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install_config_from_GUI.sh"
+    cp "$HOME/.deck_setup/steam-deck-configurator/rEFInd_config/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
+    "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install_config_from_GUI.sh"
     else
     echo "config not applied"
     fi
