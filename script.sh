@@ -72,4 +72,6 @@ install_emudeck
 install_refind_GUI
 install_refind_bootloader
 apply_refind_config
+install_refind
+#uninstall_deckyloader
 #fix_barrier
