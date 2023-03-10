@@ -2,8 +2,8 @@
 
 install_deckyloader() {
     #install deckyloader if latest version isn't installed
-    RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r 'first(.[] | select(.prerelease == "false"))')
-    VERSION=$(jq -r '.tag_name' <<< "${RELEASE}" )
+    RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+    VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
 
     if [ -f "$HOME/.deck_setup/deckyloader_installed_version" ]
     then
@@ -47,10 +47,39 @@ install_emudeck() {
     fi
 }
 
-install_refind() {
-    #Install and set up rEFInd botloader
+install_refind_GUI() {
     chmod +x "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
-    "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd"
+    "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd" # install the GUI, run the script with the argument "path for SteamDeck_rEFInd folder is $PWD/SteamDeck_rEFInd"
+}
+
+install_refind_bootloader() {
+    "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/SteamDeck_rEFInd_install.sh" "$PWD/SteamDeck_rEFInd" #install rEFInd bootloader
+}
+
+apply_refind_config() {
+    cat "$HOME/.deck_setup/build/steam-deck-configurator/rEFInd_config/refind.conf" # display the config file and ask the user to confirm
+    echo "This config will be applied, confirm? (y/n)"
+    read confirm
+    if [ "$confirm" == y ]
+    then
+    cp "$HOME/.deck_setup/build/steam-deck-configurator/rEFInd_config/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
+    "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install_config_from_GUI.sh"
+    else
+    echo "config not applied"
+    fi
+}
+
+install_refind_all() {
+    #Install and set up rEFInd botloader
+    install_refind_GUI
+    install_refind_bootloader
+    apply_refind_config
+}
+
+refind_uninstall_gui() {
+    rm -rf ~/SteamDeck_rEFInd
+    rm -rf ~/.SteamDeck_rEFInd
+    rm -f ~/Desktop/refind_GUI.desktop
 }
 
 fix_barrier() {
@@ -61,7 +90,7 @@ then
 echo "error, invalid input"
 elif [ "$barrier_auto_config" == n ]
 then
-ip_address=$(read -p "input server ip address from the barrier app") #do these with kde dialogs later
+ip_address=$(read -p "input server ip address from the barrier app")
 fi
 
 touch "$HOME/.config/systemd/user/barrier.service"
@@ -90,10 +119,10 @@ echo "Applied fix, turn off SSL on both the server and host, if Barrier still do
 }
 
 #apps
-install_firefox="flatpak install flathub org.mozilla.firefox" # Firefox
-install_corekeyboard="flatpak install org.cubocore.CoreKeyboard" # CoreKeyboard
-install_barrier="flatpak install flathub com.github.debauchee.barrier" # Barrier
-install_heroic_games="flatpak install flathub com.heroicgameslauncher.hgl" #Heroic Launcher
-install_ProtonUp_QT="flatpak install flathub net.davidotek.pupgui2" #Proton GE
-install_BoilR="flatpak install flathub io.github.philipk.boilr" #BoilR
-install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal" #Flatseal
+install_firefox="flatpak install flathub org.mozilla.firefox"
+install_corekeyboard="flatpak install org.cubocore.CoreKeyboard"
+install_barrier="flatpak install flathub com.github.debauchee.barrier"
+install_heroic_games="flatpak install flathub com.heroicgameslauncher.hgl"
+install_ProtonUp_QT="flatpak install flathub net.davidotek.pupgui2"
+install_BoilR="flatpak install flathub io.github.philipk.boilr"
+install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal"
