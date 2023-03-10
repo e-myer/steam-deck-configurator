@@ -42,11 +42,16 @@ install_emudeck() {
     fi
 }
 
-install_refind() {
-    #Install and set up rEFInd botloader
+install_refind_GUI() {
     chmod +x "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
     "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd" # install the GUI, run the script with the argument "path for SteamDeck_rEFInd folder is $PWD/SteamDeck_rEFInd"
+}
+
+install_refind_bootloader() {
     "$HOME/.deck_setup/build/steam-deck-configurator/SteamDeck_rEFInd/SteamDeck_rEFInd_install.sh" "$PWD/SteamDeck_rEFInd" #install rEFInd bootloader
+}
+
+apply_refind_config() {
     cat "$HOME/.deck_setup/build/steam-deck-configurator/rEFInd_config/refind.conf" # display the config file and ask the user to confirm
     echo "This config will be applied, confirm? (y/n)"
     read confirm
@@ -59,7 +64,14 @@ install_refind() {
     fi
 }
 
-uninstall_refind_gui() {
+install_refind_all() {
+    #Install and set up rEFInd botloader
+    install_refind_GUI
+    install_refind_bootloader
+    apply_refind_config
+}
+
+refind_uninstall_gui() {
     rm -rf ~/SteamDeck_rEFInd
     rm -rf ~/.SteamDeck_rEFInd
     rm -f ~/Desktop/refind_GUI.desktop

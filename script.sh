@@ -9,28 +9,36 @@ read -p "Please make sure a sudo password is already set before continuing. If y
  from a command line or by using the KDE Plasma User settings GUI. Otherwise, press Enter/Return to continue with the install."
  
 
-echo "
+echo '
 The following changes will be made with this script (hashtag means it is disabled)
 
-Update all apps
-Update all flatpaks
+#update all apps
+sudo pacman -Syu
 
-Install the following flatpaks:
-CoreKeyboard
-Barrier
-Heroic Launcher
-ProtonGE
-BoilR
-Flatseal
+#update flatpaks
+flatpak update -y
 
-Install & set up the following apps:
-deckyloader
-cryoutilities
-emudeck
-refind
-#barrier patch
+#install apps
+#variables
+$install_firefox -y
+$install_corekeyboard -y
+$install_barrier -y
+$install_heroic_games -y
+$install_ProtonUp_QT -y
+$install_BoilR -y
+$install_Flatseal -y
 
-continue? (y/n)"
+#functions
+install_deckyloader
+install_cryoutilities
+install_emudeck
+#install_refind_all # disable other refind functions if this is enabled
+install_refind_GUI
+install_refind_bootloader
+apply_refind_config
+#fix_barrier
+
+continue? (y/n)'
 
 read continue
 
@@ -60,5 +68,8 @@ $install_Flatseal -y
 install_deckyloader
 install_cryoutilities
 install_emudeck
-install_refind
+#install_refind_all # disable other refind functions if this is enabled
+install_refind_GUI
+install_refind_bootloader
+apply_refind_config
 #fix_barrier
