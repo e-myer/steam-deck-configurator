@@ -33,6 +33,8 @@ Go to the repo and edit the script.sh file, with something like `nano ./script.s
 
 then run `./script.sh` in a terminal
 
+If you are dualbooting, run the windows.ps1 file in Windows.
+
 # General Steam Deck Notes
 
 ## Installing SteamOS
