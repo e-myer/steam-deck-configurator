@@ -23,13 +23,13 @@ And installs
 ```
 git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git
 cd steam-deck-configurator
-chmod +x ./script.sh
+chmod +x ./configure_deck.sh
 ```
 
 # Run instructions
-Go to the repo and edit the script.sh file, with something like `nano ./script.sh`, add a hashtag before the tasks that you don't want to run, and remove the hashtag, if it exists, before the tasks that you do want to run. Also edit the `echo` lines to reflect the changes
+Go to the repo and edit the configure_deck.sh file, with something like `nano ./configure_deck.sh`, add a hashtag before the tasks that you don't want to run, and remove the hashtag, if it exists, before the tasks that you do want to run. Also edit the `echo` lines to reflect the changes
 
-then run `./script.sh` in a terminal
+then run `./configure_deck.sh` in a terminal
 
 # General Steam Deck Notes
 
