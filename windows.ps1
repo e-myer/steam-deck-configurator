@@ -1,9 +1,3 @@
-mkdir $HOME/Desktop/.deck_setup
-cp /usb/steam_deck_stuff/windows_drivers/ $HOME/.deck_setup #copy windows drivers folder to desktop
-cp SteamDeck_rEFInd/Windows/bios_install_prep.ps1 $HOME/Windows/.deck_setup
-
-
-
 $HOME/Desktop/windows_drivers/Aerith Windows Driver_2209130944/220913a-383120E-2209130944/Setup.exe # install AERITH Driver by  running the exe
 $HOME/Desktop/windows_drivers/RTLWlanE_WindowsDriver_2024.0.10.137_Drv_3.00.0039_Win11.L/Setup.exe # install RTLWLANE windows driver
 $HOME/Desktop/windows_drivers/BayHub_SD_STOR_ installV3.4.01.89_W10W11_logoed_20220228/setup.exe # install BayHub driver
