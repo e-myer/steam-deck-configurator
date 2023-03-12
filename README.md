@@ -20,6 +20,8 @@ And installs
 - Flatseal
 
 # Installation Instrictions
+Set a password if you haven't done so with `passwd`, then run the commands below
+
 ```
 git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git
 cd steam-deck-configurator
