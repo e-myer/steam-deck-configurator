@@ -1,6 +1,7 @@
 #! /usr/bin/bash
 
 install_deckyloader() {
+    echo "Checking if latest version of DeckyLoader is installed"
     #install deckyloader if latest version isn't installed
     RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
     VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
@@ -19,19 +20,23 @@ install_deckyloader() {
                echo "Latest Version of DeckyLoader is already installed"
             fi
     else
+        echo "Installing DeckyLoader"
         curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh | sh
         echo "$VERSION" > "$HOME/.deck_setup/deckyloader_installed_version"
     fi
 }
 
 uninstall_deckyloader() {
+    echo "Uninstalling DeckyLoader"
     curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh | sh
     rm "$HOME/.deck_setup/deckyloader_installed_version"
 }
 
 install_cryoutilities() {
+    echo "checking if cryoutilities is installed"
     if [ ! -d "$HOME/.cryo_utilities" ]
     then
+        echo "cryoutilities is not installed, installing"
         curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh | bash -s --
     else
         echo "cryoutilities is already installed"
@@ -39,8 +44,10 @@ install_cryoutilities() {
 }
 
 install_emudeck() {
+    echo "checking if emudeck is installed"
     if [ ! -d "$HOME/emudeck" ]
     then
+    echo "emudeck is not installed, installing"
     sh -c 'curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh | bash'
     else
     echo "emudeck is already installed"
@@ -48,15 +55,18 @@ install_emudeck() {
 }
 
 install_refind_GUI() {
+    echo "installing rEFInd GUI"
     chmod +x "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
     "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd" # install the GUI, run the script with the argument "path for SteamDeck_rEFInd folder is $PWD/SteamDeck_rEFInd"
 }
 
 install_refind_bootloader() {
+    echo "Installing rEFInd bootloader"
     "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/SteamDeck_rEFInd_install.sh" "$PWD/SteamDeck_rEFInd" #install rEFInd bootloader
 }
 
 apply_refind_config() {
+    echo "applying rEFInd config"
     cat "$HOME/.deck_setup/steam-deck-configurator/rEFInd_config/refind.conf" # display the config file and ask the user to confirm
     echo "This config will be applied, confirm? (y/n)"
     read confirm
@@ -64,6 +74,7 @@ apply_refind_config() {
     then
     cp "$HOME/.deck_setup/steam-deck-configurator/rEFInd_config/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
     "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install_config_from_GUI.sh"
+    echo "config applied"
     else
     echo "config not applied"
     fi
@@ -71,18 +82,21 @@ apply_refind_config() {
 
 install_refind_all() {
     #Install and set up rEFInd botloader
+    echo "running all rEFInd tasks"
     install_refind_GUI
     install_refind_bootloader
     apply_refind_config
 }
 
 refind_uninstall_gui() {
+    echo "uninstalling rEFInd GUI"
     rm -rf ~/SteamDeck_rEFInd
     rm -rf ~/.SteamDeck_rEFInd
     rm -f ~/Desktop/refind_GUI.desktop
 }
 
 fix_barrier() {
+echo "Fixing Barrier"
 echo "Are you using auto config for the ip address? (y/n)"
 read barrier_auto_config
 if [ "$barrier_auto_config" != y ] && [ "$barrier_auto_config" != n ]
