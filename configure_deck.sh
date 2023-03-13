@@ -32,10 +32,12 @@ $install_Flatseal -y
 install_deckyloader
 install_cryoutilities
 install_emudeck
-#install_refind_all # disable other refind functions if this is enabled
-install_refind_GUI
-install_refind_bootloader
-apply_refind_config
+install_refind_all # disable other refind functions if this is enabled
+#install_refind_GUI
+#install_refind_bootloader
+#apply_refind_config
+#install_refind
+#uninstall_deckyloader
 #fix_barrier
 
 continue? (y/n)'
@@ -68,10 +70,10 @@ $install_Flatseal -y
 install_deckyloader
 install_cryoutilities
 install_emudeck
-#install_refind_all # disable other refind functions if this is enabled
-install_refind_GUI
-install_refind_bootloader
-apply_refind_config
-install_refind
+install_refind_all # disable other refind functions if this is enabled
+#install_refind_GUI
+#install_refind_bootloader
+#apply_refind_config
+#install_refind
 #uninstall_deckyloader
 #fix_barrier
