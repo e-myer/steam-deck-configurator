@@ -10,13 +10,12 @@ install_BoilR="flatpak install flathub io.github.philipk.boilr"
 install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal"
 
 install_deckyloader() {
-    echo "Checking if latest version of DeckyLoader is installed"
-    #install deckyloader if latest version isn't installed
-    RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
-    VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
-
     if [ -f "$HOME/.deck_setup/deckyloader_installed_version" ]
     then
+        echo "Checking if latest version of DeckyLoader is installed"
+        #install deckyloader if latest version isn't installed
+        RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+        VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
         DECKYLOADER_INSTALLED_VERSION=$(cat "$HOME/.deck_setup/deckyloader_installed_version")
         echo "DeckyLoader Latest Version is $VERSION"
         echo "DeckyLoader Installed Version is $VERSION"
