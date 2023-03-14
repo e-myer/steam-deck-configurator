@@ -1,13 +1,21 @@
 #! /usr/bin/bash
 
-install_deckyloader() {
-    echo "Checking if latest version of DeckyLoader is installed"
-    #install deckyloader if latest version isn't installed
-    RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
-    VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
+#apps
+install_firefox="flatpak install flathub org.mozilla.firefox"
+install_corekeyboard="flatpak install org.cubocore.CoreKeyboard"
+install_barrier="flatpak install flathub com.github.debauchee.barrier"
+install_heroic_games="flatpak install flathub com.heroicgameslauncher.hgl"
+install_ProtonUp_QT="flatpak install flathub net.davidotek.pupgui2"
+install_BoilR="flatpak install flathub io.github.philipk.boilr"
+install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal"
 
+install_deckyloader() {
     if [ -f "$HOME/.deck_setup/deckyloader_installed_version" ]
     then
+        echo "Checking if latest version of DeckyLoader is installed"
+        #install deckyloader if latest version isn't installed
+        RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+        VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
         DECKYLOADER_INSTALLED_VERSION=$(cat "$HOME/.deck_setup/deckyloader_installed_version")
         echo "DeckyLoader Latest Version is $VERSION"
         echo "DeckyLoader Installed Version is $VERSION"
@@ -62,21 +70,26 @@ install_refind_GUI() {
 
 install_refind_bootloader() {
     echo "Installing rEFInd bootloader"
-    "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/SteamDeck_rEFInd_install.sh" "$PWD/SteamDeck_rEFInd" #install rEFInd bootloader
+    "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh" #install rEFInd bootloader
 }
 
 apply_refind_config() {
     echo "applying rEFInd config"
-    cat "$HOME/.deck_setup/steam-deck-configurator/rEFInd_config/refind.conf" # display the config file and ask the user to confirm
-    echo "This config will be applied, confirm? (y/n)"
-    read confirm
-    if [ "$confirm" == y ]
+    if [ -f "$HOME/.deck_setup/steam-deck-configurator/rEFInd_config/refind.conf" ]
     then
-    cp "$HOME/.deck_setup/steam-deck-configurator/rEFInd_config/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
-    "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install_config_from_GUI.sh"
-    echo "config applied"
+        cat "$HOME/.deck_setup/steam-deck-configurator/rEFInd_config/refind.conf" # display the config file and ask the user to confirm
+        echo "This config will be applied, confirm? (y/n)"
+        read confirm
+        if [ "$confirm" == y ]
+            then
+            cp "$HOME"/.deck_setup/steam-deck-configurator/rEFInd_config/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
+            "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
+            echo "config applied"
+            else
+            echo "config not applied"
+            fi
     else
-    echo "config not applied"
+    echo "rEFInd config not found in $HOME/.deck_setup/steam-deck-configurator/rEFInd_config/refind.conf, config not applied"
     fi
 }
 
@@ -131,12 +144,3 @@ systemctl --user status barrier
 
 echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, chck if you are connected on the same wifi network, and set windows resolution to 100%"
 }
-
-#apps
-install_firefox="flatpak install flathub org.mozilla.firefox"
-install_corekeyboard="flatpak install org.cubocore.CoreKeyboard"
-install_barrier="flatpak install flathub com.github.debauchee.barrier"
-install_heroic_games="flatpak install flathub com.heroicgameslauncher.hgl"
-install_ProtonUp_QT="flatpak install flathub net.davidotek.pupgui2"
-install_BoilR="flatpak install flathub io.github.philipk.boilr"
-install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal"
