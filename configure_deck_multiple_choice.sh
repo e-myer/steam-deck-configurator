@@ -29,7 +29,8 @@ echo -e "0. Default (starred) \n \
 19. Fix_barrier \n \n \
 Which tasks to run? (0 for all the default tasks)"
 
-tasks=("sudo pacman -Syu" \
+tasks=( "echo default" \
+"sudo pacman -Syu" \
 "flatpak update -y" \
 "$install_firefox -y" \
 "$install_corekeyboard -y" \
@@ -73,7 +74,7 @@ then
     for i in "${!default_tasks[@]}";
     do
         echo "${default_tasks[$i]}"
-        ${default_tasks[$i]} #run each task in default tasks array
+#        ${default_tasks[$i]} #run each task in default tasks array
     done
 else
     echo "string is not 0" # if default tasks isn't chosen
@@ -81,6 +82,6 @@ else
     for i in "${chosen_tasks[@]}"
     do
         echo "${tasks[$i]}" #echo the task for each
-        "${tasks[$i]}" # run the tasks 
+#        "${tasks[$i]}" # run the tasks 
     done
 fi
