@@ -83,7 +83,7 @@ apply_refind_config() {
         read confirm
         if [ "$confirm" == y ]
             then
-            cp "$HOME/.deck_setup/steam-deck-configurator/rEFInd_config/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
+            cp "$HOME/.deck_setup/steam-deck-configurator/rEFInd_config/{refind.conf,background.png,os_icon1.png,os_icon2.png}" "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
             "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install_config_from_GUI.sh"
             echo "config applied"
             else
