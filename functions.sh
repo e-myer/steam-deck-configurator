@@ -1,5 +1,14 @@
 #! /usr/bin/bash
 
+#apps
+install_firefox="flatpak install flathub org.mozilla.firefox"
+install_corekeyboard="flatpak install org.cubocore.CoreKeyboard"
+install_barrier="flatpak install flathub com.github.debauchee.barrier"
+install_heroic_games="flatpak install flathub com.heroicgameslauncher.hgl"
+install_ProtonUp_QT="flatpak install flathub net.davidotek.pupgui2"
+install_BoilR="flatpak install flathub io.github.philipk.boilr"
+install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal"
+
 install_deckyloader() {
     echo "Checking if latest version of DeckyLoader is installed"
     #install deckyloader if latest version isn't installed
@@ -131,12 +140,3 @@ systemctl --user status barrier
 
 echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, chck if you are connected on the same wifi network, and set windows resolution to 100%"
 }
-
-#apps
-install_firefox="flatpak install flathub org.mozilla.firefox"
-install_corekeyboard="flatpak install org.cubocore.CoreKeyboard"
-install_barrier="flatpak install flathub com.github.debauchee.barrier"
-install_heroic_games="flatpak install flathub com.heroicgameslauncher.hgl"
-install_ProtonUp_QT="flatpak install flathub net.davidotek.pupgui2"
-install_BoilR="flatpak install flathub io.github.philipk.boilr"
-install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal"
