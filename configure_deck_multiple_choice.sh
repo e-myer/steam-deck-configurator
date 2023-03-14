@@ -70,11 +70,11 @@ read string
 echo $string
 if [ "$string" == 0 ]; #if default is chosen
 then
-#    echo "string is 0"
+    echo "string is 0"
     for i in "${!default_tasks[@]}";
     do
         echo "${default_tasks[$i]}"
-#        ${default_tasks[$i]} #run each task in default tasks array
+        ${default_tasks[$i]} #run each task in default tasks array
     done
 else
     echo "string is not 0" # if default tasks isn't chosen
@@ -82,6 +82,6 @@ else
     for i in "${chosen_tasks[@]}"
     do
         echo "${tasks[$i]}" #echo the task for each
-#        "${tasks[$i]}" # run the tasks 
+        "${tasks[$i]}" # run the tasks 
     done
 fi
