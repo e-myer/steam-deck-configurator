@@ -1,8 +1,8 @@
 #! /usr/bin/bash
 
 echo -e "0. Default (starred) \n \
-* 1. Update apps
-* 2. Update Flatpaks
+* 1. Update apps \n \
+* 2. Update Flatpaks \n \
 * 3. Install firefox \n \
 * 4. Install_corekeyboard \n \
 * 5. Install_barrier \n \
