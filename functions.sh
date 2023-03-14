@@ -71,7 +71,7 @@ install_refind_GUI() {
 
 install_refind_bootloader() {
     echo "Installing rEFInd bootloader"
-    "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/SteamDeck_rEFInd_install.sh" "$PWD/SteamDeck_rEFInd" #install rEFInd bootloader
+    "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh" #install rEFInd bootloader
 }
 
 apply_refind_config() {
@@ -84,7 +84,7 @@ apply_refind_config() {
         if [ "$confirm" == y ]
             then
             cp "$HOME"/.deck_setup/steam-deck-configurator/rEFInd_config/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
-            "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install_config_from_GUI.sh"
+            "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
             echo "config applied"
             else
             echo "config not applied"
