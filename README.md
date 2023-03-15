@@ -48,6 +48,10 @@ Go into the steam-deck-configurator directory and run
 
 If you are dualbooting, run the windows.ps1 file in Windows.
 
+# Configuration
+
+To edit the default tasks, edit the configure_deck.sh file and add or remove the indexes of the tasks in the "default_tasks" array
+
 # General Steam Deck Notes
 
 ## Installing SteamOS
