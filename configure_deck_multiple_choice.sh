@@ -50,20 +50,7 @@ tasks=( "echo default" \
 "uninstall_deckyloader" \
 "fix_barrier" )
 
-default_tasks=("sudo pacman -Syu" \
-"flatpak update -y" \
-"$install_firefox -y" \
-"$install_corekeyboard -y" \
-"$install_barrier -y" \
-"$install_heroic_games -y" \
-"$install_ProtonUp_QT -y" \
-"$install_BoilR -y" \
-"$install_Flatseal -y" \
-"install_deckyloader" \
-"install_cryoutilities" \
-"install_emudeck" \
-"install_refind_all" \
-"install_refind" )
+default_tasks=( 1 2 3 4 5 6 7 8 9 10 11 12 13 )
 
 #read input
 read string
@@ -71,10 +58,10 @@ echo $string
 if [ "$string" == 0 ]; #if default is chosen
 then
     echo "string is 0"
-    for i in "${!default_tasks[@]}";
+    for i in "${default_tasks[@]}";
     do
-        echo "${default_tasks[$i]}"
-        ${default_tasks[$i]} #run each task in default tasks array
+        echo "${tasks[$i]}"
+#        ${tasks[$i]} #run each task in default tasks array
     done
 else
     echo "string is not 0" # if default tasks isn't chosen
@@ -82,6 +69,6 @@ else
     for i in "${chosen_tasks[@]}"
     do
         echo "${tasks[$i]}" #echo the task for each
-        "${tasks[$i]}" # run the tasks 
+#        "${tasks[$i]}" # run the tasks 
     done
 fi
