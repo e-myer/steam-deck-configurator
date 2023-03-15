@@ -32,8 +32,6 @@ chmod +x ./configure_deck_multiple_choice.sh
 Go into the steam-deck-configurator directory and run
 `./configure_deck_multiple_choice.sh`
 
-then run `./configure_deck.sh` in a terminal
-
 If you are dualbooting, run the windows.ps1 file in Windows.
 
 # General Steam Deck Notes
