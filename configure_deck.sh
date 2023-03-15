@@ -51,12 +51,11 @@ tasks=( "echo default" \
 "uninstall_deckyloader" \
 "fix_barrier" )
 
-default_tasks=( 1 2 3 4 5 6 7 8 9 10 11 12 13 )
+default_tasks=( 1 2 3 4 5 6 7 8 9 10 11 12 13 ) # edit these numbers to edit the default tasks
 
-#read input
 read string
 echo $string
-if [ "$string" == 0 ]; #if default is chosen
+if [ "$string" == 0 ];
 then
     echo "string is 0"
     for i in "${default_tasks[@]}";
