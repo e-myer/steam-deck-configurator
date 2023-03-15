@@ -35,6 +35,8 @@ cd $HOME/.deck_setup
 ### If cloning from GitHub
 
 ```
+mkdir -p $HOME/.deck_setup
+cd $HOME/.deck_setup
 git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git
 cd steam-deck-configurator
 chmod +x ./configure_deck_multiple_choice.sh
