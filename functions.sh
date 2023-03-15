@@ -2,7 +2,7 @@
 
 #apps
 install_firefox="flatpak install flathub org.mozilla.firefox"
-install_corekeyboard="flatpak install org.cubocore.CoreKeyboard"
+install_corekeyboard="flatpak install flathub org.cubocore.CoreKeyboard"
 install_barrier="flatpak install flathub com.github.debauchee.barrier"
 install_heroic_games="flatpak install flathub com.heroicgameslauncher.hgl"
 install_ProtonUp_QT="flatpak install flathub net.davidotek.pupgui2"
