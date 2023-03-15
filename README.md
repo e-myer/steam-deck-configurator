@@ -25,11 +25,12 @@ Set a password if you haven't done so with `passwd`, then run the commands below
 ```
 git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git
 cd steam-deck-configurator
-chmod +x ./configure_deck.sh
+chmod +x ./configure_deck_multiple_choice.sh
 ```
 
 # Run instructions
-Go to the repo and edit the configure_deck.sh file, with something like `nano ./configure_deck.sh`, add a hashtag before the tasks that you don't want to run, and remove the hashtag, if it exists, before the tasks that you do want to run. Also edit the `echo` lines to reflect the changes
+Go into the steam-deck-configurator directory and run
+`./configure_deck_multiple_choice.sh`
 
 then run `./configure_deck.sh` in a terminal
 
