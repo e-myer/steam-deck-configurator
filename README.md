@@ -20,7 +20,19 @@ And installs
 - Flatseal
 
 # Installation Instrictions
-Set a password if you haven't done so with `passwd`, then run the commands below
+Set a password if you haven't done so with `passwd`
+
+### If installing from USB
+
+Open a terminal in the directory of the USB
+
+```
+cd steam-deck-configurator
+chmod +x ./copy_to_steamos.sh
+./copy_to_steamos.sh
+cd $HOME/.deck_setup
+```
+### If cloning from GitHub
 
 ```
 git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git
