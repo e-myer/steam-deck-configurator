@@ -1,9 +1,5 @@
 #! /usr/bin/bash
 
-
-trap '{ qdbus $dbusRef close ; exit 255; }' SIGINT SIGTERM ERR EXIT
-
-
 source ./functions.sh
 
 kdialog --title "password" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"
@@ -39,12 +35,14 @@ options="${options//\"}"
 
 IFS=' ' read -r -a chosen_tasks <<< "$options" # split the input to an array
 dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
+qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
 
 for i in "${chosen_tasks[@]}"
 do
-    echo "${tasks_function[$i]}" #echo the task for each
     qdbus $dbusRef Set "" value $i
-    qdbus $dbusRef setLabelText "${tasks_function[$i]}"
-#        "${tasks_function[$i]}" # run the tasks 
+    qdbus $dbusRef setLabelText "${tasks[$i]}"
+#    sleep 1
+#    "${tasks[$i]}" # run the tasks 
 done
-echo last line
+qdbus $dbusRef close
+echo $dbusRef closed
