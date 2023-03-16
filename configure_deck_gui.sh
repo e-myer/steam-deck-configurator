@@ -1,9 +1,7 @@
 #! /usr/bin/bash
 
 
-trap \
- '{ qdbus $dbusRef close ; exit 255; }' \
- SIGINT SIGTERM ERR EXIT
+trap '{ qdbus $dbusRef close ; exit 255; }' SIGINT SIGTERM ERR EXIT
 
 
 source ./functions.sh
