@@ -1,43 +1,61 @@
 #! /usr/bin/bash
 source ./functions.sh
 
-echo ""
+kdialog --title "password" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"
+#exit code of yes is 0 and no is 1
 
-read -p "Please make sure a sudo password is already set before continuing. If you have not set the user\
- or sudo password, please exit this installer with 'Ctrl+c' and then create a password either using 'passwd'\
- from a command line or by using the KDE Plasma User settings GUI. Otherwise, press Enter/Return to continue with the install."
+if [ $? == 1 ];
+then
+exit 0
+fi
 
-kdialog --title "YesNoCancel dialog" --yesnocancel "About to exit.\n \
-Do you want to save the file first?"
+tasks=( "echo default" \
+"sudo pacman -Syu" \
+"flatpak update -y" \
+"$install_firefox -y" \
+"$install_corekeyboard -y" \
+"$install_barrier -y" \
+"$install_heroic_games -y" \
+"$install_ProtonUp_QT -y" \
+"$install_BoilR -y" \
+"$install_Flatseal -y" \
+"install_deckyloader" \
+"install_cryoutilities" \
+"install_emudeck" \
+"install_refind_all" \
+"install_refind_GUI" \
+"install_refind_bootloader" \
+"apply_refind_config" \
+"install_refind" \
+"uninstall_deckyloader" \
+"fix_barrier" )
 
+options=`kdialog --checklist "Select tasks, click and drag to multiselect" \
+1 "Update from pacman" on \
+2 "Update Flatpaks" on \
+3 "Install Firefox" on \
+4 "Install Corekeyboard" on \
+5 "Install Barrier" on \
+6 "Install Heroic Games" on \
+7 "Install ProtonUp_QT" on \
+8 "Install BoilR" on \
+9 "Install Flatseal" on \
+10 "Install DeckyLoader" on \
+11 "Install Cryoutilities" on \
+12 "Install Emudeck" on \
+13 "Install rEFInd all" on \
+14 "Install rEFInd GUI" off \
+15 "Install rEFInd bootloader" off \
+16 "Apply rEFInd config" off \
+17 "Install rEFInd" off \
+18 "Uninstall Deckyloader" off \
+19 "Fix Barrier" off`
 
-string=`kdialog --checklist "Select languages:" \
-1 "sudo pacman -Syu" on \
-2 "flatpak update -y" on \
-3 "install_firefox -y" on \
-4 "$install_corekeyboard -y" on \
-5 "$install_barrier -y" on \
-6 "$install_heroic_games -y" on \
-7 "$install_ProtonUp_QT -y" on \
-8 "$install_BoilR -y" on \
-9 "$install_Flatseal -y" on \
-10 "install_deckyloader" on \
-11 "install_cryoutilities" on \
-12 "install_emudeck" on \
-13 "install_refind_all" on \
-14 "install_refind_GUI" off \
-15 "install_refind_bootloader" off \
-16 "apply_refind_config" off \
-17 "install_refind" off \
-18 "uninstall_deckyloader" off \
-19 "fix_barrier" off`
+options="${options//\"}"
 
-string="${string//\"}"
+echo $options
 
-echo $string
-
-echo "string is not 0" # if default tasks isn't chosen
-IFS=' ' read -r -a chosen_tasks <<< "$string" # split the input to an array
+IFS=' ' read -r -a chosen_tasks <<< "$options" # split the input to an array
 for i in "${chosen_tasks[@]}"
 do
     echo "${tasks[$i]}" #echo the task for each
