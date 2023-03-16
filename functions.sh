@@ -145,7 +145,7 @@ systemctl --user status barrier
 echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, chck if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
-tasks_function=( "echo default" \
+tasks=( "echo default" \
 "sudo pacman -Syu" \
 "flatpak update -y" \
 "$install_firefox -y" \
