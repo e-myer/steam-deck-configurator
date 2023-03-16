@@ -144,3 +144,24 @@ systemctl --user status barrier
 
 echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, chck if you are connected on the same wifi network, and set windows resolution to 100%"
 }
+
+tasks=( "echo default" \
+"sudo pacman -Syu" \
+"flatpak update -y" \
+"$install_firefox -y" \
+"$install_corekeyboard -y" \
+"$install_barrier -y" \
+"$install_heroic_games -y" \
+"$install_ProtonUp_QT -y" \
+"$install_BoilR -y" \
+"$install_Flatseal -y" \
+"install_deckyloader" \
+"install_cryoutilities" \
+"install_emudeck" \
+"install_refind_all" \
+"install_refind_GUI" \
+"install_refind_bootloader" \
+"apply_refind_config" \
+"install_refind" \
+"uninstall_deckyloader" \
+"fix_barrier" )

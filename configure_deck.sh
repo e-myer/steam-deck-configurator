@@ -30,27 +30,6 @@ echo -e "\n \
 19. Fix_barrier \n \n \
 Which tasks to run? (0 for all the default tasks)"
 
-tasks=( "echo default" \
-"sudo pacman -Syu" \
-"flatpak update -y" \
-"$install_firefox -y" \
-"$install_corekeyboard -y" \
-"$install_barrier -y" \
-"$install_heroic_games -y" \
-"$install_ProtonUp_QT -y" \
-"$install_BoilR -y" \
-"$install_Flatseal -y" \
-"install_deckyloader" \
-"install_cryoutilities" \
-"install_emudeck" \
-"install_refind_all" \
-"install_refind_GUI" \
-"install_refind_bootloader" \
-"apply_refind_config" \
-"install_refind" \
-"uninstall_deckyloader" \
-"fix_barrier" )
-
 default_tasks=( 1 2 3 4 5 6 7 8 9 10 11 12 13 ) # edit these numbers to edit the default tasks
 
 read string
