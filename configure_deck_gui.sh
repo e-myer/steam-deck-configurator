@@ -1,4 +1,11 @@
 #! /usr/bin/bash
+
+
+trap \
+ '{ qdbus $dbusRef close ; exit 255; }' \
+ SIGINT SIGTERM ERR EXIT
+
+
 source ./functions.sh
 
 kdialog --title "password" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"
@@ -53,11 +60,15 @@ options=`kdialog --checklist "Select tasks, click and drag to multiselect" \
 
 options="${options//\"}"
 
-echo $options
-
 IFS=' ' read -r -a chosen_tasks <<< "$options" # split the input to an array
+dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
+
 for i in "${chosen_tasks[@]}"
 do
+    echo "i in $i"
     echo "${tasks[$i]}" #echo the task for each
+    qdbus $dbusRef Set "" value $i
+    qdbus $dbusRef setLabelText "${tasks[$i]}"
 #        "${tasks[$i]}" # run the tasks 
 done
+echo last line
