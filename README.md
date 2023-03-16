@@ -39,19 +39,19 @@ mkdir -p $HOME/.deck_setup
 cd $HOME/.deck_setup
 git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git
 cd steam-deck-configurator
-chmod +x ./configure_deck.sh
+chmod +x ./configure_deck_at_once.sh ./configure_deck_CLI.sh ./configure_deck_gui.sh
 ```
 
 # Run instructions
 Go into the steam-deck-configurator directory and run
-`./configure_deck.sh`
+`./configure_deck_gui.sh`
 
 If you are dualbooting, run the windows.ps1 file in Windows.
 
 # Configuration
 
-To edit the default tasks, edit the configure_deck.sh file and add or remove the indexes of the tasks in the "default_tasks" array
-
+To edit the default tasks for the CLI, edit the configure_deck.sh file and add or remove the indexes of the tasks in the "default_tasks" array
+To edit the defult tasks for the GUI, edit the configure_deck_gui.sh and change the "on" and "off" texts in the "options" array
 # General Steam Deck Notes
 
 ## Installing SteamOS
