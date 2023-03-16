@@ -44,7 +44,7 @@ do
     qdbus $dbusRef Set "" value $i
     qdbus $dbusRef setLabelText "$i/${#chosen_tasks[@]}: ${tasks[$i]}"
     sleep 0.5
-#    "${tasks[$i]}" # run the tasks 
+#    ${tasks[$i]} # run the tasks 
 done
 qdbus $dbusRef close
 echo $dbusRef closed
