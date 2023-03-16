@@ -14,27 +14,6 @@ then
 exit 0
 fi
 
-tasks=( "echo default" \
-"sudo pacman -Syu" \
-"flatpak update -y" \
-"$install_firefox -y" \
-"$install_corekeyboard -y" \
-"$install_barrier -y" \
-"$install_heroic_games -y" \
-"$install_ProtonUp_QT -y" \
-"$install_BoilR -y" \
-"$install_Flatseal -y" \
-"install_deckyloader" \
-"install_cryoutilities" \
-"install_emudeck" \
-"install_refind_all" \
-"install_refind_GUI" \
-"install_refind_bootloader" \
-"apply_refind_config" \
-"install_refind" \
-"uninstall_deckyloader" \
-"fix_barrier" )
-
 options=`kdialog --checklist "Select tasks, click and drag to multiselect" \
 1 "Update from pacman" on \
 2 "Update Flatpaks" on \
@@ -63,10 +42,9 @@ dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
 
 for i in "${chosen_tasks[@]}"
 do
-    echo "i in $i"
-    echo "${tasks[$i]}" #echo the task for each
+    echo "${tasks_function[$i]}" #echo the task for each
     qdbus $dbusRef Set "" value $i
-    qdbus $dbusRef setLabelText "${tasks[$i]}"
-#        "${tasks[$i]}" # run the tasks 
+    qdbus $dbusRef setLabelText "${tasks_function[$i]}"
+#        "${tasks_function[$i]}" # run the tasks 
 done
 echo last line
