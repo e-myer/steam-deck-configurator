@@ -22,21 +22,21 @@ install_deckyloader() {
             if [ "$VERSION" != "$DECKYLOADER_INSTALLED_VERSION" ];
             then
                 echo "Installing Latest Version"
-                curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh | sh
+                sh -c 'curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh | sh'
                 echo "$VERSION" > "$HOME/.deck_setup/deckyloader_installed_version"
             else
                echo "Latest Version of DeckyLoader is already installed"
             fi
     else
         echo "Installing DeckyLoader"
-        curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh | sh
+        sh -c 'curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh | sh'
         echo "$VERSION" > "$HOME/.deck_setup/deckyloader_installed_version"
     fi
 }
 
 uninstall_deckyloader() {
     echo "Uninstalling DeckyLoader"
-    curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh | sh
+    sh -c 'curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh | sh'
     rm "$HOME/.deck_setup/deckyloader_installed_version"
 }
 
@@ -45,7 +45,7 @@ install_cryoutilities() {
     if [ ! -d "$HOME/.cryo_utilities" ]
     then
         echo "cryoutilities is not installed, installing"
-        curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh | bash -s --
+        sh -c 'curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh | bash -s --'
     else
         echo "cryoutilities is already installed"
     fi
