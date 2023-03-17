@@ -41,10 +41,10 @@ qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
 
 for i in "${chosen_tasks[@]}"
 do
+    ${tasks[$i]} | tee terminal_output # run the tasks 
     qdbus $dbusRef Set "" value $i
-    qdbus $dbusRef setLabelText "$i/${#chosen_tasks[@]}: ${tasks[$i]}"
+    qdbus $dbusRef setLabelText "$i/${#chosen_tasks[@]}: ${tasks[$i]}: $(tail --lines 1 ./terminal_output)"
     sleep 0.5
-#    ${tasks[$i]} # run the tasks 
 done
 qdbus $dbusRef close
 echo $dbusRef closed

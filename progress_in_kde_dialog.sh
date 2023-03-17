@@ -1,5 +1,5 @@
 #! /usr/bin/bash
-
+#file is for testing
 dbusRef=$(kdialog --progressbar "Initializing" 4)
 qdbus $dbusRef Set "" value 1
 for i in {1..5}; do

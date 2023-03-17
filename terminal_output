@@ -1,0 +1,23 @@
+Looking for updates…
+
+Info: runtime org.kde.Platform branch 5.12 is end-of-life, with reason:
+   We strongly recommend moving to the latest stable version of the Plaform and SDK
+Info: applications using this runtime:
+   org.kde.falkon
+
+Info: runtime org.gnome.Platform branch 3.28 is end-of-life, with reason:
+   The GNOME 3.28 runtime is no longer supported and does not receive security updates. Please ask your application developer to migrate to a supported platform.
+Info: applications using this runtime:
+   org.sparkleshare.SparkleShare
+
+Info: runtime org.freedesktop.Platform.html5-codecs branch 18.08 is end-of-life, with reason:
+   The Freedesktop SDK 18.08 runtime is no longer supported as of 31th August 2020. Please ask your application developer to migrate to a supported platform.
+Info: applications using this extension:
+   org.kde.falkon
+
+Info: runtime org.freedesktop.Platform.ffmpeg branch 1.6 is end-of-life, with reason:
+   The Freedesktop 1.6 runtime is no longer supported and does not receive security updates. Please ask your application developer to migrate to a supported runtime.
+Info: applications using this extension:
+   org.sparkleshare.SparkleShare
+
+Nothing to do.
