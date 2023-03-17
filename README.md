@@ -20,7 +20,6 @@ And installs
 - Flatseal
 
 # Installation Instrictions
-Set a password if you haven't done so with `passwd`
 
 ### If installing from USB
 
