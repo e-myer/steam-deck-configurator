@@ -13,7 +13,6 @@ install_deckyloader() {
     if [ -f "$HOME/.deck_setup/deckyloader_installed_version" ]
     then
         echo "Checking if latest version of DeckyLoader is installed"
-        #install deckyloader if latest version isn't installed
         RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
         VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
         DECKYLOADER_INSTALLED_VERSION=$(cat "$HOME/.deck_setup/deckyloader_installed_version")
@@ -77,24 +76,15 @@ apply_refind_config() {
     echo "applying rEFInd config"
     if [ -f "$HOME/.deck_setup/steam-deck-configurator/rEFInd_config/refind.conf" ]
     then
-#        cat "$HOME/.deck_setup/steam-deck-configurator/rEFInd_config/refind.conf" # display the config file and ask the user to confirm
-#        echo "This config will be applied, confirm? (y/n)"
-#        read confirm
-#        if [ "$confirm" == y ]
-#            then
-            cp "$HOME"/.deck_setup/steam-deck-configurator/rEFInd_config/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
-            "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
-            echo "config applied"
-#        else
-#        echo "config not applied"
-#        fi
+        cp "$HOME"/.deck_setup/steam-deck-configurator/rEFInd_config/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
+        "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
+        echo "config applied"
     else
     echo "rEFInd config not found in $HOME/.deck_setup/steam-deck-configurator/rEFInd_config/refind.conf, config not applied"
     fi
 }
 
 install_refind_all() {
-    #Install and set up rEFInd botloader
     echo "running all rEFInd tasks"
     install_refind_GUI
     install_refind_bootloader
