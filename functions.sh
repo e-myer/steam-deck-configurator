@@ -44,7 +44,7 @@ install_cryoutilities() {
     if [ ! -d "$HOME/.cryo_utilities" ]
     then
         echo "cryoutilities is not installed, installing"
-        sh -c "$(curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh | bash -s --)"
+        bash "$(curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh)"
     else
         echo "cryoutilities is already installed"
     fi
@@ -55,7 +55,7 @@ install_emudeck() {
     if [ ! -d "$HOME/emudeck" ]
     then
     echo "emudeck is not installed, installing"
-    sh -c "$(curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh | bash)"
+    bash "$(curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh)"
     else
     echo "emudeck is already installed"
     fi
