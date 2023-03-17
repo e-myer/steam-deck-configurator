@@ -51,3 +51,5 @@ do
 done
 qdbus $dbusRef close
 echo $dbusRef closed
+
+kdialog --msgbox "Configuration complete"
