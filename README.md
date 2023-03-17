@@ -52,6 +52,7 @@ If you are dualbooting, run the windows.ps1 file in Windows.
 
 To edit the default tasks for the CLI, edit the configure_deck.sh file and add or remove the indexes of the tasks in the "default_tasks" array
 To edit the defult tasks for the GUI, edit the configure_deck_gui.sh and change the "on" and "off" texts in the "options" array
+
 # General Steam Deck Notes
 
 ## Installing SteamOS
