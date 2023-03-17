@@ -38,12 +38,15 @@ options="${options//\"}"
 IFS=' ' read -r -a chosen_tasks <<< "$options" # split the input to an array
 dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
 qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
+indexes_of_chosen_tasks=${chosen_tasks[@]}
+amount_of_chosen_tasks=${#chosen_tasks[@]}
 
-for i in "${chosen_tasks[@]}"
+for i in $indexes_of_chosen_tasks
 do
+    task_number=$task_number+1
     ${tasks[$i]} | tee terminal_output # run the tasks 
     qdbus $dbusRef Set "" value $i
-    qdbus $dbusRef setLabelText "$i/${#chosen_tasks[@]}: ${tasks[$i]}: $(tail --lines 1 ./terminal_output)"
+    qdbus $dbusRef setLabelText "$task_number/$amount_of_chosen_tasks: ${tasks[$i]}: $(tail --lines 1 ./terminal_output)"
     sleep 0.5
 done
 qdbus $dbusRef close
