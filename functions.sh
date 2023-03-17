@@ -22,21 +22,21 @@ install_deckyloader() {
             if [ "$VERSION" != "$DECKYLOADER_INSTALLED_VERSION" ];
             then
                 echo "Installing Latest Version"
-                sh -c 'curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh | sh'
+                sh -c "$(curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh)"
                 echo "$VERSION" > "$HOME/.deck_setup/deckyloader_installed_version"
             else
                echo "Latest Version of DeckyLoader is already installed"
             fi
     else
         echo "Installing DeckyLoader"
-        sh -c 'curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh | sh'
+        sh -c "$(curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh)"
         echo "$VERSION" > "$HOME/.deck_setup/deckyloader_installed_version"
     fi
 }
 
 uninstall_deckyloader() {
     echo "Uninstalling DeckyLoader"
-    sh -c 'curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh | sh'
+    sh -c "$(curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh)"
     rm "$HOME/.deck_setup/deckyloader_installed_version"
 }
 
@@ -45,7 +45,7 @@ install_cryoutilities() {
     if [ ! -d "$HOME/.cryo_utilities" ]
     then
         echo "cryoutilities is not installed, installing"
-        sh -c 'curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh | bash -s --'
+        sh -c "$(curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh | bash -s --)"
     else
         echo "cryoutilities is already installed"
     fi
@@ -56,7 +56,7 @@ install_emudeck() {
     if [ ! -d "$HOME/emudeck" ]
     then
     echo "emudeck is not installed, installing"
-    sh -c 'curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh | bash'
+    sh -c "$(curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh | bash)"
     else
     echo "emudeck is already installed"
     fi
