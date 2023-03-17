@@ -44,7 +44,7 @@ amount_of_chosen_tasks=${#chosen_tasks[@]}
 for i in $indexes_of_chosen_tasks
 do
     (( task_number++ ))
-    ${tasks[$i]} | tee terminal_output & # run the tasks 
+    ${tasks[$i]} >> terminal_output & # run the tasks 
     qdbus $dbusRef Set "" value $i & 
     qdbus $dbusRef setLabelText "$task_number/$amount_of_chosen_tasks: ${tasks[$i]}: $(tail --lines 1 ./terminal_output)" &
     wait
