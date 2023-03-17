@@ -1,6 +1,5 @@
 #! /usr/bin/bash
 
-#apps
 install_firefox="flatpak install flathub org.mozilla.firefox"
 install_corekeyboard="flatpak install flathub org.cubocore.CoreKeyboard"
 install_barrier="flatpak install flathub com.github.debauchee.barrier"
@@ -13,7 +12,6 @@ install_deckyloader() {
     if [ -f "$HOME/.deck_setup/deckyloader_installed_version" ]
     then
         echo "Checking if latest version of DeckyLoader is installed"
-        #install deckyloader if latest version isn't installed
         RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
         VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
         DECKYLOADER_INSTALLED_VERSION=$(cat "$HOME/.deck_setup/deckyloader_installed_version")
@@ -70,7 +68,7 @@ install_refind_GUI() {
 
 install_refind_bootloader() {
     echo "Installing rEFInd bootloader"
-    "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh" #install rEFInd bootloader
+    "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
 apply_refind_config() {
@@ -86,7 +84,6 @@ apply_refind_config() {
 }
 
 install_refind_all() {
-    #Install and set up rEFInd botloader
     echo "running all rEFInd tasks"
     install_refind_GUI
     install_refind_bootloader
