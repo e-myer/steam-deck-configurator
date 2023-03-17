@@ -38,7 +38,7 @@ options="${options//\"}"
 IFS=' ' read -r -a chosen_tasks <<< "$options" # split the input to an array
 indexes_of_chosen_tasks=${chosen_tasks[@]}
 amount_of_chosen_tasks=${#chosen_tasks[@]}
-dbusRef=$(kdialog --progressbar "Initializing" $amount_of_chosen_tasks
+dbusRef=$(kdialog --progressbar "Initializing" $amount_of_chosen_tasks)
 qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
 
 for i in $indexes_of_chosen_tasks
