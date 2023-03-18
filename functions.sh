@@ -35,7 +35,7 @@ install_deckyloader() {
 uninstall_deckyloader() {
     echo "Uninstalling DeckyLoader"
     curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh | sh
-    rm "$HOME/.deck_setup/deckyloader_installed_version"
+    rm -f "$HOME/.deck_setup/deckyloader_installed_version"
 }
 
 install_cryoutilities() {
