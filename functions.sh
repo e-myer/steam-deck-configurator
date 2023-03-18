@@ -80,7 +80,7 @@ apply_refind_config() {
     refind_config_apply_dir=$(find ~+ -mindepth 1 -type d) # else, find the folder path of the one folder and set the refind config apply dir to that
     fi
 
-    cp $refind_config_apply_dir/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
+    cp "$refind_config_apply_dir"/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
     if [ $? == 1 ];
     then
     echo "error, config not applied"
