@@ -91,7 +91,7 @@ apply_refind_config() {
 }
 
 save_refind_config() {
-    kdialog --msgbox "A config must be created using the rEFInd GUI, by editing the config and clicking on \"Create Config\", continue?"
+    kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? == 0 ];
     then
     config_name=$(kdialog --title "Name of config" --inputbox "What would you like to name your config? (no spaces)")
