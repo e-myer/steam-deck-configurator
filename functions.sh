@@ -77,7 +77,8 @@ apply_refind_config() {
     if [ "$num_of_dirs" -gt 1 ]; then #if there is more than 1 folder (or more than one config)
     refind_config_apply_dir=$(kdialog --getexistingdirectory $HOME/.deck_setup/rEFInd_saved_configs) # show a dialog to choose the folder you want (the config you want)
     else
-    refind_config_apply_dir=$(find ~+ -mindepth 1 -type d) # else, find the folder path of the one folder and set the refind config apply dir to that
+    folder_name=$(find $HOME/.deck_setup/rEFInd_saved_configs -mindepth 1) # else, find the one folder and set the refind config apply dir to that
+    refind_config_apply_dir=$(readlink -f "$folder_name") #get full path of folder
     fi
 
     cp "$refind_config_apply_dir"/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
