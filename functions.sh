@@ -99,6 +99,7 @@ save_refind_config() {
         if [[ $config_name =~ $white_space ]]
         then
         echo "error, name cannot contain spaces"
+        kdialog --error "error, name cannot contain spaces"
         exit 1
         fi
     mkdir -p "$HOME/.deck_setup/rEFInd_saved_configs/$config_name"
@@ -106,8 +107,11 @@ save_refind_config() {
         if [ $? == 0 ];
         then
         echo "config saved to $HOME/.deck_setup/rEFInd_saved_configs/$config_name"
+        kdialog --msgbox "config saved to $HOME/.deck_setup/rEFInd_saved_configs/$config_name"
         else
-        echo "error: $?, config not saved"
+        cp_error=$?
+        echo "error: $cp_error, config not saved"
+        kdialog --error "error: $cp_error, config not saved"
         fi
     fi
 }
