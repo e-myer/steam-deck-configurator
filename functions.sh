@@ -35,7 +35,7 @@ install_deckyloader() {
 uninstall_deckyloader() {
     echo "Uninstalling DeckyLoader"
     curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh | sh
-    rm "$HOME/.deck_setup/deckyloader_installed_version"
+    rm -f "$HOME/.deck_setup/deckyloader_installed_version"
 }
 
 install_cryoutilities() {
@@ -73,18 +73,53 @@ install_refind_bootloader() {
 
 apply_refind_config() {
     echo "applying rEFInd config"
-    if [ -f "$HOME/.deck_setup/steam-deck-configurator/rEFInd_config/refind.conf" ]
-    then
-        cp "$HOME"/.deck_setup/steam-deck-configurator/rEFInd_config/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
-        "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
-        echo "config applied"
+    num_of_dirs=$(find $HOME/.deck_setup/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+    if [ "$num_of_dirs" -gt 1 ]; then #if there is more than 1 folder (or more than one config)
+    refind_config_apply_dir=$(kdialog --getexistingdirectory $HOME/.deck_setup/rEFInd_configs) # show a dialog to choose the folder you want (the config you want)
     else
-    echo "rEFInd config not found in $HOME/.deck_setup/steam-deck-configurator/rEFInd_config/refind.conf, config not applied"
+    refind_config_apply_dir=$(find $HOME/.deck_setup/rEFInd_configs -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config apply dir to that
+    fi
+
+    cp "$refind_config_apply_dir"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
+    if [ $? == 1 ];
+    then
+    echo "error, config not applied"
+    else
+    "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
+    echo "config applied"
+    fi
+}
+
+save_refind_config() {
+    kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
+    if [ $? == 0 ];
+    then
+    config_name=$(kdialog --title "Name of config" --inputbox "What would you like to name your config?")
+    white_space=" |'"
+        if [[ $config_name =~ $white_space ]]
+        then
+        echo "error, name cannot contain spaces"
+        kdialog --error "error, name cannot contain spaces"
+        exit 1
+        fi
+    kdialog --msgbox "Please select the root of the storage device you want to save the config to"
+    usb_path=$(kdialog --getexistingdirectory /)
+    mkdir -p "$usb_path/rEFInd_configs/$config_name"
+    cp $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$usb_path/rEFInd_configs/$config_name" #copy files saved by rEFInd GUI to a custom directory
+        if [ $? == 0 ];
+        then
+        echo "config saved to $usb_path/rEFInd_configs/$config_name"
+        kdialog --msgbox "config saved to $usb_path/rEFInd_configs/$config_name"
+        else
+        cp_error=$?
+        echo "error: $cp_error, config not saved"
+        kdialog --error "error: $cp_error, config not saved"
+        fi
     fi
 }
 
 install_refind_all() {
-    echo "running all rEFInd tasks"
+    echo "running all install rEFInd tasks"
     install_refind_GUI
     install_refind_bootloader
     apply_refind_config
@@ -134,7 +169,7 @@ systemctl --user status barrier
 echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, chck if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
-tasks=( "echo default" \
+tasks=( "echo first task" \
 "sudo pacman -Syu" \
 "flatpak update -y" \
 "$install_firefox -y" \
@@ -151,6 +186,7 @@ tasks=( "echo default" \
 "install_refind_GUI" \
 "install_refind_bootloader" \
 "apply_refind_config" \
+"save_refind_config" \
 "install_refind" \
 "uninstall_deckyloader" \
 "fix_barrier" )
