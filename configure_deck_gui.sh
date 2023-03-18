@@ -20,18 +20,18 @@ options=$(kdialog --checklist "Select tasks, click and drag to multiselect" \
 7 "Install ProtonUp_QT" on \
 8 "Install BoilR" on \
 9 "Install Flatseal" on \
-11 "install_steam_rom_manager" off \
-12 "Install DeckyLoader" on \
-13 "Install Cryoutilities" on \
-14 "Install Emudeck" on \
-15 "Install rEFInd all" on \
-16 "Install rEFInd GUI" off \
-17 "Install rEFInd bootloader" off \
-18 "Apply rEFInd config" off \
-19 "Save rEFInd config" off \
-20 "Install rEFInd" off \
-21 "Uninstall Deckyloader" off \
-22 "Fix Barrier" off)
+10 "install_steam_rom_manager" off \
+11 "Install DeckyLoader" on \
+12 "Install Cryoutilities" on \
+13 "Install Emudeck" on \
+14 "Install rEFInd all" on \
+15 "Install rEFInd GUI" off \
+16 "Install rEFInd bootloader" off \
+17 "Apply rEFInd config" off \
+18 "Save rEFInd config" off \
+19 "Install rEFInd" off \
+20 "Uninstall Deckyloader" off \
+21 "Fix Barrier" off)
 
 options="${options//\"}"
 
