@@ -94,7 +94,13 @@ save_refind_config() {
     kdialog --msgbox "A config must be created using the rEFInd GUI, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? == 0 ];
     then
-    config_name=$(kdialog --title "Name of config" --inputbox "What would you like to name your config")
+    config_name=$(kdialog --title "Name of config" --inputbox "What would you like to name your config? (no spaces)")
+    white_space=" |'"
+        if [[ $config_name =~ $white_space ]]
+        then
+        echo "error, name cannot contain spaces"
+        exit 1
+        fi
     refind_config_save_dir=$(kdialog --getexistingdirectory $HOME/.deck_setup/rEFInd_saved_configs)
     cp $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$refind_config_save_dir/$config_name" #copy files saved by rEDInd GUI to a custom directory
     echo "config saved to $refind_config_save_dir/$config_name"
