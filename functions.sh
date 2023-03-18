@@ -73,12 +73,11 @@ install_refind_bootloader() {
 
 apply_refind_config() {
     echo "applying rEFInd config"
-    num_of_dirs=$(find $HOME/.deck_setup/rEFInd_saved_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+    num_of_dirs=$(find $HOME/.deck_setup/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then #if there is more than 1 folder (or more than one config)
-    refind_config_apply_dir=$(kdialog --getexistingdirectory $HOME/.deck_setup/rEFInd_saved_configs) # show a dialog to choose the folder you want (the config you want)
+    refind_config_apply_dir=$(kdialog --getexistingdirectory $HOME/.deck_setup/rEFInd_configs) # show a dialog to choose the folder you want (the config you want)
     else
-    refind_config_apply_dir=$(find $HOME/.deck_setup/rEFInd_saved_configs -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config apply dir to that
-#    refind_config_apply_dir=$folder_name #for testing... $(readlink -f "$folder_name") #get full path of folder
+    refind_config_apply_dir=$(find $HOME/.deck_setup/rEFInd_configs -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config apply dir to that
     fi
 
     cp "$refind_config_apply_dir"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
@@ -95,7 +94,7 @@ save_refind_config() {
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? == 0 ];
     then
-    config_name=$(kdialog --title "Name of config" --inputbox "What would you like to name your config? (no spaces)")
+    config_name=$(kdialog --title "Name of config" --inputbox "What would you like to name your config?")
     white_space=" |'"
         if [[ $config_name =~ $white_space ]]
         then
@@ -103,12 +102,14 @@ save_refind_config() {
         kdialog --error "error, name cannot contain spaces"
         exit 1
         fi
-    mkdir -p "$HOME/.deck_setup/rEFInd_saved_configs/$config_name"
-    cp $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.deck_setup/rEFInd_saved_configs/$config_name" #copy files saved by rEDInd GUI to a custom directory
+    kdialog --msgbox "Please select the root of the storage device you want to save the config to"
+    usb_path=$(kdialog --getexistingdirectory /)
+    mkdir -p "$usb_path/rEFInd_configs/$config_name"
+    cp $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$usb_path/rEFInd_configs/$config_name" #copy files saved by rEFInd GUI to a custom directory
         if [ $? == 0 ];
         then
-        echo "config saved to $HOME/.deck_setup/rEFInd_saved_configs/$config_name"
-        kdialog --msgbox "config saved to $HOME/.deck_setup/rEFInd_saved_configs/$config_name"
+        echo "config saved to $usb_path/rEFInd_configs/$config_name"
+        kdialog --msgbox "config saved to $usb_path/rEFInd_configs/$config_name"
         else
         cp_error=$?
         echo "error: $cp_error, config not saved"
