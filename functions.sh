@@ -71,7 +71,7 @@ install_refind_bootloader() {
     "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
-apply_refind_config() { ##TODO: OPEN FILE DIALOG IN .DECKSETUP/SAVED_REFIND_CONFIGS TO SELECT A CONFIG FOLDER IF THERE IS MORE THAN ONE SAVED REFIND CONFIG
+apply_refind_config() {
     echo "applying rEFInd config"
     num_of_dirs=$(find $HOME/.deck_setup/refind_configs -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then #if there is more than 1 folder (or more than one config)
@@ -80,25 +80,31 @@ apply_refind_config() { ##TODO: OPEN FILE DIALOG IN .DECKSETUP/SAVED_REFIND_CONF
     refind_config_apply_dir=$(find ~+ -mindepth 1 -type d) # else, find the folder path of the one folder and set the refind config apply dir to that
     fi
 
-    if [ -f "$refind_config_apply_dir/refind.conf" ] #if that directory has a refind.conf file
+    cp $refind_config_apply_dir/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
+    if [ $? == 1 ];
     then
-        cp "$HOME"/.deck_setup/steam-deck-configurator/rEFInd_config/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
-        "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
-        echo "config applied"
+    echo "error, files don't exist, config not applied"
     else
-    echo "rEFInd config not found in $refind_config_apply_dir, config not applied"
+    "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
+    echo "config applied"
     fi
 }
 
-save_refind_config() { ##TODO: OPEN FOLDER HOME/.DECKSETUP/SAVED REFIND CONFIGS AND SHOW TEXT INPUT DIALOG TO SELECT A NAME FOR THE CONFIG, AND PROMPT USER TO SAVE THE CONFIG USING GUI FORST
+save_refind_config() {
+    kdialog --msgbox "A config must be created using the rEFInd GUI, by editing the config and clicking on \"Create Config\", continue?"
+    if [ $? == 0 ];
+    then
     config_name=$(kdialog --title "Name of config" --inputbox "What would you like to name your config")
     refind_config_save_dir=$(kdialog --getexistingdirectory $HOME/.deck_setup/rEFInd_saved_configs)
-    cp "$HOME/.SteamDeck_rEFInd/GUI" "$refind_config_save_dir/$config_name" #copy files saved by rEDInd GUI to a custom directory
+    cp $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$refind_config_save_dir/$config_name" #copy files saved by rEDInd GUI to a custom directory
     echo "config saved to $refind_config_save_dir/$config_name"
+    else
+    echo "config not saved"
+    fi
 }
 
 install_refind_all() {
-    echo "running all rEFInd tasks"
+    echo "running all install rEFInd tasks"
     install_refind_GUI
     install_refind_bootloader
     apply_refind_config
