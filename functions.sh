@@ -132,6 +132,12 @@ refind_uninstall_gui() {
     rm -f ~/Desktop/refind_GUI.desktop
 }
 
+install_steam_rom_manager() {
+    cp -v $HOME/.deck_setup/applications/Steam-ROM-Manager-2.3.40.AppImage $HOME/Applications
+    chmod +x $HOME/Applications/Steam-ROM-Manager-2.3.40.AppImage
+    cp -v "$HOME/.deck_setup/applications/steam-rom-manager.desktop" "$HOME/.local/share/applications"
+}
+
 fix_barrier() {
 echo "Fixing Barrier"
 echo "Are you using auto config for the ip address? (y/n)"
@@ -179,6 +185,7 @@ tasks=( "echo first task" \
 "$install_ProtonUp_QT -y" \
 "$install_BoilR -y" \
 "$install_Flatseal -y" \
+"install_steam_rom_manager" \
 "install_deckyloader" \
 "install_cryoutilities" \
 "install_emudeck" \

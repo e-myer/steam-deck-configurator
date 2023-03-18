@@ -38,6 +38,7 @@ install_deckyloader
 install_cryoutilities
 install_emudeck
 install_refind_all # disable other refind functions if this is enabled
+#install_steam_rom_manager
 #install_refind_GUI
 #install_refind_bootloader
 #apply_refind_config
