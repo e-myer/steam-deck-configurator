@@ -73,7 +73,7 @@ install_refind_bootloader() {
 
 apply_refind_config() {
     echo "applying rEFInd config"
-    num_of_dirs=$(find $HOME/.deck_setup/refind_configs -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+    num_of_dirs=$(find $HOME/.deck_setup/rEFInd_saved_configs -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then #if there is more than 1 folder (or more than one config)
     refind_config_apply_dir=$(kdialog --getexistingdirectory $HOME/.deck_setup/rEFInd_saved_configs) # show a dialog to choose the folder you want (the config you want)
     else
