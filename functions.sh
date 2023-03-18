@@ -83,7 +83,7 @@ apply_refind_config() {
     cp $refind_config_apply_dir/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
     if [ $? == 1 ];
     then
-    echo "error, files don't exist, config not applied"
+    echo "error, config not applied"
     else
     "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
     echo "config applied"
