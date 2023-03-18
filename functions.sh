@@ -154,8 +154,7 @@ systemctl --user status barrier
 echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, chck if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
-tasks=( "echo default" \
-"sudo pacman -Syu" \
+tasks=( "sudo pacman -Syu" \
 "flatpak update -y" \
 "$install_firefox -y" \
 "$install_corekeyboard -y" \
@@ -171,6 +170,7 @@ tasks=( "echo default" \
 "install_refind_GUI" \
 "install_refind_bootloader" \
 "apply_refind_config" \
+"save_refind_config" \
 "install_refind" \
 "uninstall_deckyloader" \
 "fix_barrier" )
