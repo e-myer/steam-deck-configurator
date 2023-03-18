@@ -101,9 +101,9 @@ save_refind_config() {
         echo "error, name cannot contain spaces"
         exit 1
         fi
-    refind_config_save_dir=$(kdialog --getexistingdirectory $HOME/.deck_setup/rEFInd_saved_configs)
-    cp $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$refind_config_save_dir/$config_name" #copy files saved by rEDInd GUI to a custom directory
-    echo "config saved to $refind_config_save_dir/$config_name"
+    mkdir -p "$HOME/.deck_setup/rEFInd_saved_configs/$config_name"
+    cp $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$HOME/.deck_setup/rEFInd_saved_configs/$config_name" #copy files saved by rEDInd GUI to a custom directory
+    echo "config saved to $HOME/.deck_setup/rEFInd_saved_configs/$config_name"
     else
     echo "config not saved"
     fi
