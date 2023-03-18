@@ -81,7 +81,7 @@ apply_refind_config() {
 #    refind_config_apply_dir=$folder_name #for testing... $(readlink -f "$folder_name") #get full path of folder
     fi
 
-    cp "$refind_config_apply_dir"/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
+    cp "$refind_config_apply_dir"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
     if [ $? == 1 ];
     then
     echo "error, config not applied"
@@ -104,7 +104,7 @@ save_refind_config() {
         exit 1
         fi
     mkdir -p "$HOME/.deck_setup/rEFInd_saved_configs/$config_name"
-    cp $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png} "$HOME/.deck_setup/rEFInd_saved_configs/$config_name" #copy files saved by rEDInd GUI to a custom directory
+    cp $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.deck_setup/rEFInd_saved_configs/$config_name" #copy files saved by rEDInd GUI to a custom directory
         if [ $? == 0 ];
         then
         echo "config saved to $HOME/.deck_setup/rEFInd_saved_configs/$config_name"
