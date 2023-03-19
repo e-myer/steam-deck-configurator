@@ -32,6 +32,7 @@ $install_heroic_games -y
 $install_ProtonUp_QT -y
 $install_BoilR -y
 $install_Flatseal -y
+#$install_steam_rom_manager -y
 #$add_flathub
 
 #functions

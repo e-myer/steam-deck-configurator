@@ -20,18 +20,19 @@ options=$(kdialog --checklist "Select tasks, click and drag to multiselect" \
 6 "Install ProtonUp_QT" on \
 7 "Install BoilR" on \
 8 "Install Flatseal" on \
-9 "Add Flathub" on \
-10 "Install DeckyLoader" on \
-11 "Install Cryoutilities" on \
-12 "Install Emudeck" on \
-13 "Install rEFInd all" on \
-14 "Install rEFInd GUI" off \
-15 "Install rEFInd bootloader" off \
-16 "Apply rEFInd config" off \
-17 "Save rEFInd config" off \
-18 "Install rEFInd" off \
-19 "Uninstall Deckyloader" off \
-20 "Fix Barrier" off)
+9 "Install Steam Rom Manager" off \
+10 "Add Flathub" on \
+12 "Install DeckyLoader" on \
+13 "Install Cryoutilities" on \
+14 "Install Emudeck" on \
+15 "Install rEFInd all" on \
+16 "Install rEFInd GUI" off \
+17 "Install rEFInd bootloader" off \
+18 "Apply rEFInd config" off \
+19 "Save rEFInd config" off \
+20 "Install rEFInd" off \
+21 "Uninstall Deckyloader" off \
+22 "Fix Barrier" off)
 
 options="${options//\"}"
 
@@ -44,6 +45,7 @@ do
     qdbus $dbusRef Set "" value $i
     qdbus $dbusRef setLabelText "$i/${#chosen_tasks[@]}: ${tasks[$i]}"
     sleep 0.5
+    echo ${tasks[$i]}
 #    ${tasks[$i]} # run the tasks 
 done
 qdbus $dbusRef close
