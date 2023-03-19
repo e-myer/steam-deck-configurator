@@ -38,15 +38,23 @@ options="${options//\"}"
 
 IFS=' ' read -r -a chosen_tasks <<< "$options" # split the input to an array
 dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
-#qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
+qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
 
 for i in "${chosen_tasks[@]}"
 do
+    ((task_number ++))
     qdbus $dbusRef Set "" value $i
-    qdbus $dbusRef setLabelText "$i/${#chosen_tasks[@]}: ${tasks[$i]}"
-    sleep 0.5
+    qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: ${tasks[$i]}"
+#    sleep 0.5
+#    sleep 2
+    if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
+    then
     echo ${tasks[$i]}
 #    ${tasks[$i]} # run the tasks 
+    else
+    echo "Task \"${tasks[$i]}\" not executed, exiting..."
+    exit 0
+    fi
 done
 qdbus $dbusRef close
 echo $dbusRef closed
