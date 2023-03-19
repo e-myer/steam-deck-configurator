@@ -32,6 +32,7 @@ $install_heroic_games -y
 $install_ProtonUp_QT -y
 $install_BoilR -y
 $install_Flatseal -y
+#$add_flathub
 
 #functions
 install_deckyloader
