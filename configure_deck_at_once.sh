@@ -38,7 +38,7 @@ $install_Flatseal -y
 #functions
 install_deckyloader
 install_cryoutilities
-install/home/amirs-kde/.local/share/bauh/appimage/installed/steam-rom-manager/logo.png_emudeck
+install_emudeck
 install_refind_all # disable other refind functions if this is enabled
 #install_refind_GUI
 #install_refind_bootloader
