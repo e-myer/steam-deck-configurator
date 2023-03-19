@@ -7,6 +7,7 @@ install_heroic_games="flatpak install flathub com.heroicgameslauncher.hgl"
 install_ProtonUp_QT="flatpak install flathub net.davidotek.pupgui2"
 install_BoilR="flatpak install flathub io.github.philipk.boilr"
 install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal"
+install_steam_rom_manager="flatpak install flathub com.steamgriddb.steam-rom-manager"
 add_flathub="flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo"
 
 install_deckyloader() {
@@ -179,6 +180,7 @@ tasks=( "sudo pacman -Syu" \
 "$install_ProtonUp_QT -y" \
 "$install_BoilR -y" \
 "$install_Flatseal -y" \
+"$install_steam_rom_manager -y" \
 "$add_flathub" \
 "install_deckyloader" \
 "install_cryoutilities" \

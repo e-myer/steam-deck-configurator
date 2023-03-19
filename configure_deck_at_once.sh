@@ -32,12 +32,13 @@ $install_heroic_games -y
 $install_ProtonUp_QT -y
 $install_BoilR -y
 $install_Flatseal -y
+#$install_steam_rom_manager -y
 #$add_flathub
 
 #functions
 install_deckyloader
 install_cryoutilities
-install_emudeck
+install/home/amirs-kde/.local/share/bauh/appimage/installed/steam-rom-manager/logo.png_emudeck
 install_refind_all # disable other refind functions if this is enabled
 #install_refind_GUI
 #install_refind_bootloader
