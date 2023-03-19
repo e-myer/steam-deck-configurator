@@ -18,7 +18,7 @@ echo -e "\n \
 * 7. Install_ProtonUp_QT \n \
 * 8. Install_BoilR \n \
 * 9. Install_Flatseal \n \
-* 10. Add Flathub \n ]
+* 10. Add Flathub \n \
 * 11. Install_deckyloader \n \
 * 12. Install_cryoutilities \n \
 * 13. Install_emudeck \n \
