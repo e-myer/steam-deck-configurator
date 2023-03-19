@@ -10,16 +10,17 @@ read -p "Please make sure a sudo password is already set before continuing. If y
 echo -e "\n \
 D. Default (starred) \n \
 * 0. Update apps \n \
-* 1. Update Flatpaks \n \
-* 2. Install firefox \n \
-* 3. Install_corekeyboard \n \
-* 4. Install_barrier \n \
-* 5. Install_heroic_games \n \
-* 6. Install_ProtonUp_QT \n \
-* 7. Install_BoilR \n \
-* 8. Install_Flatseal \n \
-  9. Install Steam ROM Manager \n \
-* 10. Add Flathub \n \
+* 1. Add Flathub
+* 2. Update Flatpaks \n \
+* 3. Install firefox \n \
+* 4. Install_corekeyboard \n \
+* 5. Install_barrier \n \
+* 6. Install_heroic_games \n \
+* 7. Install_ProtonUp_QT \n \
+* 8. Install_BoilR \n \
+* 9. Install_Flatseal \n \
+  10. Install Steam ROM Manager \n \
+* 11. Add Flathub \n \
 * 12. Install_deckyloader \n \
 * 13. Install_cryoutilities \n \
 * 14. Install_emudeck \n \

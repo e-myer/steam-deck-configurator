@@ -172,6 +172,7 @@ echo "Applied fix, turn off SSL on both the server and host, if Barrier still do
 }
 
 tasks=( "sudo pacman -Syu" \
+"$add_flathub" \
 "flatpak update -y" \
 "$install_firefox -y" \
 "$install_corekeyboard -y" \
@@ -181,7 +182,6 @@ tasks=( "sudo pacman -Syu" \
 "$install_BoilR -y" \
 "$install_Flatseal -y" \
 "$install_steam_rom_manager -y" \
-"$add_flathub" \
 "install_deckyloader" \
 "install_cryoutilities" \
 "install_emudeck" \
