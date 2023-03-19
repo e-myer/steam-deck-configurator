@@ -20,18 +20,17 @@ D. Default (starred) \n \
 * 8. Install_BoilR \n \
 * 9. Install_Flatseal \n \
   10. Install Steam ROM Manager \n \
-* 11. Add Flathub \n \
-* 12. Install_deckyloader \n \
-* 13. Install_cryoutilities \n \
-* 14. Install_emudeck \n \
-* 15. Install_refind_all \n \
-  16. Install_refind_GUI \n \
-  17. Install_refind_bootloader \n \
-  18. Apply_refind_config \n \
-  19. Save rEFInd config \n \
-  20. Install_refind \n \
-  21. Uninstall_deckyloader \n \
-  22. Fix_barrier \n \n \
+* 11. Install_deckyloader \n \
+* 12. Install_cryoutilities \n \
+* 13. Install_emudeck \n \
+* 14. Install_refind_all \n \
+  15. Install_refind_GUI \n \
+  16. Install_refind_bootloader \n \
+  17. Apply_refind_config \n \
+  18. Save rEFInd config \n \
+  19. Install_refind \n \
+  20. Uninstall_deckyloader \n \
+  21. Fix_barrier \n \n \
 Which tasks to run? (0 for all the default tasks)"
 
 default_tasks=( 0 1 2 3 4 5 6 7 8 10 11 12 13 14 15 ) # edit these numbers to edit the default tasks
