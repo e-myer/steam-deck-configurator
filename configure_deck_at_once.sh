@@ -17,31 +17,4 @@ then
     exit 0
 fi
 
-#update all apps
-sudo pacman -Syu
-
-#update flatpaks
-flatpak update -y
-
-#install apps
-#variables
-$install_firefox -y
-$install_corekeyboard -y
-$install_barrier -y
-$install_heroic_games -y
-$install_ProtonUp_QT -y
-$install_BoilR -y
-$install_Flatseal -y
-#$add_flathub
-
-#functions
-install_deckyloader
-install_cryoutilities
-install_emudeck
-install_refind_all # disable other refind functions if this is enabled
-#install_refind_GUI
-#install_refind_bootloader
-#apply_refind_config
-#install_refind
-#uninstall_deckyloader
-#fix_barrier
+no_interactive

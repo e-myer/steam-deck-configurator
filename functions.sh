@@ -191,3 +191,87 @@ tasks=( "sudo pacman -Syu" \
 "install_refind" \
 "uninstall_deckyloader" \
 "fix_barrier" )
+
+cli_tasks_display="\n \
+D. Default (starred) \n \
+* 0. Update apps \n \
+* 1. Update Flatpaks \n \
+* 2. Install firefox \n \
+* 3. Install_corekeyboard \n \
+* 4. Install_barrier \n \
+* 5. Install_heroic_games \n \
+* 6. Install_ProtonUp_QT \n \
+* 7. Install_BoilR \n \
+* 8. Install_Flatseal \n \
+* 9. Add Flathub \n \
+* 10. Install_deckyloader \n \
+* 11. Install_cryoutilities \n \
+* 12. Install_emudeck \n \
+* 13. Install_refind_all \n \
+14. Install_refind_GUI \n \
+15. Install_refind_bootloader \n \
+16. Apply_refind_config \n \
+17. Save rEFInd config \n \
+18. Install_refind \n \
+19. Uninstall_deckyloader \n \
+20. Fix_barrier \n \n \
+Which tasks to run? (0 for all the default tasks)"
+
+options_function() {
+options=$(kdialog --checklist "Select tasks, click and drag to multiselect" \
+0 "Update from pacman" on \
+1 "Update Flatpaks" on \
+2 "Install Firefox" on \
+3 "Install Corekeyboard" on \
+4 "Install Barrier" on \
+5 "Install Heroic Games" on \
+6 "Install ProtonUp_QT" on \
+7 "Install BoilR" on \
+8 "Install Flatseal" on \
+9 "Add Flathub" on \
+10 "Install DeckyLoader" on \
+11 "Install Cryoutilities" on \
+12 "Install Emudeck" on \
+13 "Install rEFInd all" on \
+14 "Install rEFInd GUI" off \
+15 "Install rEFInd bootloader" off \
+16 "Apply rEFInd config" off \
+17 "Save rEFInd config" off \
+18 "Install rEFInd" off \
+19 "Uninstall Deckyloader" off \
+20 "Fix Barrier" off)
+}
+
+no_interactive() {
+    #update all apps
+sudo pacman -Syu
+
+#update flatpaks
+flatpak update -y
+
+#install apps
+#variables
+$install_firefox -y
+$install_corekeyboard -y
+$install_barrier -y
+$install_heroic_games -y
+$install_ProtonUp_QT -y
+$install_BoilR -y
+$install_Flatseal -y
+#$add_flathub
+
+#functions
+install_deckyloader
+install_cryoutilities
+install_emudeck
+install_refind_all # disable other refind functions if this is enabled
+#install_refind_GUI
+#install_refind_bootloader
+#apply_refind_config
+#install_refind
+#uninstall_deckyloader
+#fix_barrier
+
+}
+
+default_tasks=( 0 1 2 3 4 5 6 7 8 9 10 11 12 13 ) # edit these numbers to edit the default tasks

@@ -10,28 +10,7 @@ then
 exit 0
 fi
 
-options=$(kdialog --checklist "Select tasks, click and drag to multiselect" \
-0 "Update from pacman" on \
-1 "Update Flatpaks" on \
-2 "Install Firefox" on \
-3 "Install Corekeyboard" on \
-4 "Install Barrier" on \
-5 "Install Heroic Games" on \
-6 "Install ProtonUp_QT" on \
-7 "Install BoilR" on \
-8 "Install Flatseal" on \
-9 "Add Flathub" on \
-10 "Install DeckyLoader" on \
-11 "Install Cryoutilities" on \
-12 "Install Emudeck" on \
-13 "Install rEFInd all" on \
-14 "Install rEFInd GUI" off \
-15 "Install rEFInd bootloader" off \
-16 "Apply rEFInd config" off \
-17 "Save rEFInd config" off \
-18 "Install rEFInd" off \
-19 "Uninstall Deckyloader" off \
-20 "Fix Barrier" off)
+options_function
 
 options="${options//\"}"
 
