@@ -28,8 +28,9 @@ D. Default (starred) \n \
 16. Apply_refind_config \n \
 17. Save rEFInd config \n \
 18. Install_refind \n \
-19. Uninstall_deckyloader \n \
-20. Fix_barrier \n \n \
+19. Install Steam ROM Manager \n \
+20. Uninstall_deckyloader \n \
+21. Fix_barrier \n \n \
 Which tasks to run? (0 for all the default tasks)"
 
 default_tasks=( 0 1 2 3 4 5 6 7 8 9 10 11 12 13 ) # edit these numbers to edit the default tasks

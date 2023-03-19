@@ -133,6 +133,12 @@ refind_uninstall_gui() {
     rm -f ~/Desktop/refind_GUI.desktop
 }
 
+install_steam_rom_manager() {
+    cp -v $HOME/.deck_setup/applications/Steam-ROM-Manager-2.3.40.AppImage $HOME/Applications
+    chmod +x $HOME/Applications/Steam-ROM-Manager-2.3.40.AppImage
+    cp -v "$HOME/.deck_setup/applications/steam-rom-manager.desktop" "$HOME/.local/share/applications"
+}
+
 fix_barrier() {
 echo "Fixing Barrier"
 echo "Are you using auto config for the ip address? (y/n)"
@@ -189,5 +195,6 @@ tasks=( "sudo pacman -Syu" \
 "apply_refind_config" \
 "save_refind_config" \
 "install_refind" \
+"install_steam_rom_manager" \
 "uninstall_deckyloader" \
 "fix_barrier" )

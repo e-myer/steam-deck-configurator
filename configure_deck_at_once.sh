@@ -43,5 +43,6 @@ install_refind_all # disable other refind functions if this is enabled
 #install_refind_bootloader
 #apply_refind_config
 #install_refind
+#install_steam_rom_manager"
 #uninstall_deckyloader
 #fix_barrier

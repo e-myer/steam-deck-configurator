@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Steam ROM Manager
+Exec="$HOME/Applications/Steam-ROM-Manager-2.3.40.AppImage"
+Terminal=false
+Type=Application
+Icon=/home/amirs-kde/.local/share/bauh/appimage/installed/steam-rom-manager/logo.png
+StartupWMClass=Steam ROM Manager
+X-AppImage-Version=2.3.40
+Comment=An app for managing ROMs in Steam
+Categories=Utility;

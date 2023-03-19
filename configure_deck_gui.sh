@@ -30,8 +30,9 @@ options=$(kdialog --checklist "Select tasks, click and drag to multiselect" \
 16 "Apply rEFInd config" off \
 17 "Save rEFInd config" off \
 18 "Install rEFInd" off \
-19 "Uninstall Deckyloader" off \
-20 "Fix Barrier" off)
+19 "Install Steam ROM Manager" off \
+20 "Uninstall Deckyloader" off \
+21 "Fix Barrier" off)
 
 options="${options//\"}"
 
