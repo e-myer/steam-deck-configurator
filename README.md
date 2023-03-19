@@ -58,4 +58,4 @@ To edit the defult tasks for the GUI, edit the configure_deck_gui.sh and change 
 ## Installing SteamOS
 
 - Ensure you have the [latest steam deck recovery image](https://help.steampowered.com/en/faqs/view/1B71-EDF2-EB6D-2BB3).
-- After reimmaging steam deck, don't press reboot. Instead press cancel, shutdown, remove the usb stick, then boot.
+- After reimaging steam deck, don't press reboot. Instead press cancel, shutdown, remove the usb stick, then boot.
