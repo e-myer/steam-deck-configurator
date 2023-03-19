@@ -10,7 +10,7 @@ read -p "Please make sure a sudo password is already set before continuing. If y
 echo -e "\n \
 D. Default (starred) \n \
 * 0. Update apps \n \
-* 1. Add Flathub
+* 1. Add Flathub if it doesn't exist \n \
 * 2. Update Flatpaks \n \
 * 3. Install firefox \n \
 * 4. Install_corekeyboard \n \

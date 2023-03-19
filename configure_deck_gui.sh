@@ -12,7 +12,7 @@ fi
 
 options=$(kdialog --checklist "Select tasks, click and drag to multiselect" \
 0 "Update from pacman" on \
-1 "Add Flathub" on \
+1 "Add Flathub if it doesn't exist" on \
 2 "Update Flatpaks" on \
 3 "Install Firefox" on \
 4 "Install Corekeyboard" on \
