@@ -9,6 +9,7 @@ This project auto configures
 - Emudeck
 - rEFInd Bootloader
 - Barrier
+- Flathub
 
 And installs
 
