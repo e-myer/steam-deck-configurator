@@ -39,7 +39,7 @@ mkdir -p $HOME/.deck_setup
 cd $HOME/.deck_setup
 git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git
 cd steam-deck-configurator
-chmod +x ./configure_deck_at_once.sh ./configure_deck_CLI.sh ./configure_deck_gui.sh
+chmod +x ./configure_deck_at_once.sh ./configure_deck_cli.sh ./configure_deck_giu.sh
 ```
 
 # Run instructions
