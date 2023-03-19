@@ -18,19 +18,21 @@ echo -e "\n \
 * 7. Install_ProtonUp_QT \n \
 * 8. Install_BoilR \n \
 * 9. Install_Flatseal \n \
-* 10. Install_deckyloader \n \
-* 11. Install_cryoutilities \n \
-* 12. Install_emudeck \n \
-* 13. Install_refind_all \n \
-14. Install_refind_GUI \n \
-15. Install_refind_bootloader \n \
-16. Apply_refind_config \n \
-17. Install_refind \n \
-18. Uninstall_deckyloader \n \
-19. Fix_barrier \n \n \
+* 10. Add Flathub \n \
+* 11. Install_deckyloader \n \
+* 12. Install_cryoutilities \n \
+* 13. Install_emudeck \n \
+* 14. Install_refind_all \n \
+15. Install_refind_GUI \n \
+16. Install_refind_bootloader \n \
+17. Apply_refind_config \n \
+18. Save rEFInd config \n \
+19. Install_refind \n \
+20. Uninstall_deckyloader \n \
+21. Fix_barrier \n \n \
 Which tasks to run? (0 for all the default tasks)"
 
-default_tasks=( 1 2 3 4 5 6 7 8 9 10 11 12 13 ) # edit these numbers to edit the default tasks
+default_tasks=( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 ) # edit these numbers to edit the default tasks
 
 read string
 echo $string
