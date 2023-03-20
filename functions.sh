@@ -22,21 +22,27 @@ install_deckyloader() {
             if [ "$VERSION" != "$DECKYLOADER_INSTALLED_VERSION" ];
             then
                 echo "Installing Latest Version"
-                curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh | sh
+                curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$HOME/.deck_setup/deckyloader_install_release.sh"
+                chmod +x "$HOME/.deck_setup/deckyloader_install_release.sh"
+                $HOME/.deck_setup/deckyloader_install_release.sh
                 echo "$VERSION" > "$HOME/.deck_setup/deckyloader_installed_version"
             else
                echo "Latest Version of DeckyLoader is already installed"
             fi
     else
         echo "Installing DeckyLoader"
-        curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh | sh
+        curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$HOME/.deck_setup/deckyloader_install_release.sh"
+        chmod +x "$HOME/.deck_setup/deckyloader_install_release.sh"
+        $HOME/.deck_setup/deckyloader_install_release.sh
         echo "$VERSION" > "$HOME/.deck_setup/deckyloader_installed_version"
     fi
 }
 
 uninstall_deckyloader() {
     echo "Uninstalling DeckyLoader"
-    curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh | sh
+    curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh  --output "$HOME/.deck_setup/deckyloader_uninstaller.sh"
+    chmod +x "$HOME/.deck_setup/deckyloader_uninstaller.sh"
+    $HOME/.deck_setup/deckyloader_uninstaller.sh
     rm -f "$HOME/.deck_setup/deckyloader_installed_version"
 }
 
@@ -45,7 +51,9 @@ install_cryoutilities() {
     if [ ! -d "$HOME/.cryo_utilities" ]
     then
         echo "cryoutilities is not installed, installing"
-        curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh | bash -s --
+        curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$HOME/.deck_setup/cryoutilities_install.sh"
+        chmod +x "$HOME/.deck_setup/cryoutilities_install.sh"
+        $HOME/.deck_setup/cryoutilities_install.sh
     else
         echo "cryoutilities is already installed"
     fi
@@ -56,7 +64,9 @@ install_emudeck() {
     if [ ! -d "$HOME/emudeck" ]
     then
     echo "emudeck is not installed, installing"
-    sh -c 'curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh | bash'
+    curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh --output "$HOME/.deck_setup/emudeck_install.sh"
+    chmod +x "$HOME/.deck_setup/emudeck_install.sh"
+    $HOME/.deck_setup/emudeck_install.sh
     else
     echo "emudeck is already installed"
     fi
