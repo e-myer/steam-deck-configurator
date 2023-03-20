@@ -83,11 +83,26 @@ install_refind_bootloader() {
     "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
+choose_refind_config() {
+    configs=$(find $HOME/.deck_setup/ -mindepth 1 -maxdepth 1 -type d -printf :%f)
+    IFS=':' read -r -a configs_array <<< "$configs" # split the input to an array
+    for i in ${configs_array[@]}
+    do
+    (( index ++ ))
+    echo $index \""$i"\" off
+    config_list="$config_list $index \""$i"\" off"
+    done
+    echo kdialog --radiolist "Select a config to apply:" $config_list
+    refind_config_choice=$(kdialog --radiolist "Select a config to apply:" $config_list)
+    refind_config_apply_dir=$HOME/.deck_setup/${configs_array[$refind_config_choice]}
+    #echo $refind_config_apply_dir
+}
+
 apply_refind_config() {
     echo "applying rEFInd config"
     num_of_dirs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then #if there is more than 1 folder (or more than one config)
-    refind_config_apply_dir=$(kdialog --getexistingdirectory $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs) # show a dialog to choose the folder you want (the config you want)
+    choose_refind_config
     else
     refind_config_apply_dir=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config apply dir to that
     fi
