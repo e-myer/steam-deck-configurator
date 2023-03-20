@@ -114,14 +114,14 @@ save_refind_config() {
         kdialog --error "error, name cannot contain spaces"
         exit 1
         fi
-    kdialog --msgbox "Please select the root of the storage device you want to save the config to"
-    usb_path=$(kdialog --getexistingdirectory /)
-    mkdir -p "$usb_path/rEFInd_configs/$config_name"
-    cp $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$usb_path/rEFInd_configs/$config_name" #copy files saved by rEFInd GUI to a custom directory
+    kdialog --msgbox "Please select the rEFInd_configs folder in your USB"
+    refind_configs_path=$(kdialog --getexistingdirectory /)
+    mkdir -p "$refind_configs_path/$config_name"
+    cp $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$refind_configs_path/$config_name" #copy files saved by rEFInd GUI to a custom directory
         if [ $? == 0 ];
         then
-        echo "config saved to $usb_path/rEFInd_configs/$config_name"
-        kdialog --msgbox "config saved to $usb_path/rEFInd_configs/$config_name"
+        echo "config saved to $refind_configs_path/$config_name"
+        kdialog --msgbox "config saved to $refind_configs_path/$config_name"
         else
         cp_error=$?
         echo "error: $cp_error, config not saved"
