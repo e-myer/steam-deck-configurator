@@ -51,7 +51,7 @@ If you are dualbooting, run the windows.ps1 file in Windows.
 
 # Configuration
 
-To edit the defult tasks for the GUI, edit the configure_deck_gui.sh and change the "on" and "off" texts in the "options" array
+To edit the defult tasks, edit the configure_deck_gui.sh and change the "on" and "off" texts in the "options" array
 
 # General Steam Deck Notes
 
