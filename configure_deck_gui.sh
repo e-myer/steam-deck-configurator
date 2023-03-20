@@ -30,7 +30,6 @@ options=$(kdialog --checklist "Select tasks, click and drag to multiselect" \
 16 "Install rEFInd bootloader" off \
 17 "Apply rEFInd config" off \
 18 "Save rEFInd config" off \
-19 "Install rEFInd" off \
 20 "Uninstall Deckyloader" off \
 21 "Fix Barrier" off)
 

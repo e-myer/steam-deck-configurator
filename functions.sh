@@ -190,6 +190,5 @@ tasks=( "sudo pacman -Syu" \
 "install_refind_bootloader" \
 "apply_refind_config" \
 "save_refind_config" \
-"install_refind" \
 "uninstall_deckyloader" \
 "fix_barrier" )
