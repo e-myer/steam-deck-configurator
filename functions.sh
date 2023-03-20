@@ -9,7 +9,7 @@ install_BoilR="flatpak install flathub io.github.philipk.boilr"
 install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal"
 install_steam_rom_manager="flatpak install flathub com.steamgriddb.steam-rom-manager"
 add_flathub="flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo"
-run_cryo_utilities_reccommended="$HOME/.cryo_utilities/cryo_utilities recommended"
+run_cryo_utilities_reccommended=sudo $HOME/.cryo_utilities/cryo_utilities recommended
 
 install_deckyloader() {
     if [ -f "$HOME/.deck_setup/deckyloader_installed_version" ]
