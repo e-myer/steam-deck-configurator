@@ -38,6 +38,7 @@ $install_Flatseal -y
 #functions
 install_deckyloader
 install_cryoutilities
+run_cryo_utilities_reccommended
 install_emudeck
 install_refind_all # disable other refind functions if this is enabled
 #install_refind_GUI
