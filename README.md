@@ -40,12 +40,12 @@ mkdir -p $HOME/.deck_setup
 cd $HOME/.deck_setup
 git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git
 cd steam-deck-configurator
-chmod +x ./configure_deck_gui.sh
+chmod +x ./configure_deck.sh
 ```
 
 # Run instructions
 Go into the steam-deck-configurator directory and run
-`./configure_deck_gui.sh`
+`./configure_deck.sh`
 
 If you are dualbooting, run the windows.ps1 file in Windows.
 
