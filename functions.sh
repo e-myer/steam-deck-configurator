@@ -84,7 +84,7 @@ install_refind_bootloader() {
 }
 
 choose_refind_config() {
-    configs=$(find $HOME/.deck_setup/ -mindepth 1 -maxdepth 1 -type d -printf :%f)
+    configs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/ -mindepth 1 -maxdepth 1 -type d -printf :%f)
     IFS=':' read -r -a configs_array <<< "$configs" # split the input to an array
     for i in ${configs_array[@]}
     do
@@ -94,7 +94,7 @@ choose_refind_config() {
     done
     echo kdialog --radiolist "Select a config to apply:" $config_list
     refind_config_choice=$(kdialog --radiolist "Select a config to apply:" $config_list)
-    refind_config_apply_dir=$HOME/.deck_setup/${configs_array[$refind_config_choice]}
+    refind_config_apply_dir=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/${configs_array[$refind_config_choice]}
     #echo $refind_config_apply_dir
 }
 
