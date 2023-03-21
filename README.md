@@ -33,6 +33,12 @@ chmod +x ./copy_to_steamos.sh
 ./copy_to_steamos.sh
 cd $HOME/.deck_setup
 ```
+Alternatively, you can copy this one liner and paste it into your terminal, and run it
+
+```
+cd steam-deck-configurator && chmod +x ./copy_to_steamos.sh && ./copy_to_steamos.sh && cd $HOME/.deck_setup
+```
+
 ### If cloning from GitHub
 
 ```
