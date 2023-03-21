@@ -8,6 +8,7 @@ install_ProtonUp_QT="flatpak install flathub net.davidotek.pupgui2"
 install_BoilR="flatpak install flathub io.github.philipk.boilr"
 install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal"
 install_steam_rom_manager="flatpak install flathub com.steamgriddb.steam-rom-manager"
+install_retrodeck="flatpak install flathub net.retrodeck.retrodeck"
 add_flathub="flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo"
 run_cryo_utilities_reccommended=sudo $HOME/.cryo_utilities/cryo_utilities recommended
 
@@ -212,6 +213,7 @@ tasks=( "sudo pacman -Syu" \
 "install_cryoutilities" \
 "$run_cryo_utilities_reccommended" \
 "install_emudeck" \
+"$install_retrodeck" \
 "install_refind_all" \
 "install_refind_GUI" \
 "install_refind_bootloader" \
