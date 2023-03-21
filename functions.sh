@@ -1,5 +1,18 @@
 #! /usr/bin/bash
 
+#try flatpak install --sideload=$flatpak_directory flathub org.mozilla.firefox if this doesn't work
+flatpak_directory="$HOME/.deck_setup/steam-deck-configurator/flatpaks/.ostree/repo"
+import_firefox="flatpak install --sideload-repo=$flatpak_directory flathub org.mozilla.firefox"
+import_corekeyboard="flatpak install --sideload-repo=$flatpak_directory flathub org.cubocore.CoreKeyboard"
+import_barrier="flatpak install --sideload-repo=$flatpak_directory flathub com.github.debauchee.barrier"
+import_heroic_games="flatpak install --sideload-repo=$flatpak_directory flathub com.heroicgameslauncher.hgl"
+import_ProtonUp_QT="flatpak install --sideload-repo=$flatpak_directory flathub net.davidotek.pupgui2"
+import_BoilR="flatpak install --sideload-repo=$flatpak_directory flathub io.github.philipk.boilr"
+import_Flatseal="flatpak install --sideload-repo=$flatpak_directory flathub com.github.tchx84.Flatseal"
+import_steam_rom_manager="flatpak install --sideload-repo=$flatpak_directory flathub com.steamgriddb.steam-rom-manager"
+add_flathub="flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo"
+run_cryo_utilities_reccommended="sudo $HOME/.cryo_utilities/cryo_utilities recommended"
+
 install_firefox="flatpak install flathub org.mozilla.firefox"
 install_corekeyboard="flatpak install flathub org.cubocore.CoreKeyboard"
 install_barrier="flatpak install flathub com.github.debauchee.barrier"
@@ -11,6 +24,28 @@ install_steam_rom_manager="flatpak install flathub com.steamgriddb.steam-rom-man
 install_retrodeck="flatpak install flathub net.retrodeck.retrodeck"
 add_flathub="flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo"
 run_cryo_utilities_reccommended=sudo $HOME/.cryo_utilities/cryo_utilities recommended
+
+set_up_import_flatpaks() {
+flatpak update
+flatpak remote-modify --collection-id=org.flathub.Stable flathub
+flatpak update
+}
+
+export_flatpaks() {
+kdialog --msgbox "Select the root of your usb"
+flatpaks_export_usb=$(kdialog --getexistingdirectory /)
+flatpak update
+flatpak remote-modify --collection-id=org.flathub.Stable flathub
+flatpak update
+flatpak --verbose create-usb $flatpaks_export_usb/flatpaks org.mozilla.firefox
+flatpak --verbose create-usb $flatpaks_export_usb/flatpaks org.cubocore.CoreKeyboard
+flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.debauchee.barrier
+flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.heroicgameslauncher.hgl
+flatpak --verbose create-usb $flatpaks_export_usb/flatpaks net.davidotek.pupgui2
+flatpak --verbose create-usb $flatpaks_export_usb/flatpaks io.github.philipk.boilr
+flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.tchx84.Flatseal
+flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.steamgriddb.steam-rom-manager
+}
 
 install_deckyloader() {
     if [ -f "$HOME/.deck_setup/deckyloader_installed_version" ]
@@ -208,6 +243,15 @@ echo "Applied fix, turn off SSL on both the server and host, if Barrier still do
 tasks=( "sudo pacman -Syu" \
 "$add_flathub" \
 "flatpak update -y" \
+"set_up_import_flatpaks" \
+"$import_firefox" \
+"$import_corekeyboard" \
+"$import_barrier" \
+"$import_heroic_games" \
+"$import_ProtonUp_QT" \
+"$import_BoilR" \
+"$import_Flatseal" \
+"$import_steam_rom_manager" \
 "$install_firefox -y" \
 "$install_corekeyboard -y" \
 "$install_barrier -y" \
@@ -229,3 +273,4 @@ tasks=( "sudo pacman -Syu" \
 "save_refind_config" \
 "uninstall_deckyloader" \
 "fix_barrier" )
+
