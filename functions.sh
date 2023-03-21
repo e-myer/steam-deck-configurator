@@ -249,6 +249,7 @@ tasks=( "sudo pacman -Syu" \
 "$import_barrier" \
 "$import_heroic_games" \
 "$import_ProtonUp_QT" \
+"install_proton_ge_in_steam" \
 "$import_BoilR" \
 "$import_Flatseal" \
 "$import_steam_rom_manager" \
@@ -257,7 +258,6 @@ tasks=( "sudo pacman -Syu" \
 "$install_barrier -y" \
 "$install_heroic_games -y" \
 "$install_ProtonUp_QT -y" \
-"install_proton_ge_in_steam" \
 "$install_BoilR -y" \
 "$install_Flatseal -y" \
 "$install_steam_rom_manager -y" \
@@ -266,7 +266,6 @@ tasks=( "sudo pacman -Syu" \
 "$run_cryo_utilities_reccommended" \
 "install_emudeck" \
 "$install_retrodeck" \
-"install_refind_all" \
 "install_refind_GUI" \
 "install_refind_bootloader" \
 "apply_refind_config" \
