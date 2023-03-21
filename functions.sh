@@ -26,9 +26,11 @@ add_flathub="flatpak remote-add --if-not-exists flathub https://flathub.org/repo
 run_cryo_utilities_reccommended=sudo $HOME/.cryo_utilities/cryo_utilities recommended
 
 print_log() {
-    log=$1
-    qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: ${tasks[$i]}: $log"
-    echo "$task_number/${#chosen_tasks[@]}: ${tasks[$i]}: $log"
+    log_message=$1
+    log="$task_number/${#chosen_tasks[@]}: ${tasks[$i]}: $log_message"
+    echo "$log"
+    qdbus $dbusRef setLabelText "$log"
+    echo "$log" >> $HOME/.deck_setup/steam-deck-configurator/logs.log
 }
 
 set_up_import_flatpaks() {
