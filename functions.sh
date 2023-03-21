@@ -1,17 +1,17 @@
 #! /usr/bin/bash
 
 #try flatpak install --sideload=$flatpak_directory flathub org.mozilla.firefox if this doesn't work
-flatpak_directory=$HOME/.deck_setup/steam-deck-configurator/flatpaks/.ostree/repo
-import_firefox=flatpak install --sideload-repo=$flatpak_directory flathub org.mozilla.firefox
-import_corekeyboard=flatpak install --sideload-repo=$flatpak_directory flathub org.cubocore.CoreKeyboard
-import_barrier=flatpak install --sideload-repo=$flatpak_directory flathub com.github.debauchee.barrier
-import_heroic_games=flatpak install --sideload-repo=$flatpak_directory flathub com.heroicgameslauncher.hgl
-import_ProtonUp_QT=flatpak install --sideload-repo=$flatpak_directory flathub net.davidotek.pupgui2
-import_BoilR=flatpak install --sideload-repo=$flatpak_directory flathub io.github.philipk.boilr
-import_Flatseal=flatpak install --sideload-repo=$flatpak_directory flathub com.github.tchx84.Flatseal
-import_steam_rom_manager=flatpak install --sideload-repo=$flatpak_directory flathub com.steamgriddb.steam-rom-manager
-add_flathub=flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-run_cryo_utilities_reccommended=sudo $HOME/.cryo_utilities/cryo_utilities recommended
+flatpak_directory="$HOME/.deck_setup/steam-deck-configurator/flatpaks/.ostree/repo"
+import_firefox="flatpak install --sideload-repo=$flatpak_directory flathub org.mozilla.firefox"
+import_corekeyboard="flatpak install --sideload-repo=$flatpak_directory flathub org.cubocore.CoreKeyboard"
+import_barrier="flatpak install --sideload-repo=$flatpak_directory flathub com.github.debauchee.barrier"
+import_heroic_games="flatpak install --sideload-repo=$flatpak_directory flathub com.heroicgameslauncher.hgl"
+import_ProtonUp_QT="flatpak install --sideload-repo=$flatpak_directory flathub net.davidotek.pupgui2"
+import_BoilR="flatpak install --sideload-repo=$flatpak_directory flathub io.github.philipk.boilr"
+import_Flatseal="flatpak install --sideload-repo=$flatpak_directory flathub com.github.tchx84.Flatseal"
+import_steam_rom_manager="flatpak install --sideload-repo=$flatpak_directory flathub com.steamgriddb.steam-rom-manager"
+add_flathub="flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo"
+run_cryo_utilities_reccommended="sudo $HOME/.cryo_utilities/cryo_utilities recommended"
 
 install_firefox="flatpak install flathub org.mozilla.firefox"
 install_corekeyboard="flatpak install flathub org.cubocore.CoreKeyboard"

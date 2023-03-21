@@ -14,7 +14,7 @@ options=$(kdialog --checklist "Select tasks, click and drag to multiselect" \
 0 "Update from pacman" on \
 1 "Add Flathub if it doesn't exist" on \
 2 "Update Flatpaks" on \
-3 Set up import Flatpaks on \
+3 "Set up import Flatpaks" on \
 4 "Import Firefox" on \
 5 "Import Corekeyboard" on \
 6 "Import Barrier" on \
