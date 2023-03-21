@@ -161,6 +161,13 @@ refind_uninstall_gui() {
     rm -f ~/Desktop/refind_GUI.desktop
 }
 
+install_proton_ge_in_steam() {
+    #this assumes the native steam is installed, not the flatpak
+    mkdir -p ~/.steam/root/compatibilitytools.d
+    tar -xf $HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz -C ~/.steam/root/compatibilitytools.d/
+    echo "Proton GE installed, please restart Steam"
+}
+
 fix_barrier() {
 echo "Fixing Barrier"
 echo "Are you using auto config for the ip address? (y/n)"
@@ -206,6 +213,7 @@ tasks=( "sudo pacman -Syu" \
 "$install_barrier -y" \
 "$install_heroic_games -y" \
 "$install_ProtonUp_QT -y" \
+"install_proton_ge_in_steam" \
 "$install_BoilR -y" \
 "$install_Flatseal -y" \
 "$install_steam_rom_manager -y" \

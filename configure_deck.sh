@@ -19,21 +19,22 @@ options=$(kdialog --checklist "Select tasks, click and drag to multiselect" \
 5 "Install Barrier" on \
 6 "Install Heroic Games" on \
 7 "Install ProtonUp_QT" on \
-8 "Install BoilR" on \
-9 "Install Flatseal" on \
-10 "Install Steam Rom Manager" off \
-11 "Install DeckyLoader" on \
-12 "Install Cryoutilities" on \
-13 "Run CryoUtilities with reccommended settings" off \
-14 "Install Emudeck" on \
-15 "Install RetroDeck" off \
-16 "Install rEFInd all" on \
-17 "Install rEFInd GUI" off \
-18 "Install rEFInd bootloader" off \
-19 "Apply rEFInd config" off \
-20 "Save rEFInd config" off \
-21 "Uninstall Deckyloader" off \
-22 "Fix Barrier" off)
+8 "Install Proton GE in Steam" on \
+9 "Install BoilR" on \
+10 "Install Flatseal" on \
+11 "Install Steam Rom Manager" off \
+12 "Install DeckyLoader" on \
+13 "Install Cryoutilities" on \
+14 "Run CryoUtilities with reccommended settings" off \
+15 "Install Emudeck" on \
+16 "Install RetroDeck" off \
+17 "Install rEFInd all" on \
+18 "Install rEFInd GUI" off \
+19 "Install rEFInd bootloader" off \
+20 "Apply rEFInd config" off \
+21 "Save rEFInd config" off \
+22 "Uninstall Deckyloader" off \
+23 "Fix Barrier" off)
 
 options="${options//\"}"
 
