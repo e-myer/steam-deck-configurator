@@ -60,7 +60,7 @@ do
     if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
     then
     echo ${tasks[$i]}
-#    ${tasks[$i]} # run the tasks 
+    ${tasks[$i]} # run the tasks 
     else
     echo "Task \"${tasks[$i]}\" not executed, exiting..."
     exit 0
