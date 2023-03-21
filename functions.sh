@@ -24,7 +24,6 @@ install_steam_rom_manager="flatpak install flathub com.steamgriddb.steam-rom-man
 
 set_up_import_flatpaks() {
 # https://dataswamp.org/~solene/2023-01-01-flatpak-export-import.html
-# replace "export" with the directory of the usb
 flatpak update
 flatpak remote-modify --collection-id=org.flathub.Stable flathub
 flatpak update
@@ -32,7 +31,7 @@ flatpak update
 
 export_flatpaks() {
 # https://dataswamp.org/~solene/2023-01-01-flatpak-export-import.html
-# replace "export" with the directory of the usb
+kdialog --msgbox "Select the root of your usb"
 flatpaks_export_usb=$(kdialog --getexistingdirectory /)
 flatpak update
 flatpak remote-modify --collection-id=org.flathub.Stable flathub
@@ -44,6 +43,7 @@ flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.heroicgameslaunch
 flatpak --verbose create-usb $flatpaks_export_usb/flatpaks net.davidotek.pupgui2
 flatpak --verbose create-usb $flatpaks_export_usb/flatpaks io.github.philipk.boilr
 flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.tchx84.Flatseal
+flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.steamgriddb.steam-rom-manager
 }
 
 install_deckyloader() {
