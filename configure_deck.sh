@@ -19,7 +19,7 @@ options=$(kdialog --checklist "Select tasks, click and drag to multiselect" \
 5 "Install Barrier" on \
 6 "Install Heroic Games" on \
 7 "Install ProtonUp_QT" on \
-8 "Install Proton GE" on \
+8 "Install Proton GE in Steam" on \
 9 "Install BoilR" on \
 10 "Install Flatseal" on \
 11 "Install Steam Rom Manager" off \
