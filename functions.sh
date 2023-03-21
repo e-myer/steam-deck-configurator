@@ -21,16 +21,17 @@ install_ProtonUp_QT="flatpak install flathub net.davidotek.pupgui2"
 install_BoilR="flatpak install flathub io.github.philipk.boilr"
 install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal"
 install_steam_rom_manager="flatpak install flathub com.steamgriddb.steam-rom-manager"
+install_retrodeck="flatpak install flathub net.retrodeck.retrodeck"
+add_flathub="flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo"
+run_cryo_utilities_reccommended=sudo $HOME/.cryo_utilities/cryo_utilities recommended
 
 set_up_import_flatpaks() {
-# https://dataswamp.org/~solene/2023-01-01-flatpak-export-import.html
 flatpak update
 flatpak remote-modify --collection-id=org.flathub.Stable flathub
 flatpak update
 }
 
 export_flatpaks() {
-# https://dataswamp.org/~solene/2023-01-01-flatpak-export-import.html
 kdialog --msgbox "Select the root of your usb"
 flatpaks_export_usb=$(kdialog --getexistingdirectory /)
 flatpak update
@@ -195,6 +196,13 @@ refind_uninstall_gui() {
     rm -f ~/Desktop/refind_GUI.desktop
 }
 
+install_proton_ge_in_steam() {
+    #this assumes the native steam is installed, not the flatpak
+    mkdir -p ~/.steam/root/compatibilitytools.d
+    tar -xf $HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz -C ~/.steam/root/compatibilitytools.d/
+    echo "Proton GE installed, please restart Steam"
+}
+
 fix_barrier() {
 echo "Fixing Barrier"
 echo "Are you using auto config for the ip address? (y/n)"
@@ -229,7 +237,7 @@ systemctl --user enable barrier
 systemctl --user start barrier
 systemctl --user status barrier
 
-echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, chck if you are connected on the same wifi network, and set windows resolution to 100%"
+echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
 tasks=( "sudo pacman -Syu" \
@@ -249,6 +257,7 @@ tasks=( "sudo pacman -Syu" \
 "$install_barrier -y" \
 "$install_heroic_games -y" \
 "$install_ProtonUp_QT -y" \
+"install_proton_ge_in_steam" \
 "$install_BoilR -y" \
 "$install_Flatseal -y" \
 "$install_steam_rom_manager -y" \
@@ -256,6 +265,7 @@ tasks=( "sudo pacman -Syu" \
 "install_cryoutilities" \
 "$run_cryo_utilities_reccommended" \
 "install_emudeck" \
+"$install_retrodeck" \
 "install_refind_all" \
 "install_refind_GUI" \
 "install_refind_bootloader" \
