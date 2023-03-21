@@ -2,21 +2,21 @@
 
 source ./functions.sh
 
-kdialog --title "password" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"
+#kdialog --title "password" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"
 #exit code of yes is 0 and no is 1
 
-if [ $? == 1 ];
-then
-exit 0
-fi
+#if [ $? == 1 ];
+#then
+#exit 0
+#fi
 
-options=$(kdialog --separate-output --checklist "Select tasks, click and drag to multiselect" \
+readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select tasks, click and drag to multiselect" \
 "${tasks_array[Update from pacman]}" "Update from pacman" on \
 "${tasks_array[Add Flathub if it does not exist]}" "Add Flathub if it doesn't exist" on \
 "${tasks_array[Update Flatpaks]}" "Update Flatpaks" on \
 "${tasks_array[Set up import Flatpaks]}" "Set up import Flatpaks" on \
 "${tasks_array[Import Firefox]}" "Import Firefox" on \
-"${tasks_array[Import Corekeyboard]}" "Import Corekeyboard" on \
+"${tasks_array[Import Cor${options//\"}ekeyboard]}" "Import Corekeyboard" on \
 "${tasks_array[Import Barrier]}" "Import Barrier" on \
 "${tasks_array[Import Heroic_games]}" "Import Heroic_games" on \
 "${tasks_array[Import ProtonUp_QT]}" "Import ProtonUp_QT" on \
@@ -54,27 +54,27 @@ options=$(kdialog --separate-output --checklist "Select tasks, click and drag to
 #IFS='
 #' read -r -a chosen_tasks <<< $options # split the input to an array
 #echo ${!chosen_tasks[@]}
+echo ${my_array[1]}
+
 
 #dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
 #qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
 
-#for i in "${chosen_tasks[@]}"
-#do
-   # ((task_number ++))
-   # qdbus $dbusRef Set "" value $i
-   # qdbus $dbusRef setLabelText "test"
-#    sleep 0.5
-#    sleep 2
-   # if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
-   # then
-  #  task_name=${tasks_array[$i]}
-   # echo "task name is $task_name"
-   # echo ${tasks_array[$task_name]}
-#    ${tasks[$i]} # run the tasks 
-  #  else
-  #  echo "Task \"${tasks[$i]}\" not executed, exiting..."
-  #  exit 0
-   # fi
-#done
+for i in "${chosen_tasks[@]}"
+do
+    ((task_number ++))
+    qdbus $dbusRef Set "" value 2
+    qdbus $dbusRef setLabelText "test"
+    sleep 0.5
+    sleep 2
+    if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
+    then
+    echo $i
+ #   $i #run task
+    else
+    echo "Task \"${tasks[$i]}\" not executed, exiting..."
+    exit 0
+    fi
+done
 #qdbus $dbusRef close
 #echo $dbusRef closed
