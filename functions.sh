@@ -249,6 +249,7 @@ tasks=( "sudo pacman -Syu" \
 "$import_barrier" \
 "$import_heroic_games" \
 "$import_ProtonUp_QT" \
+"install_proton_ge_in_steam" \
 "$import_BoilR" \
 "$import_Flatseal" \
 "$import_steam_rom_manager" \
@@ -257,7 +258,6 @@ tasks=( "sudo pacman -Syu" \
 "$install_barrier -y" \
 "$install_heroic_games -y" \
 "$install_ProtonUp_QT -y" \
-"install_proton_ge_in_steam" \
 "$install_BoilR -y" \
 "$install_Flatseal -y" \
 "$install_steam_rom_manager -y" \
