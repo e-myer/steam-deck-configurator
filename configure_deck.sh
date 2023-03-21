@@ -37,13 +37,12 @@ options=$(kdialog --checklist "Select tasks, click and drag to multiselect" \
 23 "Run CryoUtilities with reccommended settings" off \
 24 "Install Emudeck" on \
 25 "Install RetroDeck" off \
-26 "Install rEFInd all" on \
-27 "Install rEFInd GUI" off \
-28 "Install rEFInd bootloader" off \
-29 "Apply rEFInd config" off \
-30 "Save rEFInd config" off \
-31 "Uninstall Deckyloader" off \
-32 "Fix Barrier" off)
+26 "Install rEFInd GUI" on \
+27 "Install rEFInd bootloader" on \
+28 "Apply rEFInd config" on \
+29 "Save rEFInd config" off \
+30 "Uninstall Deckyloader" off \
+31 "Fix Barrier" off)
 
 options="${options//\"}"
 

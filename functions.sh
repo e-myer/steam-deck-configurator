@@ -266,7 +266,6 @@ tasks=( "sudo pacman -Syu" \
 "$run_cryo_utilities_reccommended" \
 "install_emudeck" \
 "$install_retrodeck" \
-"install_refind_all" \
 "install_refind_GUI" \
 "install_refind_bootloader" \
 "apply_refind_config" \
