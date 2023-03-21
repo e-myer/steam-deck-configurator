@@ -23,7 +23,7 @@ install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal"
 install_steam_rom_manager="flatpak install flathub com.steamgriddb.steam-rom-manager"
 install_retrodeck="flatpak install flathub net.retrodeck.retrodeck"
 add_flathub="flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo"
-run_cryo_utilities_reccommended=sudo $HOME/.cryo_utilities/cryo_utilities recommended
+run_cryo_utilities_reccommended="sudo $HOME/.cryo_utilities/cryo_utilities recommended"
 
 print_log() {
     log_message=$1
@@ -248,36 +248,37 @@ systemctl --user status barrier
 echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
-tasks=( "sudo pacman -Syu" \
-"$add_flathub" \
-"flatpak update -y" \
-"set_up_import_flatpaks" \
-"$import_firefox" \
-"$import_corekeyboard" \
-"$import_barrier" \
-"$import_heroic_games" \
-"$import_ProtonUp_QT" \
-"install_proton_ge_in_steam" \
-"$import_BoilR" \
-"$import_Flatseal" \
-"$import_steam_rom_manager" \
-"$install_firefox -y" \
-"$install_corekeyboard -y" \
-"$install_barrier -y" \
-"$install_heroic_games -y" \
-"$install_ProtonUp_QT -y" \
-"$install_BoilR -y" \
-"$install_Flatseal -y" \
-"$install_steam_rom_manager -y" \
-"install_deckyloader" \
-"install_cryoutilities" \
-"$run_cryo_utilities_reccommended" \
-"install_emudeck" \
-"$install_retrodeck" \
-"install_refind_GUI" \
-"install_refind_bootloader" \
-"apply_refind_config" \
-"save_refind_config" \
-"uninstall_deckyloader" \
-"fix_barrier" )
+declare -A tasks_array
+tasks_array["Update from pacman"]="sudo pacman -Syu"
+tasks_array["Add Flathub if it does not exist"]="$add_flathub"
+tasks_array["Update Flatpaks"]="flatpak update -y"
+tasks_array["Set up import Flatpaks"]="set_up_import_flatpaks"
+tasks_array["Import Firefox"]="$import_firefox"
+tasks_array["Import Corekeyboard"]="$import_corekeyboard"
+tasks_array["Import Barrier"]="$import_barrier"
+tasks_array["Import Heroic_games"]="$import_heroic_games"
+tasks_array["Import ProtonUp_QT"]="$import_ProtonUp_QT"
+tasks_array["Install Proton GE in Steam"]="install_proton_ge_in_steam"
+tasks_array["Import BoilR"]="$import_BoilR"
+tasks_array["Import Flatseal"]="$import_Flatseal"
+tasks_array["Import Steam ROM Manager"]="$import_steam_rom_manager"
+tasks_array["Install Firefox"]="$install_firefox -y"
+tasks_array["Install Corekeyboard"]="$install_corekeyboard -y"
+tasks_array["Install Barrier"]="$install_barrier -y"
+tasks_array["Install Heroic Games"]="$install_heroic_games -y"
+tasks_array["Install ProtonUp_QT"]="$install_ProtonUp_QT -y"
+tasks_array["Install BoilR"]="$install_BoilR -y"
+tasks_array["Install Flatseal"]="$install_Flatseal -y"
+tasks_array["Install Steam Rom Manager"]="$install_steam_rom_manager -y"
+tasks_array["Install DeckyLoader"]="install_deckyloader"
+tasks_array["Install Cryoutilities"]="install_cryoutilities"
+tasks_array["Run CryoUtilities with reccommended settings"]="$run_cryo_utilities_reccommended"
+tasks_array["Install Emudeck"]="install_emudeck"
+tasks_array["Install RetroDeck"]="$install_retrodeck"
+tasks_array["Install rEFInd GUI"]="install_refind_GUI"
+tasks_array["Install rEFInd bootloader"]="install_refind_bootloader"
+tasks_array["Apply rEFInd config"]="apply_refind_config"
+tasks_array["Save rEFInd config"]="save_refind_config"
+tasks_array["Uninstall Deckyloader"]="uninstall_deckyloader"
+tasks_array["Fix Barrier"]="fix_barrier"
 
