@@ -20,28 +20,29 @@ options=$(kdialog --checklist "Select tasks, click and drag to multiselect" \
 6 "Import Barrier" on \
 7 "Import Heroic_games" on \
 8 "Import ProtonUp_QT" on \
-9 "Import BoilR" on \
-10 "Import Flatseal" on \
-11 "Import Steam ROM Manager" on \
-12 "Install Firefox" off \
-13 "Install Corekeyboard" off \
-14 "Install Barrier" off \
-15 "Install Heroic Games" off \
-16 "Install ProtonUp_QT" off \
-17 "Install BoilR" off \
-18 "Install Flatseal" off \
-19 "Install Steam Rom Manager" off \
-20 "Install DeckyLoader" on \
-21 "Install Cryoutilities" on \
-22 "Run CryoUtilities with reccommended settings" off \
-23 "Install Emudeck" on \
-24 "Install rEFInd all" on \
-25 "Install rEFInd GUI" off \
-26 "Install rEFInd bootloader" off \
-27 "Apply rEFInd config" off \
-28 "Save rEFInd config" off \
-29 "Uninstall Deckyloader" off \
-30 "Fix Barrier" off)
+9 "Install Proton GE in Steam" on \
+10 "Import BoilR" on \
+11 "Import Flatseal" on \
+12 "Import Steam ROM Manager" on \
+13 "Install Firefox" off \
+14 "Install Corekeyboard" off \
+15 "Install Barrier" off \
+16 "Install Heroic Games" off \
+17 "Install ProtonUp_QT" off \
+18 "Install BoilR" off \
+19 "Install Flatseal" off \
+20 "Install Steam Rom Manager" off \
+21 "Install DeckyLoader" on \
+22 "Install Cryoutilities" on \
+23 "Run CryoUtilities with reccommended settings" off \
+24 "Install Emudeck" on \
+25 "Install rEFInd all" on \
+26 "Install rEFInd GUI" off \
+27 "Install rEFInd bootloader" off \
+28 "Apply rEFInd config" off \
+29 "Save rEFInd config" off \
+30 "Uninstall Deckyloader" off \
+31 "Fix Barrier" off)
 
 options="${options//\"}"
 
