@@ -72,7 +72,7 @@ install_deckyloader() {
             else
                print_log "Latest Version of DeckyLoader is already installed"
             fi
-   else
+    else
         print_log "Installing DeckyLoader"
         curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$HOME/.deck_setup/deckyloader_install_release.sh"
         chmod +x "$HOME/.deck_setup/deckyloader_install_release.sh"
