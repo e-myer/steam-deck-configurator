@@ -161,6 +161,30 @@ refind_uninstall_gui() {
     rm -f ~/Desktop/refind_GUI.desktop
 }
 
+install_proton_ge() {
+    #this assumes the native steam is installed, not flatpak
+    # make temp working directory
+    mkdir /tmp/proton-ge-custom
+    cd /tmp/proton-ge-custom
+
+    # download  tarball 
+    curl -sLOJ $(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | grep browser_download_url | cut -d\" -f4 | egrep .tar.gz)
+
+    # download checksum 
+    curl -sLOJ $(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | grep browser_download_url | cut -d\" -f4 | egrep .sha512sum) 
+
+    # check tarball with checksum
+    sha512sum -c *.sha512sum
+    # if result is ok, continue
+
+    # make steam directory if it does not exist
+    mkdir -p ~/.steam/root/compatibilitytools.d
+
+    # extract proton tarball to steam directory
+    tar -xf GE-Proton*.tar.gz -C ~/.steam/root/compatibilitytools.d/
+    echo "All done :)"
+}
+
 fix_barrier() {
 echo "Fixing Barrier"
 echo "Are you using auto config for the ip address? (y/n)"
@@ -206,6 +230,7 @@ tasks=( "sudo pacman -Syu" \
 "$install_barrier -y" \
 "$install_heroic_games -y" \
 "$install_ProtonUp_QT -y" \
+"install_proton_ge" \
 "$install_BoilR -y" \
 "$install_Flatseal -y" \
 "$install_steam_rom_manager -y" \
