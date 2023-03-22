@@ -44,16 +44,20 @@ readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select task
 "${tasks_array[Fix Barrier]}" "Fix Barrier" off)
 
 echo ${chosen_tasks[@]}
-
+if [ ${#chosen_tasks[@]} -eq 0 ]
+then
+echo exiting...
+exit 0
+fi
 
 dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
 qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
+qdbus $dbusRef setLabelText "Initializing..."
 
 for i in "${chosen_tasks[@]}"
 do
     ((task_number ++))
     qdbus $dbusRef Set "" value $task_number
-    qdbus $dbusRef setLabelText "Initializing..."
 #    sleep 0.5
 #    sleep 2
     if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
