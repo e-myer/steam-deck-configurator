@@ -124,7 +124,7 @@ install_bauh() {
 	Comment[ca]=Instal·lar i eliminar aplicacions (AppImage, Arch, Flatpak, Snap, Web)
 	Comment[ru]=Установка и удаление приложений (AppImage, Arch, Flatpak, Snap, Web)
 	Comment[tr]=Uygulama yükle/kaldır (AppImage, Arch, Flatpak, Snap, Web)
-	Exec=$HOME/AppImages/bauh-0.10.5-x86_64.AppImage
+	Exec=$HOME/Applications/bauh-0.10.5-x86_64.AppImage
 	Icon=bauh
 	EOF
     cp $HOME/.deck_setup/steam-deck-configurator/desktop_icons/bauh.svg $HOME/.local/share/icons/
