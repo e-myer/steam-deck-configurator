@@ -33,6 +33,12 @@ chmod +x ./copy_to_steamos.sh
 ./copy_to_steamos.sh
 cd $HOME/.deck_setup
 ```
+To clone the repo to the usb, for contributers, run
+
+```
+git clone --recurse-submodules git@github.com:e-myer/steam-deck-configurator.git
+```
+
 Alternatively, you can copy this one liner and paste it into your terminal, and run it
 
 ```
