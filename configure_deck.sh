@@ -16,7 +16,7 @@ readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select task
 "${tasks_array[Update Flatpaks]}" "Update Flatpaks" on \
 "${tasks_array[Set up import Flatpaks]}" "Set up import Flatpaks" on \
 "${tasks_array[Import Firefox]}" "Import Firefox" on \
-"${tasks_array[Import Cor${options//\"}ekeyboard]}" "Import Corekeyboard" on \
+"${tasks_array[Import Corekeyboard]}" "Import Corekeyboard" on \
 "${tasks_array[Import Barrier]}" "Import Barrier" on \
 "${tasks_array[Import Heroic_games]}" "Import Heroic_games" on \
 "${tasks_array[Import ProtonUp_QT]}" "Import ProtonUp_QT" on \
@@ -54,11 +54,11 @@ readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select task
 #IFS='
 #' read -r -a chosen_tasks <<< $options # split the input to an array
 #echo ${!chosen_tasks[@]}
-echo ${my_array[1]}
+echo ${chosen_tasks[@]}
 
 
-#dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
-#qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
+dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
+qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
 
 for i in "${chosen_tasks[@]}"
 do
@@ -70,7 +70,7 @@ do
     if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
     then
     echo $i
- #   $i #run task
+    $i #run task
     else
     echo "Task \"${tasks[$i]}\" not executed, exiting..."
     exit 0
