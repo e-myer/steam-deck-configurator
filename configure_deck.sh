@@ -3,7 +3,6 @@
 source ./functions.sh
 
 kdialog --title "password" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"
-exit code of yes is 0 and no is 1
 
 if [ $? == 1 ];
 then
