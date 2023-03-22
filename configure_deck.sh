@@ -51,7 +51,7 @@ exit 0
 fi
 
 dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
-qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
+#qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
 qdbus $dbusRef setLabelText "Initializing..."
 
 for i in "${chosen_tasks[@]}"
