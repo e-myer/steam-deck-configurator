@@ -11,7 +11,7 @@ print_log() {
 }
 
 update_from_pacman() {
-    print log "Updating apps from Pacman"
+    print_log "Updating apps from Pacman"
     sudo pacman -Syu
 }
 
