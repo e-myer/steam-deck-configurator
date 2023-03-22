@@ -2,13 +2,13 @@
 
 source ./functions.sh
 
-#kdialog --title "password" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"
-#exit code of yes is 0 and no is 1
+kdialog --title "password" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"
+exit code of yes is 0 and no is 1
 
-#if [ $? == 1 ];
-#then
-#exit 0
-#fi
+if [ $? == 1 ];
+then
+exit 0
+fi
 
 readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select tasks, click and drag to multiselect" \
 "${tasks_array[Update from pacman]}" "Update from pacman" on \
@@ -44,16 +44,6 @@ readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select task
 "${tasks_array[Uninstall Deckyloader]}" "Uninstall Deckyloader" off \
 "${tasks_array[Fix Barrier]}" "Fix Barrier" off)
 
-#echo "$options"
-
-
-#options="${options//\"}"
-
-
-
-#IFS='
-#' read -r -a chosen_tasks <<< $options # split the input to an array
-#echo ${!chosen_tasks[@]}
 echo ${chosen_tasks[@]}
 
 
@@ -69,7 +59,7 @@ do
     sleep 2
     if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
     then
-    echo $i
+#    echo $i
     $i #run task
     else
     echo "Task \"${tasks[$i]}\" not executed, exiting..."
