@@ -30,6 +30,7 @@ readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select task
 "${tasks_array[Install ProtonUp_QT]}" "Install ProtonUp_QT" off \
 "${tasks_array[Install BoilR]}" "Install BoilR" off \
 "${tasks_array[Install Flatseal]}" "Install Flatseal" off \
+"${tasks_array[Install Bauh]}" "Install Bauh" off \
 "${tasks_array[Install Steam Rom Manager]}" "Install Steam Rom Manager" off \
 "${tasks_array[Install DeckyLoader]}" "Install DeckyLoader" on \
 "${tasks_array[Install Cryoutilities]}" "Install Cryoutilities" on \

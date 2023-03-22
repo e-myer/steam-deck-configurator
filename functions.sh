@@ -100,6 +100,36 @@ install_retrodeck() {
     flatpak install flathub net.retrodeck.retrodeck -y
 }
 
+install_bauh() {
+    print_log "Installing Bauh"
+    cp $HOME/.deck_setup/applications/bauh-0.10.5-x86_64.AppImage $HOME/Applications/
+    chmod +x $HOME/Applications/bauh-0.10.5-x86_64.AppImage
+    cat <<- EOF > $HOME/.local/share/applications/bauh.desktop
+    [Desktop Entry]
+	Type=Application
+	Name=Applications (bauh)
+	Name[pt]=Aplicativos (bauh)
+	Name[es]=Aplicaciones (bauh)
+	Name[ca]=Aplicacions (bauh)
+	Name[it]=Applicazioni (bauh)
+	Name[de]=Anwendungen (bauh)
+	Name[ru]=Приложения (bauh)
+	Name[tr]=Paket Yönetici (bauh)
+	Categories=System;
+	Comment=Install and remove applications (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[pt]=Instale e remova aplicativos (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[es]=Instalar y eliminar aplicaciones (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[it]=Installa e rimuovi applicazioni (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[de]=Anwendungen installieren und entfernen (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[ca]=Instal·lar i eliminar aplicacions (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[ru]=Установка и удаление приложений (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[tr]=Uygulama yükle/kaldır (AppImage, Arch, Flatpak, Snap, Web)
+	Exec=$HOME/Applications/bauh-0.10.5-x86_64.AppImage
+	Icon=bauh
+	EOF
+    cp $HOME/.deck_setup/steam-deck-configurator/desktop_icons/bauh.svg $HOME/.local/share/icons/
+}
+
 add_flathub() {
     print_log "Adding Flathub"
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -352,6 +382,7 @@ tasks_array["Install Proton GE in Steam"]="install_proton_ge_in_steam"
 tasks_array["Import BoilR"]="import_boilr"
 tasks_array["Import Flatseal"]="import_flatseal"
 tasks_array["Import Steam ROM Manager"]="import_steam_rom_manager"
+tasks_array["Install Bauh"]="install_bauh"
 tasks_array["Install Firefox"]="install_firefox"
 tasks_array["Install Corekeyboard"]="install_corekeyboard"
 tasks_array["Install Barrier"]="install_barrier"
