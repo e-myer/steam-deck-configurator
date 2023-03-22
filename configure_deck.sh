@@ -65,7 +65,7 @@ do
 #    echo $i
     $i #run task
     else
-    echo "Task \"${tasks[$i]}\" not executed, exiting..."
+    echo "Task $i not executed, exiting..."
     exit 0
     fi
 done
