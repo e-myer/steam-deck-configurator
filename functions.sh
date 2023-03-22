@@ -1,29 +1,6 @@
-#! /usr/bin/bash
+#! /usr/bin/bash -v
 
 #try flatpak install --sideload=$flatpak_directory flathub org.mozilla.firefox if this doesn't work
-flatpak_directory="$HOME/.deck_setup/steam-deck-configurator/flatpaks/.ostree/repo"
-import_firefox="flatpak install --sideload-repo=$flatpak_directory flathub org.mozilla.firefox"
-import_corekeyboard="flatpak install --sideload-repo=$flatpak_directory flathub org.cubocore.CoreKeyboard"
-import_barrier="flatpak install --sideload-repo=$flatpak_directory flathub com.github.debauchee.barrier"
-import_heroic_games="flatpak install --sideload-repo=$flatpak_directory flathub com.heroicgameslauncher.hgl"
-import_ProtonUp_QT="flatpak install --sideload-repo=$flatpak_directory flathub net.davidotek.pupgui2"
-import_BoilR="flatpak install --sideload-repo=$flatpak_directory flathub io.github.philipk.boilr"
-import_Flatseal="flatpak install --sideload-repo=$flatpak_directory flathub com.github.tchx84.Flatseal"
-import_steam_rom_manager="flatpak install --sideload-repo=$flatpak_directory flathub com.steamgriddb.steam-rom-manager"
-add_flathub="flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo"
-run_cryo_utilities_reccommended="sudo $HOME/.cryo_utilities/cryo_utilities recommended"
-
-install_firefox="flatpak install flathub org.mozilla.firefox"
-install_corekeyboard="flatpak install flathub org.cubocore.CoreKeyboard"
-install_barrier="flatpak install flathub com.github.debauchee.barrier"
-install_heroic_games="flatpak install flathub com.heroicgameslauncher.hgl"
-install_ProtonUp_QT="flatpak install flathub net.davidotek.pupgui2"
-install_BoilR="flatpak install flathub io.github.philipk.boilr"
-install_Flatseal="flatpak install flathub com.github.tchx84.Flatseal"
-install_steam_rom_manager="flatpak install flathub com.steamgriddb.steam-rom-manager"
-install_retrodeck="flatpak install flathub net.retrodeck.retrodeck"
-add_flathub="flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo"
-run_cryo_utilities_reccommended=sudo $HOME/.cryo_utilities/cryo_utilities recommended
 
 print_log() {
     log_message=$1
@@ -33,6 +10,111 @@ print_log() {
     echo "$log" >> $HOME/.deck_setup/steam-deck-configurator/logs.log
 }
 
+update_from_pacman() {
+    print_log "Updating apps from Pacman"
+    sudo pacman -Syu
+}
+
+import_firefox() {
+    print_log "Importing Firefoc"
+    flatpak install --sideload-repo=$flatpak_directory flathub org.mozilla.firefox
+}
+
+import_corekeyboard() {
+    print_log "Importing CoreKeyboard"
+    flatpak install --sideload-repo=$flatpak_directory flathub org.cubocore.CoreKeyboard
+}
+
+import_barrier() {
+    print_log "Importing Barrier"
+    flatpak install --sideload-repo=$flatpak_directory flathub com.github.debauchee.barrier
+}
+
+import_heroic_games() {
+    print_log "Importing Heroic Games"
+    flatpak install --sideload-repo=$flatpak_directory flathub com.heroicgameslauncher.hgl
+}
+
+import_protonup_qt() {
+    print_log "Importing ProtonUP QT"
+    flatpak install --sideload-repo=$flatpak_directory flathub net.davidotek.pupgui2
+}
+
+import_boilr() {
+    print_log "Importing BoilR"
+    flatpak install --sideload-repo=$flatpak_directory flathub io.github.philipk.boilr
+}
+
+import_flatseal() {
+    print_log "Importing Flatseal"
+    flatpak install --sideload-repo=$flatpak_directory flathub com.github.tchx84.Flatseal
+}
+
+import_steam_rom_manager() {
+    print_log "Importing Steam ROM Manager"
+    flatpak install --sideload-repo=$flatpak_directory flathub com.steamgriddb.steam-rom-manager
+}
+
+install_firefox() {
+    print_log "Installing Firefox"
+    flatpak install flathub org.mozilla.firefox -y
+}
+
+install_corekeyboard() {
+    print_log "Installing CoreKeyboard"
+    flatpak install flathub org.cubocore.CoreKeyboard -y
+}
+
+install_barrier() {
+    print_log "Installing Barrier"
+    flatpak install flathub com.github.debauchee.barrier -y
+}
+
+install_heroic_games() {
+    print_log "Installing Heroic Games"
+    flatpak install flathub com.heroicgameslauncher.hgl -y
+}
+
+install_protonUp_qt() {
+    print_log "Installing ProtonUP QT"
+    flatpak install flathub net.davidotek.pupgui2 -y
+}
+
+install_boilr() {
+    print_log "Installing BoilR"
+    flatpak install flathub io.github.philipk.boilr -y
+}
+
+install_flatseal() {
+    print_log "Installing Flatseal"
+    flatpak install flathub com.github.tchx84.Flatseal -y
+}
+
+install_steam_rom_manager() {
+    print_log "Installing Steam ROM Manager"
+    flatpak install flathub com.steamgriddb.steam-rom-manager -y
+}
+
+install_retrodeck() {
+    print_log "Installing RetroDeck"
+    flatpak install flathub net.retrodeck.retrodeck -y
+}
+
+add_flathub() {
+    print_log "Adding Flathub"
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+}
+
+run_cryo_utilities_reccommended() {
+    print_log "Running Cryoutilities with reccommended settings"
+    sudo $HOME/.cryo_utilities/cryo_utilities recommended
+}
+
+update_flatpaks() {
+    print_log "Updating Flatpaks"
+    flatpak update -y
+}
+
 set_up_import_flatpaks() {
 flatpak update
 flatpak remote-modify --collection-id=org.flathub.Stable flathub
@@ -40,18 +122,28 @@ flatpak update
 }
 
 export_flatpaks() {
+print_log "exporting flatpaks"
 kdialog --msgbox "Select the root of your usb"
 flatpaks_export_usb=$(kdialog --getexistingdirectory /)
+print_log "updating flatpaks"
 flatpak update
 flatpak remote-modify --collection-id=org.flathub.Stable flathub
 flatpak update
+print_log "adding Firefox to usb"
 flatpak --verbose create-usb $flatpaks_export_usb/flatpaks org.mozilla.firefox
+print_log "adding CoreKeyboard to usb"
 flatpak --verbose create-usb $flatpaks_export_usb/flatpaks org.cubocore.CoreKeyboard
+print_log "adding barrier to usb"
 flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.debauchee.barrier
+print_log "adding heroic games to usb"
 flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.heroicgameslauncher.hgl
+print_log "adding proton up qt to usb"
 flatpak --verbose create-usb $flatpaks_export_usb/flatpaks net.davidotek.pupgui2
+print_log "adding boilr to usb"
 flatpak --verbose create-usb $flatpaks_export_usb/flatpaks io.github.philipk.boilr
+print_log "adding flatseal to usb"
 flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.tchx84.Flatseal
+print_log "adding steam rom manager to usb"
 flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.steamgriddb.steam-rom-manager
 }
 
@@ -134,13 +226,11 @@ choose_refind_config() {
     for i in ${configs_array[@]}
     do
     (( index ++ ))
-    echo $index \""$i"\" off
+#    echo $index \""$i"\" off
     config_list="$config_list $index \""$i"\" off"
     done
-    echo kdialog --radiolist "Select a config to apply:" $config_list
     refind_config_choice=$(kdialog --radiolist "Select a config to apply:" $config_list)
     refind_config_apply_dir=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/${configs_array[$refind_config_choice]}
-    #echo $refind_config_apply_dir
 }
 
 apply_refind_config() {
@@ -248,36 +338,37 @@ systemctl --user status barrier
 echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
-tasks=( "sudo pacman -Syu" \
-"$add_flathub" \
-"flatpak update -y" \
-"set_up_import_flatpaks" \
-"$import_firefox" \
-"$import_corekeyboard" \
-"$import_barrier" \
-"$import_heroic_games" \
-"$import_ProtonUp_QT" \
-"install_proton_ge_in_steam" \
-"$import_BoilR" \
-"$import_Flatseal" \
-"$import_steam_rom_manager" \
-"$install_firefox -y" \
-"$install_corekeyboard -y" \
-"$install_barrier -y" \
-"$install_heroic_games -y" \
-"$install_ProtonUp_QT -y" \
-"$install_BoilR -y" \
-"$install_Flatseal -y" \
-"$install_steam_rom_manager -y" \
-"install_deckyloader" \
-"install_cryoutilities" \
-"$run_cryo_utilities_reccommended" \
-"install_emudeck" \
-"$install_retrodeck" \
-"install_refind_GUI" \
-"install_refind_bootloader" \
-"apply_refind_config" \
-"save_refind_config" \
-"uninstall_deckyloader" \
-"fix_barrier" )
+declare -A tasks_array
+tasks_array["Update from pacman"]="update_from_pacman"
+tasks_array["Add Flathub if it does not exist"]="add_flathub"
+tasks_array["Update Flatpaks"]="update_flatpaks"
+tasks_array["Set up import Flatpaks"]="set_up_import_flatpaks"
+tasks_array["Import Firefox"]="import_firefox"
+tasks_array["Import Corekeyboard"]="import_corekeyboard"
+tasks_array["Import Barrier"]="import_barrier"
+tasks_array["Import Heroic_games"]="import_heroic_games"
+tasks_array["Import ProtonUp_QT"]="import_protonup_qt"
+tasks_array["Install Proton GE in Steam"]="install_proton_ge_in_steam"
+tasks_array["Import BoilR"]="import_boilr"
+tasks_array["Import Flatseal"]="import_flatseal"
+tasks_array["Import Steam ROM Manager"]="import_steam_rom_manager"
+tasks_array["Install Firefox"]="install_firefox"
+tasks_array["Install Corekeyboard"]="install_corekeyboard"
+tasks_array["Install Barrier"]="install_barrier"
+tasks_array["Install Heroic Games"]="install_heroic_games"
+tasks_array["Install ProtonUp_QT"]="install_protonUp_qt"
+tasks_array["Install BoilR"]="install_boilr"
+tasks_array["Install Flatseal"]="install_flatseal"
+tasks_array["Install Steam Rom Manager"]="install_steam_rom_manager"
+tasks_array["Install DeckyLoader"]="install_deckyloader"
+tasks_array["Install Cryoutilities"]="install_cryoutilities"
+tasks_array["Run CryoUtilities with reccommended settings"]="run_cryo_utilities_reccommended"
+tasks_array["Install Emudeck"]="install_emudeck"
+tasks_array["Install RetroDeck"]="install_retrodeck"
+tasks_array["Install rEFInd GUI"]="install_refind_GUI"
+tasks_array["Install rEFInd bootloader"]="install_refind_bootloader"
+tasks_array["Apply rEFInd config"]="apply_refind_config"
+tasks_array["Save rEFInd config"]="save_refind_config"
+tasks_array["Uninstall Deckyloader"]="uninstall_deckyloader"
+tasks_array["Fix Barrier"]="fix_barrier"
 
