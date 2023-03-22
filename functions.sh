@@ -100,6 +100,14 @@ install_retrodeck() {
     flatpak install flathub net.retrodeck.retrodeck -y
 }
 
+install_bauh() {
+    print_log "Installing Bauh"
+    cp $HOME/.deck_setup/applications/bauh-0.10.5-x86_64.AppImage $HOME/Applications/
+    chmod +x $HOME/Applications/bauh-0.10.5-x86_64.AppImage
+    cp $HOME/.deck_setup/steam-deck-configurator/desktop_files/bauh.desktop $HOME/.local/share/applications/
+    cp $HOME/.deck_setup/steam-deck-configurator/desktop_icons/bauh.svg $HOME/.local/share/icons/
+}
+
 add_flathub() {
     print_log "Adding Flathub"
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -352,6 +360,7 @@ tasks_array["Install Proton GE in Steam"]="install_proton_ge_in_steam"
 tasks_array["Import BoilR"]="import_boilr"
 tasks_array["Import Flatseal"]="import_flatseal"
 tasks_array["Import Steam ROM Manager"]="import_steam_rom_manager"
+tasks_array["Install Bauh"]="install_bauh"
 tasks_array["Install Firefox"]="install_firefox"
 tasks_array["Install Corekeyboard"]="install_corekeyboard"
 tasks_array["Install Barrier"]="install_barrier"
