@@ -53,8 +53,8 @@ qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
 for i in "${chosen_tasks[@]}"
 do
     ((task_number ++))
-    qdbus $dbusRef Set "" value 2
-    qdbus $dbusRef setLabelText "test"
+    qdbus $dbusRef Set "" value $task_number
+    qdbus $dbusRef setLabelText "Initializing..."
     sleep 0.5
     sleep 2
     if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
