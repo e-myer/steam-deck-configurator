@@ -55,18 +55,18 @@ dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
 #qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
 qdbus $dbusRef setLabelText "Initializing..."
 
-for i in "${chosen_tasks[@]}"
+for task in "${chosen_tasks[@]}"
 do
     ((task_number ++))
-    qdbus $dbusRef Set "" value $task_number
 #    sleep 0.5
-#    sleep 2
+#    sleep 5
     if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
     then
-#    echo $i
-    $i #run task
+#    echo $task
+    $task #run task
+    qdbus $dbusRef Set "" value $task_number
     else
-    echo "Task $i not executed, exiting..."
+    echo "Task $task not executed, exiting..."
     exit 0
     fi
 done
