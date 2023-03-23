@@ -146,35 +146,35 @@ update_flatpaks() {
 }
 
 set_up_import_flatpaks() {
-flatpak update
-flatpak remote-modify --collection-id=org.flathub.Stable flathub
-flatpak update
+    flatpak update
+    flatpak remote-modify --collection-id=org.flathub.Stable flathub
+    flatpak update
 }
 
 export_flatpaks() {
-print_log "exporting flatpaks"
-kdialog --msgbox "Select the root of your usb"
-flatpaks_export_usb=$(kdialog --getexistingdirectory /)
-print_log "updating flatpaks"
-flatpak update
-flatpak remote-modify --collection-id=org.flathub.Stable flathub
-flatpak update
-print_log "adding Firefox to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks org.mozilla.firefox
-print_log "adding CoreKeyboard to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks org.cubocore.CoreKeyboard
-print_log "adding barrier to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.debauchee.barrier
-print_log "adding heroic games to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.heroicgameslauncher.hgl
-print_log "adding proton up qt to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks net.davidotek.pupgui2
-print_log "adding boilr to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks io.github.philipk.boilr
-print_log "adding flatseal to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.tchx84.Flatseal
-print_log "adding steam rom manager to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.steamgriddb.steam-rom-manager
+    print_log "exporting flatpaks"
+    kdialog --msgbox "Select the root of your usb"
+    flatpaks_export_usb=$(kdialog --getexistingdirectory /)
+    print_log "updating flatpaks"
+    flatpak update
+    flatpak remote-modify --collection-id=org.flathub.Stable flathub
+    flatpak update
+    print_log "adding Firefox to usb"
+    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks org.mozilla.firefox
+    print_log "adding CoreKeyboard to usb"
+    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks org.cubocore.CoreKeyboard
+    print_log "adding barrier to usb"
+    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.debauchee.barrier
+    print_log "adding heroic games to usb"
+    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.heroicgameslauncher.hgl
+    print_log "adding proton up qt to usb"
+    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks net.davidotek.pupgui2
+    print_log "adding boilr to usb"
+    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks io.github.philipk.boilr
+    print_log "adding flatseal to usb"
+    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.tchx84.Flatseal
+    print_log "adding steam rom manager to usb"
+    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.steamgriddb.steam-rom-manager
 }
 
 install_deckyloader() {
@@ -332,40 +332,40 @@ install_proton_ge_in_steam() {
 }
 
 fix_barrier() {
-print_log "Fixing Barrier"
-echo "Are you using auto config for the ip address? (y/n)"
-read barrier_auto_config
-if [ "$barrier_auto_config" != y ] && [ "$barrier_auto_config" != n ]
-then
-echo "error, invalid input"
-elif [ "$barrier_auto_config" == n ]
-then
-ip_address=$(read -p "input server ip address from the barrier app")
-fi
+    print_log "Fixing Barrier"
+    echo "Are you using auto config for the ip address? (y/n)"
+    read barrier_auto_config
+    if [ "$barrier_auto_config" != y ] && [ "$barrier_auto_config" != n ]
+    then
+    echo "error, invalid input"
+    elif [ "$barrier_auto_config" == n ]
+    then
+    ip_address=$(read -p "input server ip address from the barrier app")
+    fi
 
-touch "$HOME/.config/systemd/user/barrier.service"
-cat > "$HOME/.config/systemd/user/barrier.service" << EOL
-[Unit]
-Description=Barrier
-After=graphical.target
-StartLimitIntervalSec=400
-StartLimitBurst=3
+    touch "$HOME/.config/systemd/user/barrier.service"
+	cat <<- EOF > $HOME/.config/systemd/user/barrier.service
+	[Unit]
+	Description=Barrier
+	After=graphical.target
+	StartLimitIntervalSec=400
+	StartLimitBurst=3
+	
+	[Service]
+	Type=simple
+	ExecStart=/usr/bin/flatpak run -p --command="barrierc" com.github.debauchee.barrier --no-restart --no-tray --no-daemon --debug INFO --name steamdeck${ip_address}
+	Restart=always
+	RestartSec=20
+	
+	[Install]
+	WantedBy=default.target
+	EOF
 
-[Service]
-Type=simple
-ExecStart=/usr/bin/flatpak run -p --command="barrierc" com.github.debauchee.barrier --no-restart --no-tray --no-daemon --debug INFO --name steamdeck${ip_address}
-Restart=always
-RestartSec=20
+    systemctl --user enable barrier
+    systemctl --user start barrier
+    systemctl --user status barrier
 
-[Install]
-WantedBy=default.target
-EOL
-
-systemctl --user enable barrier
-systemctl --user start barrier
-systemctl --user status barrier
-
-echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
+    echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
 declare -A tasks_array
