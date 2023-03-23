@@ -1,13 +1,15 @@
-#! /usr/bin/bash -v
+#! /usr/bin/bash
 
 #try flatpak install --sideload=$flatpak_directory flathub org.mozilla.firefox if this doesn't work
+
+HERE="$(dirname "$(readlink -f "${0}")")"
 
 print_log() {
     log_message=$1
     log="$task_number/${#chosen_tasks[@]}: ${tasks[$i]}: $log_message"
     echo "$log"
     qdbus $dbusRef setLabelText "$log"
-    echo "$log" >> $HOME/.deck_setup/steam-deck-configurator/logs.log
+    echo "$log" >> "$HERE/logs.log"
 }
 
 update_from_pacman() {
@@ -17,42 +19,42 @@ update_from_pacman() {
 
 import_firefox() {
     print_log "Importing Firefoc"
-    flatpak install --sideload-repo=$flatpak_directory flathub org.mozilla.firefox
+    flatpak install --sideload-repo="$HERE/flatpaks" flathub org.mozilla.firefox
 }
 
 import_corekeyboard() {
     print_log "Importing CoreKeyboard"
-    flatpak install --sideload-repo=$flatpak_directory flathub org.cubocore.CoreKeyboard
+    flatpak install --sideload-repo="$HERE/flatpaks" flathub org.cubocore.CoreKeyboard
 }
 
 import_barrier() {
     print_log "Importing Barrier"
-    flatpak install --sideload-repo=$flatpak_directory flathub com.github.debauchee.barrier
+    flatpak install --sideload-repo="$HERE/flatpaks" flathub com.github.debauchee.barrier
 }
 
 import_heroic_games() {
     print_log "Importing Heroic Games"
-    flatpak install --sideload-repo=$flatpak_directory flathub com.heroicgameslauncher.hgl
+    flatpak install --sideload-repo="$HERE/flatpaks" flathub com.heroicgameslauncher.hgl
 }
 
 import_protonup_qt() {
     print_log "Importing ProtonUP QT"
-    flatpak install --sideload-repo=$flatpak_directory flathub net.davidotek.pupgui2
+    flatpak install --sideload-repo="$HERE/flatpaks" flathub net.davidotek.pupgui2
 }
 
 import_boilr() {
     print_log "Importing BoilR"
-    flatpak install --sideload-repo=$flatpak_directory flathub io.github.philipk.boilr
+    flatpak install --sideload-repo="$HERE/flatpaks" flathub io.github.philipk.boilr
 }
 
 import_flatseal() {
     print_log "Importing Flatseal"
-    flatpak install --sideload-repo=$flatpak_directory flathub com.github.tchx84.Flatseal
+    flatpak install --sideload-repo="$HERE/flatpaks" flathub com.github.tchx84.Flatseal
 }
 
 import_steam_rom_manager() {
     print_log "Importing Steam ROM Manager"
-    flatpak install --sideload-repo=$flatpak_directory flathub com.steamgriddb.steam-rom-manager
+    flatpak install --sideload-repo="$HERE/flatpaks" flathub com.steamgriddb.steam-rom-manager
 }
 
 install_firefox() {
@@ -102,7 +104,7 @@ install_retrodeck() {
 
 install_bauh() {
     print_log "Installing Bauh"
-    cp $HOME/.deck_setup/applications/bauh-0.10.5-x86_64.AppImage $HOME/Applications/
+    cp $HERE/applications/bauh-0.10.5-x86_64.AppImage $HOME/Applications/
     chmod +x $HOME/Applications/bauh-0.10.5-x86_64.AppImage
     cat <<- EOF > $HOME/.local/share/applications/bauh.desktop
     [Desktop Entry]
@@ -127,7 +129,7 @@ install_bauh() {
 	Exec=$HOME/Applications/bauh-0.10.5-x86_64.AppImage
 	Icon=bauh
 	EOF
-    cp $HOME/.deck_setup/steam-deck-configurator/desktop_icons/bauh.svg $HOME/.local/share/icons/
+    cp $HERE/desktop_icons/bauh.svg $HOME/.local/share/icons/
 }
 
 add_flathub() {
@@ -160,25 +162,25 @@ flatpak update
 flatpak remote-modify --collection-id=org.flathub.Stable flathub
 flatpak update
 print_log "adding Firefox to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks org.mozilla.firefox
+flatpak --verbose create-usb $HERE/flatpaks org.mozilla.firefox
 print_log "adding CoreKeyboard to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks org.cubocore.CoreKeyboard
+flatpak --verbose create-usb $HERE/flatpaks org.cubocore.CoreKeyboard
 print_log "adding barrier to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.debauchee.barrier
+flatpak --verbose create-usb $HERE/flatpaks com.github.debauchee.barrier
 print_log "adding heroic games to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.heroicgameslauncher.hgl
+flatpak --verbose create-usb $HERE/flatpaks com.heroicgameslauncher.hgl
 print_log "adding proton up qt to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks net.davidotek.pupgui2
+flatpak --verbose create-usb $HERE/flatpaks net.davidotek.pupgui2
 print_log "adding boilr to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks io.github.philipk.boilr
+flatpak --verbose create-usb $HERE/flatpaks io.github.philipk.boilr
 print_log "adding flatseal to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.tchx84.Flatseal
+flatpak --verbose create-usb $HERE/flatpaks com.github.tchx84.Flatseal
 print_log "adding steam rom manager to usb"
-flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.steamgriddb.steam-rom-manager
+flatpak --verbose create-usb $HERE/flatpaks com.steamgriddb.steam-rom-manager
 }
 
 install_deckyloader() {
-    if [ -f "$HOME/.deck_setup/deckyloader_installed_version" ]
+    if [ -f "$HERE/deckyloader_installed_version" ]
     then
         print_log "Checking if latest version of DeckyLoader is installed"
         RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
@@ -191,26 +193,26 @@ install_deckyloader() {
                 print_log "Installing Latest Version"
                 curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$HOME/.deck_setup/deckyloader_install_release.sh"
                 chmod +x "$HOME/.deck_setup/deckyloader_install_release.sh"
-                $HOME/.deck_setup/deckyloader_install_release.sh
-                echo "$VERSION" > "$HOME/.deck_setup/deckyloader_installed_version"
+                $HERE/deckyloader_install_release.sh
+                echo "$VERSION" > "$HERE/deckyloader_installed_version"
             else
                print_log "Latest Version of DeckyLoader is already installed"
             fi
     else
         print_log "Installing DeckyLoader"
         curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$HOME/.deck_setup/deckyloader_install_release.sh"
-        chmod +x "$HOME/.deck_setup/deckyloader_install_release.sh"
-        $HOME/.deck_setup/deckyloader_install_release.sh
-        echo "$VERSION" > "$HOME/.deck_setup/deckyloader_installed_version"
+        chmod +x "$HERE/deckyloader_install_release.sh"
+        $HERE/deckyloader_install_release.sh
+        echo "$VERSION" > "$HERE/deckyloader_installed_version"
    fi
 }
 
 uninstall_deckyloader() {
     print_log "Uninstalling DeckyLoader"
     curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh  --output "$HOME/.deck_setup/deckyloader_uninstaller.sh"
-    chmod +x "$HOME/.deck_setup/deckyloader_uninstaller.sh"
+    chmod +x "$HERE/deckyloader_uninstaller.sh"
     $HOME/.deck_setup/deckyloader_uninstaller.sh
-    rm -f "$HOME/.deck_setup/deckyloader_installed_version"
+    rm -f "$HERE/deckyloader_installed_version"
 }
 
 install_cryoutilities() {
@@ -219,8 +221,8 @@ install_cryoutilities() {
     then
         print_log "cryoutilities is not installed, installing"
         curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$HOME/.deck_setup/cryoutilities_install.sh"
-        chmod +x "$HOME/.deck_setup/cryoutilities_install.sh"
-        $HOME/.deck_setup/cryoutilities_install.sh
+        chmod +x "$HERE/.deck_setup/cryoutilities_install.sh"
+        $HERE/cryoutilities_install.sh
     else
         print_log "cryoutilities is already installed"
     fi
@@ -232,8 +234,8 @@ install_emudeck() {
     then
     print_log "emudeck is not installed, installing"
     curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh --output "$HOME/.deck_setup/emudeck_install.sh"
-    chmod +x "$HOME/.deck_setup/emudeck_install.sh"
-    $HOME/.deck_setup/emudeck_install.sh
+    chmod +x "$HERE/emudeck_install.sh"
+    $HERE/emudeck_install.sh
     else
     print_log "emudeck is already installed"
     fi
@@ -241,8 +243,8 @@ install_emudeck() {
 
 install_refind_GUI() {
     print_log "installing rEFInd GUI"
-    chmod +x "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
-    "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd" # install the GUI, run the script with the argument "path for SteamDeck_rEFInd folder is $PWD/SteamDeck_rEFInd"
+    chmod +x "$HERE/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
+    "$HERE/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd" # install the GUI, run the script with the argument "path for SteamDeck_rEFInd folder is $PWD/SteamDeck_rEFInd"
 }
 
 install_refind_bootloader() {
@@ -251,7 +253,7 @@ install_refind_bootloader() {
 }
 
 choose_refind_config() {
-    configs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/ -mindepth 1 -maxdepth 1 -type d -printf :%f)
+    configs=$(find $HERE/rEFInd_configs/ -mindepth 1 -maxdepth 1 -type d -printf :%f)
     IFS=':' read -r -a configs_array <<< "$configs" # split the input to an array
     for i in ${configs_array[@]}
     do
@@ -260,16 +262,16 @@ choose_refind_config() {
     config_list="$config_list $index \""$i"\" off"
     done
     refind_config_choice=$(kdialog --radiolist "Select a config to apply:" $config_list)
-    refind_config_apply_dir=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/${configs_array[$refind_config_choice]}
+    refind_config_apply_dir=$HERE/rEFInd_configs/${configs_array[$refind_config_choice]}
 }
 
 apply_refind_config() {
     print_log "applying rEFInd config"
-    num_of_dirs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+    num_of_dirs=$(find $HERE/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then #if there is more than 1 folder (or more than one config)
     choose_refind_config
     else
-    refind_config_apply_dir=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config apply dir to that
+    refind_config_apply_dir=$(find $HERE/rEFInd_configs -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config apply dir to that
     fi
 
     cp -v "$refind_config_apply_dir"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
@@ -277,7 +279,7 @@ apply_refind_config() {
     then
     print_log "error, config not applied"
     else
-    "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
+    "$HERE/.SteamDeck_rEFInd/install_config_from_GUI.sh"
     print_log "config applied"
     fi
 }
@@ -297,7 +299,7 @@ save_refind_config() {
     kdialog --msgbox "Please select the rEFInd_configs folder in your USB"
     refind_configs_path=$(kdialog --getexistingdirectory /)
     mkdir -p "$refind_configs_path/$config_name"
-    cp -v $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$refind_configs_path/$config_name" #copy files saved by rEFInd GUI to a custom directory
+    cp -v $HERE/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$refind_configs_path/$config_name" #copy files saved by rEFInd GUI to a custom directory
         if [ $? == 0 ];
         then
         echo "config saved to $refind_configs_path/$config_name"
@@ -327,7 +329,7 @@ refind_uninstall_gui() {
 install_proton_ge_in_steam() {
     #this assumes the native steam is installed, not the flatpak
     mkdir -p ~/.steam/root/compatibilitytools.d
-    tar -xf $HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz -C ~/.steam/root/compatibilitytools.d/
+    tar -xf $HERE/GE-Proton*.tar.gz -C ~/.steam/root/compatibilitytools.d/
     print_log "Proton GE installed, please restart Steam"
 }
 
