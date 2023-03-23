@@ -3,13 +3,16 @@
 #try flatpak install --sideload=$flatpak_directory flathub org.mozilla.firefox if this doesn't work
 
 HERE="$(dirname "$(readlink -f "${0}")")"
+PARENTDIR=$(dirname $HERE)
+PARENTDIR=$(dirname $parentdir)
+PARENTDIR=$(dirname $parentdir)
 
 print_log() {
     log_message=$1
     log="$task_number/${#chosen_tasks[@]}: ${tasks[$i]}: $log_message"
     echo "$log"
     qdbus $dbusRef setLabelText "$log"
-    echo "$log" >> "$HERE/logs.log"
+    echo "$log" >> "$PARENTDIR/logs.log"
 }
 
 update_from_pacman() {
@@ -162,25 +165,25 @@ flatpak update
 flatpak remote-modify --collection-id=org.flathub.Stable flathub
 flatpak update
 print_log "adding Firefox to usb"
-flatpak --verbose create-usb $HERE/flatpaks org.mozilla.firefox
+flatpak --verbose create-usb $PARENTDIR/flatpaks org.mozilla.firefox
 print_log "adding CoreKeyboard to usb"
-flatpak --verbose create-usb $HERE/flatpaks org.cubocore.CoreKeyboard
+flatpak --verbose create-usb $PARENTDIR/flatpaks org.cubocore.CoreKeyboard
 print_log "adding barrier to usb"
-flatpak --verbose create-usb $HERE/flatpaks com.github.debauchee.barrier
+flatpak --verbose create-usb $PARENTDIR/flatpaks com.github.debauchee.barrier
 print_log "adding heroic games to usb"
-flatpak --verbose create-usb $HERE/flatpaks com.heroicgameslauncher.hgl
+flatpak --verbose create-usb $PARENTDIR/flatpaks com.heroicgameslauncher.hgl
 print_log "adding proton up qt to usb"
-flatpak --verbose create-usb $HERE/flatpaks net.davidotek.pupgui2
+flatpak --verbose create-usb $PARENTDIR/flatpaks net.davidotek.pupgui2
 print_log "adding boilr to usb"
-flatpak --verbose create-usb $HERE/flatpaks io.github.philipk.boilr
+flatpak --verbose create-usb $PARENTDIR/flatpaks io.github.philipk.boilr
 print_log "adding flatseal to usb"
-flatpak --verbose create-usb $HERE/flatpaks com.github.tchx84.Flatseal
+flatpak --verbose create-usb $PARENTDIR/flatpaks com.github.tchx84.Flatseal
 print_log "adding steam rom manager to usb"
-flatpak --verbose create-usb $HERE/flatpaks com.steamgriddb.steam-rom-manager
+flatpak --verbose create-usb $PARENTDIR/flatpaks com.steamgriddb.steam-rom-manager
 }
 
 install_deckyloader() {
-    if [ -f "$HERE/deckyloader_installed_version" ]
+    if [ -f "$PARENTDIR/deckyloader_installed_version" ]
     then
         print_log "Checking if latest version of DeckyLoader is installed"
         RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
@@ -194,7 +197,7 @@ install_deckyloader() {
                 curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$HOME/.deck_setup/deckyloader_install_release.sh"
                 chmod +x "$HOME/.deck_setup/deckyloader_install_release.sh"
                 $HERE/deckyloader_install_release.sh
-                echo "$VERSION" > "$HERE/deckyloader_installed_version"
+                echo "$VERSION" > "$PARENTDIR/deckyloader_installed_version"
             else
                print_log "Latest Version of DeckyLoader is already installed"
             fi
@@ -203,7 +206,7 @@ install_deckyloader() {
         curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$HOME/.deck_setup/deckyloader_install_release.sh"
         chmod +x "$HERE/deckyloader_install_release.sh"
         $HERE/deckyloader_install_release.sh
-        echo "$VERSION" > "$HERE/deckyloader_installed_version"
+        echo "$VERSION" > "$PARENTDIR/deckyloader_installed_version"
    fi
 }
 
@@ -212,7 +215,7 @@ uninstall_deckyloader() {
     curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh  --output "$HOME/.deck_setup/deckyloader_uninstaller.sh"
     chmod +x "$HERE/deckyloader_uninstaller.sh"
     $HOME/.deck_setup/deckyloader_uninstaller.sh
-    rm -f "$HERE/deckyloader_installed_version"
+    rm -f "$PARENTDIR/deckyloader_installed_version"
 }
 
 install_cryoutilities() {
@@ -297,7 +300,7 @@ save_refind_config() {
         exit 1
         fi
     kdialog --msgbox "Please select the rEFInd_configs folder in your USB"
-    refind_configs_path=$(kdialog --getexistingdirectory /)
+    refind_configs_path=$HERE/rEFInd_configs
     mkdir -p "$refind_configs_path/$config_name"
     cp -v $HERE/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$refind_configs_path/$config_name" #copy files saved by rEFInd GUI to a custom directory
         if [ $? == 0 ];
