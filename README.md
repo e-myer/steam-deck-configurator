@@ -21,7 +21,7 @@ And installs
 - Flatseal
 - Steam ROM Manager
 
-# Installation Instrictions
+## Installation Instrictions
 
 ### If installing from USB
 
@@ -55,15 +55,15 @@ cd steam-deck-configurator
 chmod +x ./configure_deck.sh
 ```
 
-# Run instructions
+## Run instructions
 Go into the steam-deck-configurator directory and run
 `./configure_deck.sh`
 
-# Configuration
+## Configuration
 
 To edit the default tasks, edit the configure_deck.sh and change the "on" and "off" texts in the "options" array
 
-# General Steam Deck Notes
+## General Steam Deck Notes
 
 - Ensure you have the [latest steam deck recovery image](https://help.steampowered.com/en/faqs/view/1B71-EDF2-EB6D-2BB3).
 - After reimaging steam deck, don't press reboot. Instead press cancel, shutdown, remove the usb stick, then boot.
