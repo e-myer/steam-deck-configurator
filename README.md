@@ -72,3 +72,4 @@ To edit the default tasks, edit the configure_deck.sh and change the "on" and "o
 - Flash your USB with the file "steamdeck-recovery-4.img.bz2", not the IMG file inside it.
 - If flashing with a usb is slow, try flashing with a high speed micro sd card.
 - Clonezilla can be used to clone a configured steam deck and easily replicate the setup in another steam deck.
+- Checksum: SHA256 (steamdeck-recovery-4.img.bz2) = ac9c58fdd319d46120444875172eb56382098634f2075729f51426ba5cb788c6
