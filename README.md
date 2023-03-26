@@ -73,3 +73,4 @@ To edit the default tasks, edit the configure_deck.sh and change the "on" and "o
 - After reimaging steam deck, don't press reboot. Instead press cancel, shutdown, remove the usb stick, then boot.
 - Flash your USB with the file "steamdeck-recovery-4.img.bz2", not the IMG file inside it.
 - If flashing with a usb is slow, try flashing with a high speed micro sd card.
+- Clonezilla can be used to clone a configured steam deck and easily replicate the setup in another steam deck.
