@@ -72,3 +72,4 @@ To edit the default tasks, edit the configure_deck.sh and change the "on" and "o
 - Ensure you have the [latest steam deck recovery image](https://help.steampowered.com/en/faqs/view/1B71-EDF2-EB6D-2BB3).
 - After reimaging steam deck, don't press reboot. Instead press cancel, shutdown, remove the usb stick, then boot.
 - Flash your USB with the file "steamdeck-recovery-4.img.bz2", not the IMG file inside it.
+- If flashing with a usb is slow, try flashing with a high speed micro sd card.
