@@ -319,7 +319,6 @@ refind_uninstall_gui() {
 }
 
 install_proton_ge_in_steam() {
-    #this assumes the native steam is installed, not the flatpak
     mkdir -p ~/.steam/root/compatibilitytools.d
     tar -xf $HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz -C ~/.steam/root/compatibilitytools.d/
     print_log "Proton GE installed, please restart Steam"
