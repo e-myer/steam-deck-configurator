@@ -153,28 +153,27 @@ set_up_import_flatpaks() {
 
 export_flatpaks() {
     print_log "exporting flatpaks"
-    kdialog --msgbox "Select the root of your usb"
-    flatpaks_export_usb=$(kdialog --getexistingdirectory /)
     print_log "updating flatpaks"
     flatpak update
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
     flatpak update
     print_log "adding Firefox to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks org.mozilla.firefox
+    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks org.mozilla.firefox
     print_log "adding CoreKeyboard to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks org.cubocore.CoreKeyboard
+    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks org.cubocore.CoreKeyboard
     print_log "adding barrier to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.debauchee.barrier
+    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks com.github.debauchee.barrier
     print_log "adding heroic games to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.heroicgameslauncher.hgl
+    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks com.heroicgameslauncher.hgl
     print_log "adding proton up qt to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks net.davidotek.pupgui2
+    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks net.davidotek.pupgui2
     print_log "adding boilr to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks io.github.philipk.boilr
+    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks io.github.philipk.boilr
     print_log "adding flatseal to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.tchx84.Flatseal
+    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks com.github.tchx84.Flatseal
     print_log "adding steam rom manager to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.steamgriddb.steam-rom-manager
+    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks com.steamgriddb.steam-rom-manager
+    echo "created flatpaks at $HOME/.deck_setup/steam-deck-configurator/created_flatpaks"
 }
 
 install_deckyloader() {
