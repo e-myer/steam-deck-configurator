@@ -73,7 +73,8 @@ To edit the default tasks, edit the configure_deck.sh and change the "on" and "o
 - SHA256 Checksum - steamdeck-recovery-4.img.bz2 = ac9c58fdd319d46120444875172eb56382098634f2075729f51426ba5cb788c6
 - You can use Steam Link for remote desktop
 
-- Post install scripts and tools for Windows on Steam Deck
-  - [SteamDeckPostInstallScript by ryanrudolfoba](https://github.com/ryanrudolfoba/SteamDeckPostInstallScript)
-  - [SteamDeckAutomatedInstall by CelesteHeartsong](https://github.com/CelesteHeartsong/SteamDeckAutomatedInstall)
-  - [Chris Titus Tech's Windows Utility](https://github.com/ChrisTitusTech/winutil)
+
+## Post install scripts and tools for Windows on Steam Deck
+- [SteamDeckPostInstallScript by ryanrudolfoba](https://github.com/ryanrudolfoba/SteamDeckPostInstallScript)
+- [SteamDeckAutomatedInstall by CelesteHeartsong](https://github.com/CelesteHeartsong/SteamDeckAutomatedInstall)
+- [Chris Titus Tech's Windows Utility](https://github.com/ChrisTitusTech/winutil)
