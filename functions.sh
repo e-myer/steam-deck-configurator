@@ -157,6 +157,7 @@ export_flatpaks() {
     flatpak update
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
     flatpak update
+    mkdir -p $HOME/.deck_setup/steam-deck-configurator/created_flatpaks
     print_log "adding Firefox to usb"
     flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks org.mozilla.firefox
     print_log "adding CoreKeyboard to usb"
