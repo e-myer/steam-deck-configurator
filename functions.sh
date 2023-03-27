@@ -2,10 +2,6 @@
 
 #try flatpak install --sideload=$flatpak_directory flathub org.mozilla.firefox if this doesn't work
 
-set_flatpak_directory() {
-    kdialog --msgbox "Select the root of your usb"
-    flatpaks_export_usb=$(kdialog --getexistingdirectory /)
-}
 
 print_log() {
     log_message=$1
@@ -22,42 +18,42 @@ update_from_pacman() {
 
 import_firefox() {
     print_log "Importing Firefox"
-    flatpak install --sideload-repo=$flatpak_directory flathub org.mozilla.firefox
+    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub org.mozilla.firefox
 }
 
 import_corekeyboard() {
     print_log "Importing CoreKeyboard"
-    flatpak install --sideload-repo=$flatpak_directory flathub org.cubocore.CoreKeyboard
+    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub org.cubocore.CoreKeyboard
 }
 
 import_barrier() {
     print_log "Importing Barrier"
-    flatpak install --sideload-repo=$flatpak_directory flathub com.github.debauchee.barrier
+    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub com.github.debauchee.barrier
 }
 
 import_heroic_games() {
     print_log "Importing Heroic Games"
-    flatpak install --sideload-repo=$flatpak_directory flathub com.heroicgameslauncher.hgl
+    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub com.heroicgameslauncher.hgl
 }
 
 import_protonup_qt() {
     print_log "Importing ProtonUP QT"
-    flatpak install --sideload-repo=$flatpak_directory flathub net.davidotek.pupgui2
+    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub net.davidotek.pupgui2
 }
 
 import_boilr() {
     print_log "Importing BoilR"
-    flatpak install --sideload-repo=$flatpak_directory flathub io.github.philipk.boilr
+    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub io.github.philipk.boilr
 }
 
 import_flatseal() {
     print_log "Importing Flatseal"
-    flatpak install --sideload-repo=$flatpak_directory flathub com.github.tchx84.Flatseal
+    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub com.github.tchx84.Flatseal
 }
 
 import_steam_rom_manager() {
     print_log "Importing Steam ROM Manager"
-    flatpak install --sideload-repo=$flatpak_directory flathub com.steamgriddb.steam-rom-manager
+    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub com.steamgriddb.steam-rom-manager
 }
 
 install_firefox() {
@@ -107,7 +103,7 @@ install_retrodeck() {
 
 install_bauh() {
     print_log "Installing Bauh"
-    cp $HOME/.deck_setup/applications/bauh-0.10.5-x86_64.AppImage $HOME/Applications/
+    cp $HOME/.deck_setup/steam-deck-configurator/applications/bauh-0.10.5-x86_64.AppImage $HOME/Applications/
     chmod +x $HOME/Applications/bauh-0.10.5-x86_64.AppImage
     cat <<- EOF > $HOME/.local/share/applications/bauh.desktop
     [Desktop Entry]
@@ -193,27 +189,27 @@ install_deckyloader() {
             then
                 print_log "Installing Latest Version"
                 curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$HOME/.deck_setup/deckyloader_install_release.sh"
-                chmod +x "$HOME/.deck_setup/deckyloader_install_release.sh"
-                $HOME/.deck_setup/deckyloader_install_release.sh
-                echo "$VERSION" > "$HOME/.deck_setup/deckyloader_installed_version"
+                chmod +x "$HOME/.deck_setup/steam-deck-configurator/deckyloader_install_release.sh"
+                $HOME/.deck_setup/steam-deck-configurator/deckyloader_install_release.sh
+                echo "$VERSION" > "$HOME/.deck_setup/steam-deck-configurator/deckyloader_installed_version"
             else
                print_log "Latest Version of DeckyLoader is already installed"
             fi
     else
         print_log "Installing DeckyLoader"
         curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$HOME/.deck_setup/deckyloader_install_release.sh"
-        chmod +x "$HOME/.deck_setup/deckyloader_install_release.sh"
-        $HOME/.deck_setup/deckyloader_install_release.sh
-        echo "$VERSION" > "$HOME/.deck_setup/deckyloader_installed_version"
+        chmod +x "$HOME/.deck_setup/steam-deck-configurator/deckyloader_install_release.sh"
+        $HOME/.deck_setup/steam-deck-configurator/deckyloader_install_release.sh
+        echo "$VERSION" > "$HOME/.deck_setup/steam-deck-configurator/deckyloader_installed_version"
    fi
 }
 
 uninstall_deckyloader() {
     print_log "Uninstalling DeckyLoader"
     curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh  --output "$HOME/.deck_setup/deckyloader_uninstaller.sh"
-    chmod +x "$HOME/.deck_setup/deckyloader_uninstaller.sh"
-    $HOME/.deck_setup/deckyloader_uninstaller.sh
-    rm -f "$HOME/.deck_setup/deckyloader_installed_version"
+    chmod +x "$HOME/.deck_setup/steam-deck-configurator/deckyloader_uninstaller.sh"
+    $HOME/.deck_setup/steam-deck-configurator/deckyloader_uninstaller.sh
+    rm -f "$HOME/.deck_setup/steam-deck-configurator/deckyloader_installed_version"
 }
 
 install_cryoutilities() {
@@ -222,8 +218,8 @@ install_cryoutilities() {
     then
         print_log "cryoutilities is not installed, installing"
         curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$HOME/.deck_setup/cryoutilities_install.sh"
-        chmod +x "$HOME/.deck_setup/cryoutilities_install.sh"
-        $HOME/.deck_setup/cryoutilities_install.sh
+        chmod +x "$HOME/.deck_setup/steam-deck-configurator/cryoutilities_install.sh"
+        $HOME/.deck_setup/steam-deck-configurator/cryoutilities_install.sh
     else
         print_log "cryoutilities is already installed"
     fi
@@ -235,8 +231,8 @@ install_emudeck() {
     then
     print_log "emudeck is not installed, installing"
     curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh --output "$HOME/.deck_setup/emudeck_install.sh"
-    chmod +x "$HOME/.deck_setup/emudeck_install.sh"
-    $HOME/.deck_setup/emudeck_install.sh
+    chmod +x "$HOME/.deck_setup/steam-deck-configurator/emudeck_install.sh"
+    $HOME/.deck_setup/steam-deck-configurator/emudeck_install.sh
     else
     print_log "emudeck is already installed"
     fi
