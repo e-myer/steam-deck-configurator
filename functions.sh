@@ -2,6 +2,12 @@
 
 #try flatpak install --sideload=$flatpak_directory flathub org.mozilla.firefox if this doesn't work
 
+set_flatpak_directory() {
+    kdialog --msgbox "Select the root of your usb"
+    flatpaks_export_usb=$(kdialog --getexistingdirectory /)
+    flatpak_directory=$flatpaks_export_usb/flatpaks/.ostree/repo
+}
+
 print_log() {
     log_message=$1
     log="$task_number/${#chosen_tasks[@]}: ${tasks[$i]}: $log_message"
@@ -17,42 +23,42 @@ update_from_pacman() {
 
 import_firefox() {
     print_log "Importing Firefox"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam-deck-configurator/flatpaks flathub org.mozilla.firefox
+    flatpak install --sideload-repo=$flatpak_directory flathub org.mozilla.firefox
 }
 
 import_corekeyboard() {
     print_log "Importing CoreKeyboard"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam-deck-configurator/flatpaks flathub org.cubocore.CoreKeyboard
+    flatpak install --sideload-repo=$flatpak_directory flathub org.cubocore.CoreKeyboard
 }
 
 import_barrier() {
     print_log "Importing Barrier"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam-deck-configurator/flatpaks flathub com.github.debauchee.barrier
+    flatpak install --sideload-repo=$flatpak_directory flathub com.github.debauchee.barrier
 }
 
 import_heroic_games() {
     print_log "Importing Heroic Games"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam-deck-configurator/flatpaks flathub com.heroicgameslauncher.hgl
+    flatpak install --sideload-repo=$flatpak_directory flathub com.heroicgameslauncher.hgl
 }
 
 import_protonup_qt() {
     print_log "Importing ProtonUP QT"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam-deck-configurator/flatpaks flathub net.davidotek.pupgui2
+    flatpak install --sideload-repo=$flatpak_directory flathub net.davidotek.pupgui2
 }
 
 import_boilr() {
     print_log "Importing BoilR"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam-deck-configurator/flatpaks flathub io.github.philipk.boilr
+    flatpak install --sideload-repo=$flatpak_directory flathub io.github.philipk.boilr
 }
 
 import_flatseal() {
     print_log "Importing Flatseal"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam-deck-configurator/flatpaks flathub com.github.tchx84.Flatseal
+    flatpak install --sideload-repo=$flatpak_directory flathub com.github.tchx84.Flatseal
 }
 
 import_steam_rom_manager() {
     print_log "Importing Steam ROM Manager"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam-deck-configurator/flatpaks flathub com.steamgriddb.steam-rom-manager
+    flatpak install --sideload-repo=$flatpak_directory flathub com.steamgriddb.steam-rom-manager
 }
 
 install_firefox() {
@@ -149,6 +155,7 @@ set_up_import_and_export_flatpaks() {
     flatpak update
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
     flatpak update
+    set_flatpak_directory
 }
 
 export_flatpaks() {
