@@ -13,7 +13,7 @@ readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select task
 "${tasks_array[Update from pacman]}" "Update from pacman" on \
 "${tasks_array[Add Flathub if it does not exist]}" "Add Flathub if it doesn't exist" on \
 "${tasks_array[Update Flatpaks]}" "Update Flatpaks" on \
-"${tasks_array[Set up import Flatpaks]}" "Set up import Flatpaks" on \
+"${tasks_array[Set up import and export Flatpaks]}" "Set up import and export Flatpaks" on \
 "${tasks_array[Import Firefox]}" "Import Firefox" on \
 "${tasks_array[Import Corekeyboard]}" "Import Corekeyboard" on \
 "${tasks_array[Import Barrier]}" "Import Barrier" on \
@@ -47,7 +47,7 @@ readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select task
 echo ${chosen_tasks[@]}
 if [ ${#chosen_tasks[@]} -eq 0 ]
 then
-echo exiting...
+echo No tasks chosen, exiting...
 exit 0
 fi
 
