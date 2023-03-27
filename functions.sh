@@ -158,23 +158,24 @@ export_flatpaks() {
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
     flatpak update
     mkdir -p $HOME/.deck_setup/steam-deck-configurator/created_flatpaks
-    print_log "adding Firefox to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks org.mozilla.firefox
-    print_log "adding CoreKeyboard to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks org.cubocore.CoreKeyboard
-    print_log "adding barrier to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks com.github.debauchee.barrier
-    print_log "adding heroic games to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks com.heroicgameslauncher.hgl
-    print_log "adding proton up qt to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks net.davidotek.pupgui2
-    print_log "adding boilr to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks io.github.philipk.boilr
-    print_log "adding flatseal to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks com.github.tchx84.Flatseal
-    print_log "adding steam rom manager to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks com.steamgriddb.steam-rom-manager
-    echo "created flatpaks at $HOME/.deck_setup/steam-deck-configurator/created_flatpaks"
+
+    readarray -t flatpak_names < <(flatpak list --app --columns=name)
+    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
+
+    for name in "${flatpak_names[@]}"
+    do
+    ((number ++))
+    menu+=("$number" "$name" off)
+    done
+    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
+    
+    #echo ${chosen_flatpaks[@]}
+    for flatpak in "${chosen_flatpaks[@]}"
+    do
+    echo "${flatpak_ids[$i]}"
+    print_log "adding $flatpak to usb"
+    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks $flatpak
+    done
 }
 
 install_deckyloader() {
