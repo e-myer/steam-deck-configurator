@@ -2,6 +2,11 @@
 
 #try flatpak install --sideload=$flatpak_directory flathub org.mozilla.firefox if this doesn't work
 
+set_flatpak_directory() {
+    kdialog --msgbox "Select the root of your usb"
+    flatpaks_export_usb=$(kdialog --getexistingdirectory /)
+}
+
 print_log() {
     log_message=$1
     log="$task_number/${#chosen_tasks[@]}: ${tasks[$i]}: $log_message"
@@ -16,7 +21,7 @@ update_from_pacman() {
 }
 
 import_firefox() {
-    print_log "Importing Firefoc"
+    print_log "Importing Firefox"
     flatpak install --sideload-repo=$flatpak_directory flathub org.mozilla.firefox
 }
 
@@ -145,36 +150,34 @@ update_flatpaks() {
     flatpak update -y
 }
 
-set_up_import_flatpaks() {
-    flatpak update
+set_up_import_and_export_flatpaks() {
+    flatpak update -y
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
-    flatpak update
+    flatpak update -y
+    set_flatpak_directory
 }
 
 export_flatpaks() {
     print_log "exporting flatpaks"
-    kdialog --msgbox "Select the root of your usb"
-    flatpaks_export_usb=$(kdialog --getexistingdirectory /)
-    print_log "updating flatpaks"
-    flatpak update
-    flatpak remote-modify --collection-id=org.flathub.Stable flathub
-    flatpak update
-    print_log "adding Firefox to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks org.mozilla.firefox
-    print_log "adding CoreKeyboard to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks org.cubocore.CoreKeyboard
-    print_log "adding barrier to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.debauchee.barrier
-    print_log "adding heroic games to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.heroicgameslauncher.hgl
-    print_log "adding proton up qt to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks net.davidotek.pupgui2
-    print_log "adding boilr to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks io.github.philipk.boilr
-    print_log "adding flatseal to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.github.tchx84.Flatseal
-    print_log "adding steam rom manager to usb"
-    flatpak --verbose create-usb $flatpaks_export_usb/flatpaks com.steamgriddb.steam-rom-manager
+    mkdir -p $HOME/.deck_setup/steam-deck-configurator/created_flatpaks
+
+    readarray -t flatpak_names < <(flatpak list --app --columns=name)
+    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
+
+    for name in "${flatpak_names[@]}"
+    do
+    ((number ++))
+    menu+=("$number" "$name" off)
+    done
+    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
+
+    #echo ${chosen_flatpaks[@]}
+    for flatpak in "${chosen_flatpaks[@]}"
+    do
+    echo "${flatpak_ids[$i]}"
+    print_log "adding $flatpak to usb"
+    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks $flatpak
+    done
 }
 
 install_deckyloader() {
@@ -370,7 +373,7 @@ declare -A tasks_array
 tasks_array["Update from pacman"]="update_from_pacman"
 tasks_array["Add Flathub if it does not exist"]="add_flathub"
 tasks_array["Update Flatpaks"]="update_flatpaks"
-tasks_array["Set up import Flatpaks"]="set_up_import_flatpaks"
+tasks_array["Set up import and export Flatpaks"]="set_up_import_and_export_flatpaks"
 tasks_array["Import Firefox"]="import_firefox"
 tasks_array["Import Corekeyboard"]="import_corekeyboard"
 tasks_array["Import Barrier"]="import_barrier"
