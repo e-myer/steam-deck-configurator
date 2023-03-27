@@ -147,10 +147,7 @@ update_flatpaks() {
 }
 
 set_up_import_and_export_flatpaks() {
-    flatpak update -y
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
-    flatpak update -y
-    set_flatpak_directory
 }
 
 export_flatpaks() {
@@ -177,7 +174,7 @@ export_flatpaks() {
 }
 
 install_deckyloader() {
-    if [ -f "$HOME/.deck_setup/deckyloader_installed_version" ]
+    if [ -f "$HOME/.deck_setup/steam-deck-configurator/deckyloader_installed_version" ]
     then
         print_log "Checking if latest version of DeckyLoader is installed"
         RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
