@@ -27,12 +27,12 @@ And installs
 
 Open a terminal in the directory of the USB
 
+`mkdir $HOME/.deck_setup`
+Mount the usb to the folder "$HOME/.deck_setup" using the KDE Partition Manager and run
 ```
-cd steam-deck-configurator
-chmod +x ./copy_to_steamos.sh
-./copy_to_steamos.sh
-cd $HOME/.deck_setup
+chmod -v +x $HOME/.deck_setup/steam-deck-configurator/functions.sh $HOME/.deck_setup/steam-deck-configurator/configure_deck.sh $HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/SteamDeck_rEFInd_install.sh $HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh
 ```
+
 To clone the repo to the usb, for contributers, run
 
 ```
