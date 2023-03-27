@@ -16,7 +16,7 @@ update_from_pacman() {
 }
 
 import_firefox() {
-    print_log "Importing Firefoc"
+    print_log "Importing Firefox"
     flatpak install --sideload-repo=$flatpak_directory flathub org.mozilla.firefox
 }
 
