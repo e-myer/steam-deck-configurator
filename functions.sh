@@ -152,9 +152,9 @@ update_flatpaks() {
 }
 
 set_up_import_and_export_flatpaks() {
-    flatpak update
+    flatpak update -y
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
-    flatpak update
+    flatpak update -y
     set_flatpak_directory
 }
 
