@@ -33,7 +33,7 @@ Mount the usb to the folder "$HOME/.deck_setup" using the KDE Partition Manager 
 chmod -v +x $HOME/.deck_setup/steam-deck-configurator/functions.sh $HOME/.deck_setup/steam-deck-configurator/configure_deck.sh $HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/SteamDeck_rEFInd_install.sh $HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh
 ```
 
-To clone the repo to the usb, for contributers, run
+To clone the repo to the usb, run
 
 ```
 git clone --recurse-submodules git@github.com:e-myer/steam-deck-configurator.git
