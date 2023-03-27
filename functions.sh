@@ -145,7 +145,7 @@ update_flatpaks() {
     flatpak update -y
 }
 
-set_up_import_flatpaks() {
+set_up_import_and_export_flatpaks() {
     flatpak update
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
     flatpak update
@@ -153,10 +153,6 @@ set_up_import_flatpaks() {
 
 export_flatpaks() {
     print_log "exporting flatpaks"
-    print_log "updating flatpaks"
-    flatpak update
-    flatpak remote-modify --collection-id=org.flathub.Stable flathub
-    flatpak update
     mkdir -p $HOME/.deck_setup/steam-deck-configurator/created_flatpaks
 
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
@@ -168,7 +164,7 @@ export_flatpaks() {
     menu+=("$number" "$name" off)
     done
     readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
-    
+
     #echo ${chosen_flatpaks[@]}
     for flatpak in "${chosen_flatpaks[@]}"
     do
@@ -371,7 +367,7 @@ declare -A tasks_array
 tasks_array["Update from pacman"]="update_from_pacman"
 tasks_array["Add Flathub if it does not exist"]="add_flathub"
 tasks_array["Update Flatpaks"]="update_flatpaks"
-tasks_array["Set up import Flatpaks"]="set_up_import_flatpaks"
+tasks_array["Set up import and export Flatpaks"]="set_up_import_and_export_flatpaks"
 tasks_array["Import Firefox"]="import_firefox"
 tasks_array["Import Corekeyboard"]="import_corekeyboard"
 tasks_array["Import Barrier"]="import_barrier"
