@@ -5,7 +5,7 @@
 set_flatpak_directory() {
     kdialog --msgbox "Select the root of your usb"
     flatpaks_export_usb=$(kdialog --getexistingdirectory /)
-    flatpak_directory=$flatpaks_export_usb/flatpaks/.ostree/repo
+    flatpak_directory=$flatpaks_export_usb/steam_deck_stuff/flatpaks/.ostree/repo
 }
 
 print_log() {
