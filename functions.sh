@@ -3,9 +3,9 @@
 #try flatpak install --sideload=$flatpak_directory flathub org.mozilla.firefox if this doesn't work
 
 set_flatpak_directory() {
-    kdialog --msgbox "Select the root of your usb"
-    flatpaks_export_usb=$(kdialog --getexistingdirectory /)
-    flatpak_directory=$flatpaks_export_usb/steam_deck_stuff/flatpaks/.ostree/repo
+#    kdialog --msgbox "Select the root of your usb"
+#    flatpaks_export_usb=$(kdialog --getexistingdirectory /)
+    flatpak_directory=$HOME/configurator_usb
 }
 
 print_log() {
