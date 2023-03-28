@@ -103,6 +103,7 @@ install_retrodeck() {
 
 install_bauh() {
     print_log "Installing Bauh"
+    if [ -f $HOME/.deck_setup/steam-deck-configurator/applications/bauh-0.10.5-x86_64.AppImage ]; then
     cp $HOME/.deck_setup/steam-deck-configurator/applications/bauh-0.10.5-x86_64.AppImage $HOME/Applications/
     chmod +x $HOME/Applications/bauh-0.10.5-x86_64.AppImage
     cat <<- EOF > $HOME/.local/share/applications/bauh.desktop
@@ -129,6 +130,9 @@ install_bauh() {
 	Icon=bauh
 	EOF
     cp $HOME/.deck_setup/steam-deck-configurator/desktop_icons/bauh.svg $HOME/.local/share/icons/
+    else
+    print_log "bauh appimage doesn't exist in this folder, download it first"
+    fi
 }
 
 add_flathub() {
@@ -319,9 +323,13 @@ refind_uninstall_gui() {
 }
 
 install_proton_ge_in_steam() {
+    if compgen -G "$HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz" > /dev/null; then
     mkdir -p ~/.steam/root/compatibilitytools.d
     tar -xf $HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz -C ~/.steam/root/compatibilitytools.d/
     print_log "Proton GE installed, please restart Steam"
+    else
+    print_log "Proton GE doesn't exist in this folder, plese download it first"
+    fi
 }
 
 fix_barrier() {
