@@ -104,8 +104,8 @@ install_retrodeck() {
 install_bauh() {
     print_log "Installing Bauh"
     if [ -f $HOME/.deck_setup/steam-deck-configurator/applications/bauh-0.10.5-x86_64.AppImage ]; then
-    cp $HOME/.deck_setup/steam-deck-configurator/applications/bauh-0.10.5-x86_64.AppImage $HOME/Applications/
-    chmod +x $HOME/Applications/bauh-0.10.5-x86_64.AppImage
+    cp -v $HOME/.deck_setup/steam-deck-configurator/applications/bauh-0.10.5-x86_64.AppImage $HOME/Applications/
+    chmod -v +x $HOME/Applications/bauh-0.10.5-x86_64.AppImage
     cat <<- EOF > $HOME/.local/share/applications/bauh.desktop
     [Desktop Entry]
 	Type=Application
@@ -129,7 +129,7 @@ install_bauh() {
 	Exec=$HOME/Applications/bauh-0.10.5-x86_64.AppImage
 	Icon=bauh
 	EOF
-    cp $HOME/.deck_setup/steam-deck-configurator/desktop_icons/bauh.svg $HOME/.local/share/icons/
+    cp -v $HOME/.deck_setup/steam-deck-configurator/desktop_icons/bauh.svg $HOME/.local/share/icons/
     else
     print_log "bauh appimage doesn't exist in this folder, download it first"
     fi
@@ -190,7 +190,7 @@ install_deckyloader() {
             then
                 print_log "Installing Latest Version"
                 curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$HOME/.deck_setup/deckyloader_install_release.sh"
-                chmod +x "$HOME/.deck_setup/steam-deck-configurator/deckyloader_install_release.sh"
+                chmod -v +x "$HOME/.deck_setup/steam-deck-configurator/deckyloader_install_release.sh"
                 $HOME/.deck_setup/steam-deck-configurator/deckyloader_install_release.sh
                 echo "$VERSION" > "$HOME/.deck_setup/steam-deck-configurator/deckyloader_installed_version"
             else
@@ -199,7 +199,7 @@ install_deckyloader() {
     else
         print_log "Installing DeckyLoader"
         curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$HOME/.deck_setup/deckyloader_install_release.sh"
-        chmod +x "$HOME/.deck_setup/steam-deck-configurator/deckyloader_install_release.sh"
+        chmod -v +x "$HOME/.deck_setup/steam-deck-configurator/deckyloader_install_release.sh"
         $HOME/.deck_setup/steam-deck-configurator/deckyloader_install_release.sh
         echo "$VERSION" > "$HOME/.deck_setup/steam-deck-configurator/deckyloader_installed_version"
    fi
@@ -208,7 +208,7 @@ install_deckyloader() {
 uninstall_deckyloader() {
     print_log "Uninstalling DeckyLoader"
     curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh  --output "$HOME/.deck_setup/deckyloader_uninstaller.sh"
-    chmod +x "$HOME/.deck_setup/steam-deck-configurator/deckyloader_uninstaller.sh"
+    chmod -v +x "$HOME/.deck_setup/steam-deck-configurator/deckyloader_uninstaller.sh"
     $HOME/.deck_setup/steam-deck-configurator/deckyloader_uninstaller.sh
     rm -f "$HOME/.deck_setup/steam-deck-configurator/deckyloader_installed_version"
 }
@@ -219,7 +219,7 @@ install_cryoutilities() {
     then
         print_log "cryoutilities is not installed, installing"
         curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$HOME/.deck_setup/cryoutilities_install.sh"
-        chmod +x "$HOME/.deck_setup/steam-deck-configurator/cryoutilities_install.sh"
+        chmod -v +x "$HOME/.deck_setup/steam-deck-configurator/cryoutilities_install.sh"
         $HOME/.deck_setup/steam-deck-configurator/cryoutilities_install.sh
     else
         print_log "cryoutilities is already installed"
@@ -232,7 +232,7 @@ install_emudeck() {
     then
     print_log "emudeck is not installed, installing"
     curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh --output "$HOME/.deck_setup/emudeck_install.sh"
-    chmod +x "$HOME/.deck_setup/steam-deck-configurator/emudeck_install.sh"
+    chmod -v +x "$HOME/.deck_setup/steam-deck-configurator/emudeck_install.sh"
     $HOME/.deck_setup/steam-deck-configurator/emudeck_install.sh
     else
     print_log "emudeck is already installed"
@@ -241,7 +241,7 @@ install_emudeck() {
 
 install_refind_GUI() {
     print_log "installing rEFInd GUI"
-    chmod +x "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
+    chmod -v +x "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
     "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd" # install the GUI, run the script with the argument "path for SteamDeck_rEFInd folder is $PWD/SteamDeck_rEFInd"
 }
 
