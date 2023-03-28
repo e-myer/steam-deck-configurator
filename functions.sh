@@ -328,7 +328,7 @@ install_proton_ge_in_steam() {
     tar -xf $HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz -C ~/.steam/root/compatibilitytools.d/
     print_log "Proton GE installed, please restart Steam"
     else
-    print_log "Proton GE doesn't exist in this folder, plese download it first"
+    print_log "Proton GE doesn't exist in this folder, please download it first"
     fi
 }
 
