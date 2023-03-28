@@ -10,6 +10,7 @@ This project auto configures
 - rEFInd Bootloader
 - Barrier
 - Flathub
+- Proton GE
 
 And installs
 
@@ -20,6 +21,8 @@ And installs
 - BoilR
 - Flatseal
 - Steam ROM Manager
+- RetroDeck
+- Bauh
 
 ## Installation Instrictions
 
@@ -44,6 +47,7 @@ And make the nessecary files executable using
 ```
 chmod -v +x $HOME/.deck_setup/steam-deck-configurator/functions.sh $HOME/.deck_setup/steam-deck-configurator/configure_deck.sh $HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/SteamDeck_rEFInd_install.sh $HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh
 ```
+Proton GE and the Bauh AppImage needs to be downloaded separatley and placed in the steam-deck-configurator folder for the Proton GE and Bauh tasks to work.
 
 ## Run instructions
 Go into the steam-deck-configurator directory and run
