@@ -131,7 +131,8 @@ install_bauh() {
 	EOF
     cp -v $HOME/.deck_setup/steam-deck-configurator/desktop_icons/bauh.svg $HOME/.local/share/icons/
     else
-    print_log "bauh appimage doesn't exist in this folder, download it first"
+    print_log "bauh appimage doesn't exist in this folder, download it first, skipping..."
+    sleep 3
     fi
 }
 
@@ -328,7 +329,8 @@ install_proton_ge_in_steam() {
     tar -xf $HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz -C ~/.steam/root/compatibilitytools.d/
     print_log "Proton GE installed, please restart Steam"
     else
-    print_log "Proton GE doesn't exist in this folder, please download it first"
+    print_log "Proton GE doesn't exist in this folder, please download it first, skipping..."
+    sleep 3
     fi
 }
 
