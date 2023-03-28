@@ -23,29 +23,10 @@ And installs
 
 ## Installation Instrictions
 
-### If installing from USB
+Create a directory in the home folder called .deck_setup or run`mkdir $HOME/.deck_setup`
 
-Open a terminal in the directory of the USB
+Clone this repository to the folder inside it
 
-`mkdir $HOME/.deck_setup`
-Mount the usb to the folder "$HOME/.deck_setup" using the KDE Partition Manager and run
-```
-chmod -v +x $HOME/.deck_setup/steam-deck-configurator/functions.sh $HOME/.deck_setup/steam-deck-configurator/configure_deck.sh $HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/SteamDeck_rEFInd_install.sh $HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh
-```
-
-To clone the repo to the usb, run
-
-```
-git clone --recurse-submodules git@github.com:e-myer/steam-deck-configurator.git
-```
-
-Alternatively, you can copy this one liner and paste it into your terminal, and run it
-
-```
-cd steam-deck-configurator && chmod +x ./copy_to_steamos.sh && ./copy_to_steamos.sh && cd $HOME/.deck_setup
-```
-
-### If cloning from GitHub
 
 ```
 mkdir -p $HOME/.deck_setup
@@ -53,6 +34,13 @@ cd $HOME/.deck_setup
 git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git
 cd steam-deck-configurator
 chmod +x ./configure_deck.sh
+```
+
+Alternatively, you can clone the repo to a USB, and mount it to the folder at $HOME/.deck_setup using the KDE Partition manager
+
+And make the nessecary files executable using
+```
+chmod -v +x $HOME/.deck_setup/steam-deck-configurator/functions.sh $HOME/.deck_setup/steam-deck-configurator/configure_deck.sh $HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/SteamDeck_rEFInd_install.sh $HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh
 ```
 
 ## Run instructions
