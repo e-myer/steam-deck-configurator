@@ -55,7 +55,7 @@ Go into the steam-deck-configurator directory and run
 
 ## Configuration
 
-To edit the default tasks, edit the configure_deck.sh and change the "on" and "off" texts in the "options" array
+To edit the default tasks, edit the configure_deck.sh file and change the "on" and "off" texts in the "options" array
 
 ## General Steam Deck Notes
 
