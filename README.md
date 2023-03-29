@@ -41,7 +41,7 @@ chmod +x ./configure_deck.sh
 
 Alternatively, you can clone the repo to a USB, and mount it to the folder at $HOME/.deck_setup.
 
-To do so, first create the folder with `mkdir $HOME/.deck_setup`, identify the drive by running `lsblk`, then mount it to $HOME/.deck_setup. For example if the usb is mounted at /dev/sdc1, then run the command `sudo mount /dev/sdc1 /home/deck/.deck_setup` in a terminal
+To do so, first create the folder with `mkdir $HOME/.deck_setup`, identify the USB drive by running `lsblk`, then mount it to $HOME/.deck_setup. For example if the usb is mounted at /dev/sdc1, then run the command `sudo mount /dev/sdc1 /home/deck/.deck_setup` in a terminal
 
 And make the nessecary files executable using
 ```
@@ -50,8 +50,7 @@ chmod -v +x $HOME/.deck_setup/steam-deck-configurator/functions.sh $HOME/.deck_s
 Proton GE and the Bauh AppImage needs to be downloaded separatley and placed in the steam-deck-configurator folder for the Proton GE and Bauh tasks to work.
 
 ## Run instructions
-Go into the steam-deck-configurator directory and run
-`./configure_deck.sh`
+Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a terminal
 
 ## Configuration
 
