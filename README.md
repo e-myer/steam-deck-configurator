@@ -41,7 +41,7 @@ chmod +x ./configure_deck.sh
 
 Alternatively, you can clone the repo to a USB, and mount it to the folder at $HOME/.deck_setup.
 
-To do so, first identify the drive by running `lsblk`, create the folder with `mkdir $HOME/.deck_setup`, then mount it to $HOME/.deck_setup. For example if the usb is mounted at /dev/sdc1, then run the command `sudo mount /dev/sdc1 /home/deck/.deck_setup` in a terminal
+To do so, first create the folder with `mkdir $HOME/.deck_setup`, identify the drive by running `lsblk`, then mount it to $HOME/.deck_setup. For example if the usb is mounted at /dev/sdc1, then run the command `sudo mount /dev/sdc1 /home/deck/.deck_setup` in a terminal
 
 And make the nessecary files executable using
 ```
