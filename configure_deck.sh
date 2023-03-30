@@ -37,6 +37,7 @@ readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select task
 "${tasks_array[Run CryoUtilities with reccommended settings]}" "Run CryoUtilities with reccommended settings" off \
 "${tasks_array[Install Emudeck]}" "Install Emudeck" on \
 "${tasks_array[Install RetroDeck]}" "Install RetroDeck" off \
+"${tasks_array[Update Submodules]}" "Update Submodules" off \
 "${tasks_array[Install rEFInd GUI]}" "Install rEFInd GUI" on \
 "${tasks_array[Install rEFInd bootloader]}" "Install rEFInd bootloader" on \
 "${tasks_array[Apply rEFInd config]}" "Apply rEFInd config" on \

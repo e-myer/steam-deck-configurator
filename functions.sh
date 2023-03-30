@@ -240,6 +240,10 @@ install_emudeck() {
     fi
 }
 
+update_submodules() {
+    git submodule update
+}
+
 install_refind_GUI() {
     print_log "installing rEFInd GUI"
     chmod -v +x "$HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
@@ -399,6 +403,7 @@ tasks_array["Install Cryoutilities"]="install_cryoutilities"
 tasks_array["Run CryoUtilities with reccommended settings"]="run_cryo_utilities_reccommended"
 tasks_array["Install Emudeck"]="install_emudeck"
 tasks_array["Install RetroDeck"]="install_retrodeck"
+tasks_array["Update Submodules"]="update_submodules"
 tasks_array["Install rEFInd GUI"]="install_refind_GUI"
 tasks_array["Install rEFInd bootloader"]="install_refind_bootloader"
 tasks_array["Apply rEFInd config"]="apply_refind_config"
