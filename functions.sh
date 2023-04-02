@@ -316,9 +316,9 @@ install_refind_all() {
 
 refind_uninstall_gui() {
     print_log "uninstalling rEFInd GUI"
-    rm -rf ~/SteamDeck_rEFInd
-    rm -rf ~/.SteamDeck_rEFInd
-    rm -f ~/Desktop/refind_GUI.desktop
+    rm -vrf ~/SteamDeck_rEFInd
+    rm -vrf ~/.SteamDeck_rEFInd
+    rm -vf ~/Desktop/refind_GUI.desktop
 }
 
 check_for_updates_proton_ge() {
