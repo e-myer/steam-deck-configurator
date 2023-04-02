@@ -326,7 +326,7 @@ check_for_updates_proton_ge() {
     VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
     proton_ge_downloaded_version="$(basename $HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz)"
     if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then 
-    echo -e "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version"
+    echo -e "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
     else
     echo "ProtonGE is up to date"
     fi
