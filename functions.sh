@@ -1,7 +1,5 @@
 #! /usr/bin/bash -v
 
-#try flatpak install --sideload=$flatpak_directory flathub org.mozilla.firefox if this doesn't work
-
 
 print_log() {
     log_message=$1
