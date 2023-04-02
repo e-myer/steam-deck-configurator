@@ -107,7 +107,7 @@ install_bauh() {
     cp -v $HOME/.deck_setup/steam-deck-configurator/applications/bauh-0.10.5-x86_64.AppImage $HOME/Applications/
     chmod -v +x $HOME/Applications/bauh-0.10.5-x86_64.AppImage
     cat <<- EOF > $HOME/.local/share/applications/bauh.desktop
-    [Desktop Entry]
+	[Desktop Entry]
 	Type=Application
 	Name=Applications (bauh)
 	Name[pt]=Aplicativos (bauh)
@@ -321,6 +321,18 @@ refind_uninstall_gui() {
     rm -rf ~/SteamDeck_rEFInd
     rm -rf ~/.SteamDeck_rEFInd
     rm -f ~/Desktop/refind_GUI.desktop
+}
+
+check_for_updates_proton_ge() {
+    #RELEASE=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+    #VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
+    VERSION=GE-Proton7-53
+    proton_ge_downloaded_version="$(basename $HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz)"
+    if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then 
+    echo -e "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version"
+    else
+    echo "ProtonGE is up to date"
+    fi
 }
 
 install_proton_ge_in_steam() {
