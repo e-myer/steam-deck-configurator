@@ -1,12 +1,10 @@
 #! /usr/bin/bash -v
 
-#try flatpak install --sideload=$flatpak_directory flathub org.mozilla.firefox if this doesn't work
-
 
 print_log() {
     log_message=$1
     log="$task_number/${#chosen_tasks[@]}: ${tasks[$i]}: $log_message"
-    echo "$log"
+    echo -e "$log"
     qdbus $dbusRef setLabelText "$log"
     echo "$log" >> $HOME/.deck_setup/steam-deck-configurator/logs.log
 }
@@ -14,6 +12,20 @@ print_log() {
 update_from_pacman() {
     print_log "Updating apps from Pacman"
     sudo pacman -Syu
+}
+
+add_flathub() {
+    print_log "Adding Flathub"
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+}
+
+update_flatpaks() {
+    print_log "Updating Flatpaks"
+    flatpak update -y
+}
+
+set_up_import_and_export_flatpaks() {
+    flatpak remote-modify --collection-id=org.flathub.Stable flathub
 }
 
 import_firefox() {
@@ -107,7 +119,7 @@ install_bauh() {
     cp -v $HOME/.deck_setup/steam-deck-configurator/applications/bauh-0.10.5-x86_64.AppImage $HOME/Applications/
     chmod -v +x $HOME/Applications/bauh-0.10.5-x86_64.AppImage
     cat <<- EOF > $HOME/.local/share/applications/bauh.desktop
-    [Desktop Entry]
+	[Desktop Entry]
 	Type=Application
 	Name=Applications (bauh)
 	Name[pt]=Aplicativos (bauh)
@@ -136,23 +148,9 @@ install_bauh() {
     fi
 }
 
-add_flathub() {
-    print_log "Adding Flathub"
-    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-}
-
 run_cryo_utilities_reccommended() {
     print_log "Running Cryoutilities with reccommended settings"
     sudo $HOME/.cryo_utilities/cryo_utilities recommended
-}
-
-update_flatpaks() {
-    print_log "Updating Flatpaks"
-    flatpak update -y
-}
-
-set_up_import_and_export_flatpaks() {
-    flatpak remote-modify --collection-id=org.flathub.Stable flathub
 }
 
 export_flatpaks() {
@@ -318,9 +316,20 @@ install_refind_all() {
 
 refind_uninstall_gui() {
     print_log "uninstalling rEFInd GUI"
-    rm -rf ~/SteamDeck_rEFInd
-    rm -rf ~/.SteamDeck_rEFInd
-    rm -f ~/Desktop/refind_GUI.desktop
+    rm -vrf ~/SteamDeck_rEFInd
+    rm -vrf ~/.SteamDeck_rEFInd
+    rm -vf ~/Desktop/refind_GUI.desktop
+}
+
+check_for_updates_proton_ge() {
+    RELEASE=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+    VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
+    proton_ge_downloaded_version="$(basename $HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz)"
+    if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then 
+    print_log "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+    else
+    print_log "ProtonGE is up to date"
+    fi
 }
 
 install_proton_ge_in_steam() {
@@ -368,7 +377,7 @@ fix_barrier() {
     systemctl --user start barrier
     systemctl --user status barrier
 
-    echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
+    print_log "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
 declare -A tasks_array
@@ -395,6 +404,10 @@ tasks_array["Install BoilR"]="install_boilr"
 tasks_array["Install Flatseal"]="install_flatseal"
 tasks_array["Install Steam Rom Manager"]="install_steam_rom_manager"
 tasks_array["Install DeckyLoader"]="install_deckyloader"
+tasks_array["Uninstall DeckyLoader"]="uninstall_deckyloader"
+tasks_array["Install rEFInd All"]="install_refind_all"
+tasks_array["Uninstall rEFInd GUI"]="refind_uninstall_gui"
+tasks_array["Check for Proton GE Updates"]="check_for_updates_proton_ge"
 tasks_array["Install Cryoutilities"]="install_cryoutilities"
 tasks_array["Run CryoUtilities with reccommended settings"]="run_cryo_utilities_reccommended"
 tasks_array["Install Emudeck"]="install_emudeck"
