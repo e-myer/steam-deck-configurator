@@ -4,7 +4,7 @@
 print_log() {
     log_message=$1
     log="$task_number/${#chosen_tasks[@]}: ${tasks[$i]}: $log_message"
-    echo "$log"
+    echo -e "$log"
     qdbus $dbusRef setLabelText "$log"
     echo "$log" >> $HOME/.deck_setup/steam-deck-configurator/logs.log
 }
@@ -326,9 +326,9 @@ check_for_updates_proton_ge() {
     VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
     proton_ge_downloaded_version="$(basename $HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz)"
     if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then 
-    echo -e "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+    print_log "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
     else
-    echo "ProtonGE is up to date"
+    print_log "ProtonGE is up to date"
     fi
 }
 
@@ -377,7 +377,7 @@ fix_barrier() {
     systemctl --user start barrier
     systemctl --user status barrier
 
-    echo "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
+    print_log "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
 declare -A tasks_array
