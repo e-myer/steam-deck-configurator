@@ -43,7 +43,7 @@ readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select task
 "${tasks_array[Save rEFInd config]}" "Save rEFInd config" off \
 "${tasks_array[Uninstall Deckyloader]}" "Uninstall Deckyloader" off \
 "${tasks_array[Fix Barrier]}" "Fix Barrier" off \
-"${tasks_array[Install rEFInd All]}" "Install rEFInd All" off \
+\ #"${tasks_array[Install rEFInd All]}" "Install rEFInd All" off \
 "${tasks_array[Uninstall rEFInd GUI]}" "Uninstall rEFInd GUI" off \
 "${tasks_array[Check for Proton GE Updates]}" "Check for Proton GE Updates" off)
 
@@ -65,8 +65,8 @@ do
 #    sleep 5
     if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
     then
-#    echo $task
-    $task #run task
+    echo $task
+#    $task #run task
     qdbus $dbusRef Set "" value $task_number
     else
     echo "Task $task not executed, exiting..."
