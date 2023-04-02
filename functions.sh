@@ -322,9 +322,8 @@ refind_uninstall_gui() {
 }
 
 check_for_updates_proton_ge() {
-    #RELEASE=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
-    #VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
-    VERSION=GE-Proton7-53
+    RELEASE=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+    VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
     proton_ge_downloaded_version="$(basename $HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz)"
     if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then 
     echo -e "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version"
