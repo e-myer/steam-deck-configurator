@@ -42,7 +42,10 @@ readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select task
 "${tasks_array[Apply rEFInd config]}" "Apply rEFInd config" on \
 "${tasks_array[Save rEFInd config]}" "Save rEFInd config" off \
 "${tasks_array[Uninstall Deckyloader]}" "Uninstall Deckyloader" off \
-"${tasks_array[Fix Barrier]}" "Fix Barrier" off)
+"${tasks_array[Fix Barrier]}" "Fix Barrier" off \
+"${tasks_array[Install rEFInd All]}" "Install rEFInd All" off \
+"${tasks_array[Uninstall rEFInd GUI]}" "Uninstall rEFInd GUI" off \
+"${tasks_array[Check for Proton GE Updates]}" "Check for Proton GE Updates" off)
 
 echo ${chosen_tasks[@]}
 if [ ${#chosen_tasks[@]} -eq 0 ]
