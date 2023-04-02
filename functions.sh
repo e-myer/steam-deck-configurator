@@ -14,6 +14,20 @@ update_from_pacman() {
     sudo pacman -Syu
 }
 
+add_flathub() {
+    print_log "Adding Flathub"
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+}
+
+update_flatpaks() {
+    print_log "Updating Flatpaks"
+    flatpak update -y
+}
+
+set_up_import_and_export_flatpaks() {
+    flatpak remote-modify --collection-id=org.flathub.Stable flathub
+}
+
 import_firefox() {
     print_log "Importing Firefox"
     flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub org.mozilla.firefox
@@ -134,23 +148,9 @@ install_bauh() {
     fi
 }
 
-add_flathub() {
-    print_log "Adding Flathub"
-    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-}
-
 run_cryo_utilities_reccommended() {
     print_log "Running Cryoutilities with reccommended settings"
     sudo $HOME/.cryo_utilities/cryo_utilities recommended
-}
-
-update_flatpaks() {
-    print_log "Updating Flatpaks"
-    flatpak update -y
-}
-
-set_up_import_and_export_flatpaks() {
-    flatpak remote-modify --collection-id=org.flathub.Stable flathub
 }
 
 export_flatpaks() {
