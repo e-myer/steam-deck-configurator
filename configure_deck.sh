@@ -66,7 +66,7 @@ do
     if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
     then
     echo $task
-#    $task #run task
+    $task #run task
     qdbus $dbusRef Set "" value $task_number
     else
     echo "Task $task not executed, exiting..."
