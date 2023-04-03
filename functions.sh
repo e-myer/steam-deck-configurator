@@ -1,4 +1,4 @@
-#! /usr/bin/bash -v
+#! /usr/bin/bash
 
 
 print_log() {
