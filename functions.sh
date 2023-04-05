@@ -241,7 +241,7 @@ install_emudeck() {
 }
 
 update_submodules() {
-    git submodule update
+    git submodule update --remote --merge
 }
 
 install_refind_GUI() {
