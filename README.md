@@ -53,7 +53,8 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
 
 ## Configuration
 
-To edit the default tasks, edit the configure_deck.sh file and change the "on" and "off" texts in the "options" array
+- To edit the default tasks, edit the configure_deck.sh file and change the "on" and "off" texts in the "options" array
+- To have an entry not show up in the GUI, add a backslash and a hashtag (`\ #`) before that line in the configure_deck.sh file
 
 ## General Steam Deck Notes
 
