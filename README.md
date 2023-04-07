@@ -75,3 +75,4 @@ To edit the default tasks, edit the configure_deck.sh file and change the "on" a
 ## Credits
 - This project includes code from [CryoByte33's steam-deck-utilities](https://github.com/CryoByte33/steam-deck-utilities/blob/main/LICENSE). The line to install CryoUtilities has been copied and modified from the desktop file in his repo.
 - This project includes the Bauh desktop file and the Bauh icon, copied from the [Bauh repo](https://github.com/vinifmor/bauh)
+- This project includes a dualboot config file created by [jlobue10's SteamDeck_rEFInd tool](https://github.com/jlobue10/SteamDeck_rEFInd), and OS Icons, taken from his [repo](https://github.com/jlobue10/SteamDeck_rEFInd)
