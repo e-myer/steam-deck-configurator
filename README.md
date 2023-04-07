@@ -71,3 +71,7 @@ To edit the default tasks, edit the configure_deck.sh file and change the "on" a
 - [SteamDeckPostInstallScript by ryanrudolfoba](https://github.com/ryanrudolfoba/SteamDeckPostInstallScript)
 - [SteamDeckAutomatedInstall by CelesteHeartsong](https://github.com/CelesteHeartsong/SteamDeckAutomatedInstall)
 - [Chris Titus Tech's Windows Utility](https://github.com/ChrisTitusTech/winutil)
+
+## Credits
+- This project includes code from [CryoByte33's steam-deck-utilities](https://github.com/CryoByte33/steam-deck-utilities/blob/main/LICENSE). The line to install CryoUtilities has been copied and modified from the desktop file in his repo.
+- This project includes the Bauh desktop file and the Bauh icon, copied from the [Bauh repo](https://github.com/vinifmor/bauh)
