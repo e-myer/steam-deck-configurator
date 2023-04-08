@@ -1,5 +1,6 @@
 #! /usr/bin/bash
 
+set -x 
 
 print_log() {
     log_message=$1
@@ -255,20 +256,33 @@ install_refind_bootloader() {
 
 choose_refind_config() {
     configs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/ -mindepth 1 -maxdepth 1 -type d -printf :%f)
-    IFS=':' read -r -a configs_array <<< "$configs" # split the input to an array
+    pre_ifs=$IFS
+    IFS=':'
+    read -r -a configs_array <<< "$configs" # split the input to an array
+    IFS=$pre_ifs
+    #echo ${confings_array[@]}
+    configs_array=("${configs_array[@]:1}") #remove first element
     for i in ${configs_array[@]}
     do
     (( index ++ ))
 #    echo $index \""$i"\" off
-    config_list="$config_list $index \""$i"\" off"
+#    echo "$config_list $index \"$i\" off"
+    if [ -z "$config_list" ]; then #if config_list isn't set/is empty
+        config_list="$index \"$i\" off"
+    else
+        config_list="$config_list $index \"$i\" off"
+    fi
+    # echo config list is:$config_list
     done
-    refind_config_choice=$(kdialog --radiolist "Select a config to apply:" $config_list)
-    refind_config_apply_dir=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/${configs_array[$refind_config_choice]}
+        echo $config_list
+        refind_config_choice=$(kdialog --radiolist "Select a config to apply:" $config_list)
+        refind_config_apply_dir=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/${configs_array[$refind_config_choice]}
 }
 
 apply_refind_config() {
     print_log "applying rEFInd config"
     num_of_dirs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+    #echo num_of_dirs is $num_of_dirs
     if [ "$num_of_dirs" -gt 1 ]; then #if there is more than 1 folder (or more than one config)
     choose_refind_config
     else
