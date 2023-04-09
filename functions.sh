@@ -258,32 +258,17 @@ install_refind_bootloader() {
 }
 
 choose_refind_config() {
-    configs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/ -mindepth 1 -maxdepth 1 -type d -printf :%f)
-    pre_ifs=$IFS
-    IFS=':'
-    read -r -a configs_array <<< "$configs" # split the input to an array
-    IFS=$pre_ifs
-    configs_array=("${configs_array[@]:1}") #remove first element
-    for i in "${configs_array[@]}"
-    do
-    if [ -z "$index" ]; then
-    index=0
-    else
-    (( index ++ ))
-    fi
-    config_list+=("$index" \"$i\" off)
-    done
-    refind_config_choice=$(kdialog --radiolist "Select a config to apply:" "${config_list[@]}")
-    refind_config_apply_dir=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/${configs_array[$refind_config_choice]}
+    refind_config_apply_dir=$(zenity --file-selection --save --directory --filename=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/)
 }
 
 apply_refind_config() {
     print_log "applying rEFInd config"
     num_of_dirs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then #if there is more than 1 folder (or more than one config)
-    choose_refind_config
+    refind_config_apply_dir=$(zenity --file-selection --save --directory --filename=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/)
     else
     refind_config_apply_dir=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config apply dir to that
+    print log "one config found, applying $refind_config_apply_dir"
     fi
 
     cp -v "$refind_config_apply_dir"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
@@ -300,14 +285,12 @@ save_refind_config() {
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? == 0 ];
     then
-    config_name=$(kdialog --title "Name of config" --inputbox "What would you like to name your config?")
-    config_name=${config_name// /_}
-    mkdir "$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/$config_name"
-    cp -v $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/$config_name" #copy files saved by rEFInd GUI to a custom directory
+    config_folder=$(zenity --file-selection --save --directory --filename=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/)
+    cp -v $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_folder" #copy files saved by rEFInd GUI to a custom directory
         if [ $? == 0 ];
         then
-        echo "config saved to $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/$config_name"
-        kdialog --msgbox "config saved to $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/$config_name"
+        echo "config saved to $config_folder"
+        kdialog --msgbox "config saved to $config_folder"
         else
         cp_error=$?
         echo "error: $cp_error, config not saved"
