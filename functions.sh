@@ -1,6 +1,6 @@
 #! /usr/bin/bash
 
-set -x 
+#set -x 
 
 print_log() {
     log_message=$1
@@ -165,15 +165,16 @@ export_flatpaks() {
     do
     ((number ++))
     menu+=("$number" "$name" off)
+    echo "{$menu[@]}"
     done
     readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
 
-    #echo ${chosen_flatpaks[@]}
-    for flatpak in "${chosen_flatpaks[@]}"
+    echo ${chosen_flatpaks[@]}
+    for flatpak_index in "${chosen_flatpaks[@]}"
     do
-    echo "${flatpak_ids[$i]}"
-    print_log "adding $flatpak to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks $flatpak
+    #echo "${flatpak_ids[$flatpak_index]}"
+    print_log "adding ${flatpak_ids[$flatpak_index]} to usb"
+    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks "${flatpak_ids[$flatpak_index]}"
     done
 }
 
