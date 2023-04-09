@@ -264,7 +264,11 @@ choose_refind_config() {
     configs_array=("${configs_array[@]:1}") #remove first element
     for i in ${configs_array[@]}
     do
+    if [ -z "$index" ]; then
+    index=0
+    else
     (( index ++ ))
+    fi
 #    echo $index \""$i"\" off
 #    echo "$config_list $index \"$i\" off"
     if [ -z "$config_list" ]; then #if config_list isn't set/is empty
@@ -276,6 +280,7 @@ choose_refind_config() {
     done
         echo $config_list
         refind_config_choice=$(kdialog --radiolist "Select a config to apply:" $config_list)
+        echo refind config choice is $refind_config_choice
         refind_config_apply_dir=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/${configs_array[$refind_config_choice]}
 }
 
