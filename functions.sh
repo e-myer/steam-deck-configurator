@@ -265,7 +265,7 @@ apply_refind_config() {
     print_log "applying rEFInd config"
     num_of_dirs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then #if there is more than 1 folder (or more than one config)
-    refind_config_apply_dir=$(zenity --file-selection --save --directory --filename=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/)
+    refind_config_apply_dir=$(zenity --file-selection --directory --filename=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/)
     else
     refind_config_apply_dir=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config apply dir to that
     print log "one config found, applying $refind_config_apply_dir"
