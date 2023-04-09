@@ -257,10 +257,6 @@ install_refind_bootloader() {
     "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
-choose_refind_config() {
-    refind_config_apply_dir=$(zenity --file-selection --save --directory --filename=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/)
-}
-
 apply_refind_config() {
     print_log "applying rEFInd config"
     num_of_dirs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
