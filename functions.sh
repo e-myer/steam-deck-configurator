@@ -274,10 +274,10 @@ choose_refind_config() {
         config_list="$config_list $index \"$i\" off"
     fi
     done
-        echo $config_list
-        refind_config_choice=$(kdialog --radiolist "Select a config to apply:" $config_list)
-        echo refind config choice is $refind_config_choice
-        refind_config_apply_dir=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/${configs_array[$refind_config_choice]}
+    echo $config_list
+    refind_config_choice=$(kdialog --radiolist "Select a config to apply:" $config_list)
+    echo refind config choice is $refind_config_choice
+    refind_config_apply_dir=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/${configs_array[$refind_config_choice]}
 }
 
 apply_refind_config() {
