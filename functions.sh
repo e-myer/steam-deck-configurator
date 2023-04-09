@@ -163,11 +163,9 @@ export_flatpaks() {
     do
     ((number ++))
     menu+=("$number" "$name" off)
-    echo "{$menu[@]}"
     done
     readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
 
-    echo ${chosen_flatpaks[@]}
     #echo ${chosen_flatpaks[@]}
     for flatpak in "${chosen_flatpaks[@]}"
     do
