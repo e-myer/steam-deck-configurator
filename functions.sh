@@ -153,26 +153,31 @@ run_cryo_utilities_reccommended() {
 }
 
 export_flatpaks() {
-    print_log "exporting flatpaks"
-    mkdir -p $HOME/.deck_setup/steam-deck-configurator/created_flatpaks
+print_log "exporting flatpaks"
+mkdir -p $HOME/.deck_setup/steam-deck-configurator/created_flatpaks
 
-    readarray -t flatpak_names < <(flatpak list --app --columns=name)
-    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
+readarray -t flatpak_names < <(flatpak list --app --columns=name)
+readarray -t flatpak_ids < <(flatpak list --app --columns=application)
 
-    for name in "${flatpak_names[@]}"
-    do
-    ((number ++))
-    menu+=("$number" "$name" off)
-    done
-    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
+for name in "${flatpak_names[@]}"
+do
+if [ -z "$number" ]; then
+number=0
+else
+((number ++))
+fi
+menu+=("$number" "$name" off)
+done
 
-    #echo ${chosen_flatpaks[@]}
-    for flatpak in "${chosen_flatpaks[@]}"
-    do
-    echo "${flatpak_ids[$i]}"
-    print_log "adding $flatpak to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks $flatpak
-    done
+readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
+echo ${chosen_flatpaks[@]}
+
+for flatpak in "${chosen_flatpaks[@]}"
+do
+echo "${flatpak_ids[$flatpak]}"
+print_log "adding $flatpak to usb"
+flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks $flatpak
+done
 }
 
 install_deckyloader() {
