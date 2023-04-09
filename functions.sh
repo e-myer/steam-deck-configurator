@@ -161,17 +161,22 @@ export_flatpaks() {
 
     for name in "${flatpak_names[@]}"
     do
+    if [ -z "$number" ]; then
+    number=0
+    else
     ((number ++))
+    fi
     menu+=("$number" "$name" off)
     done
-    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
 
-    #echo ${chosen_flatpaks[@]}
+    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
+    echo ${chosen_flatpaks[@]}
+
     for flatpak in "${chosen_flatpaks[@]}"
     do
-    echo "${flatpak_ids[$i]}"
+    echo "${flatpak_ids[$flatpak]}"
     print_log "adding $flatpak to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks $flatpak
+    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks "${flatpak_ids[$flatpak]}"
     done
 }
 
