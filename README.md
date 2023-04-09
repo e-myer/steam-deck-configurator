@@ -40,7 +40,7 @@ chmod +x ./configure_deck.sh
 
 Alternatively, you can clone the repo to a USB, and mount it to the folder at $HOME/.deck_setup.
 
-To do so, first create the folder with `mkdir $HOME/.deck_setup`, identify the USB drive by running `lsblk`, then mount it to $HOME/.deck_setup. For example if the usb is mounted at /dev/sdc1, then run the command `sudo mount /dev/sdc1 /home/deck/.deck_setup` in a terminal
+To do so, first create the folder with `mkdir $HOME/.deck_setup`, identify the USB drive by running `lsblk`, then mount it to $HOME/.deck_setup. For example if the usb is mounted at /dev/sdc1, then run the command `sudo mount /dev/sdc1 $HOME/.deck_setup` in a terminal
 
 And make the nessecary files executable using
 ```
@@ -82,3 +82,8 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
 - [SteamDeckPostInstallScript by ryanrudolfoba](https://github.com/ryanrudolfoba/SteamDeckPostInstallScript)
 - [SteamDeckAutomatedInstall by CelesteHeartsong](https://github.com/CelesteHeartsong/SteamDeckAutomatedInstall)
 - [Chris Titus Tech's Windows Utility](https://github.com/ChrisTitusTech/winutil)
+
+## Credits
+- This project includes code from [CryoByte33's steam-deck-utilities](https://github.com/CryoByte33/steam-deck-utilities/blob/main/LICENSE). The line to install CryoUtilities has been copied and modified from the desktop file in his repo.
+- This project includes the Bauh desktop file and the Bauh icon, copied from the [Bauh repo](https://github.com/vinifmor/bauh)
+- This project includes a dualboot config file created by [jlobue10's SteamDeck_rEFInd tool](https://github.com/jlobue10/SteamDeck_rEFInd), and OS Icons, taken from his [repo](https://github.com/jlobue10/SteamDeck_rEFInd)

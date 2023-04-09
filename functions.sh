@@ -1,6 +1,5 @@
 #! /usr/bin/bash
 
-
 print_log() {
     log_message=$1
     log="$task_number/${#chosen_tasks[@]}: ${tasks[$i]}: $log_message"
@@ -162,17 +161,22 @@ export_flatpaks() {
 
     for name in "${flatpak_names[@]}"
     do
+    if [ -z "$number" ]; then
+    number=0
+    else
     ((number ++))
+    fi
     menu+=("$number" "$name" off)
     done
-    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
 
-    #echo ${chosen_flatpaks[@]}
+    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
+    echo ${chosen_flatpaks[@]}
+
     for flatpak in "${chosen_flatpaks[@]}"
     do
-    echo "${flatpak_ids[$i]}"
+    echo "${flatpak_ids[$flatpak]}"
     print_log "adding $flatpak to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks $flatpak
+    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks "${flatpak_ids[$flatpak]}"
     done
 }
 
@@ -255,14 +259,21 @@ install_refind_bootloader() {
 
 choose_refind_config() {
     configs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/ -mindepth 1 -maxdepth 1 -type d -printf :%f)
-    IFS=':' read -r -a configs_array <<< "$configs" # split the input to an array
-    for i in ${configs_array[@]}
+    pre_ifs=$IFS
+    IFS=':'
+    read -r -a configs_array <<< "$configs" # split the input to an array
+    IFS=$pre_ifs
+    configs_array=("${configs_array[@]:1}") #remove first element
+    for i in "${configs_array[@]}"
     do
+    if [ -z "$index" ]; then
+    index=0
+    else
     (( index ++ ))
-#    echo $index \""$i"\" off
-    config_list="$config_list $index \""$i"\" off"
+    fi
+    config_list+=("$index" \"$i\" off)
     done
-    refind_config_choice=$(kdialog --radiolist "Select a config to apply:" $config_list)
+    refind_config_choice=$(kdialog --radiolist "Select a config to apply:" "${config_list[@]}")
     refind_config_apply_dir=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/${configs_array[$refind_config_choice]}
 }
 
