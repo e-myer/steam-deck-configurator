@@ -176,7 +176,7 @@ export_flatpaks() {
     do
     echo "${flatpak_ids[$flatpak]}"
     print_log "adding $flatpak to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks $flatpak
+    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks "${flatpak_ids[$flatpak]}"
     done
 }
 
