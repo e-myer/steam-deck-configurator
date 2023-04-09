@@ -274,16 +274,13 @@ choose_refind_config() {
         config_list="$config_list $index \"$i\" off"
     fi
     done
-    echo $config_list
     refind_config_choice=$(kdialog --radiolist "Select a config to apply:" $config_list)
-    echo refind config choice is $refind_config_choice
     refind_config_apply_dir=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/${configs_array[$refind_config_choice]}
 }
 
 apply_refind_config() {
     print_log "applying rEFInd config"
     num_of_dirs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
-    #echo num_of_dirs is $num_of_dirs
     if [ "$num_of_dirs" -gt 1 ]; then #if there is more than 1 folder (or more than one config)
     choose_refind_config
     else
