@@ -260,7 +260,6 @@ choose_refind_config() {
     IFS=':'
     read -r -a configs_array <<< "$configs" # split the input to an array
     IFS=$pre_ifs
-    #echo ${confings_array[@]}
     configs_array=("${configs_array[@]:1}") #remove first element
     for i in ${configs_array[@]}
     do
@@ -269,14 +268,11 @@ choose_refind_config() {
     else
     (( index ++ ))
     fi
-#    echo $index \""$i"\" off
-#    echo "$config_list $index \"$i\" off"
-    if [ -z "$config_list" ]; then #if config_list isn't set/is empty
+    if [ -z "$config_list" ]; then
         config_list="$index \"$i\" off"
     else
         config_list="$config_list $index \"$i\" off"
     fi
-    # echo config list is:$config_list
     done
         echo $config_list
         refind_config_choice=$(kdialog --radiolist "Select a config to apply:" $config_list)
