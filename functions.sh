@@ -1,6 +1,5 @@
 #! /usr/bin/bash
 
-
 print_log() {
     log_message=$1
     log="$task_number/${#chosen_tasks[@]}: ${tasks[$i]}: $log_message"
@@ -255,12 +254,23 @@ install_refind_bootloader() {
 
 choose_refind_config() {
     configs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/ -mindepth 1 -maxdepth 1 -type d -printf :%f)
-    IFS=':' read -r -a configs_array <<< "$configs" # split the input to an array
+    pre_ifs=$IFS
+    IFS=':'
+    read -r -a configs_array <<< "$configs" # split the input to an array
+    IFS=$pre_ifs
+    configs_array=("${configs_array[@]:1}") #remove first element
     for i in ${configs_array[@]}
     do
+    if [ -z "$index" ]; then
+    index=0
+    else
     (( index ++ ))
-#    echo $index \""$i"\" off
-    config_list="$config_list $index \""$i"\" off"
+    fi
+    if [ -z "$config_list" ]; then
+        config_list="$index \"$i\" off"
+    else
+        config_list="$config_list $index \"$i\" off"
+    fi
     done
     refind_config_choice=$(kdialog --radiolist "Select a config to apply:" $config_list)
     refind_config_apply_dir=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/${configs_array[$refind_config_choice]}
