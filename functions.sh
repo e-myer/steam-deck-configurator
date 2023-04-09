@@ -264,20 +264,18 @@ choose_refind_config() {
     read -r -a configs_array <<< "$configs" # split the input to an array
     IFS=$pre_ifs
     configs_array=("${configs_array[@]:1}") #remove first element
-    for i in ${configs_array[@]}
+    echo "${configs_array[@]}"
+    for i in "${configs_array[@]}"
     do
     if [ -z "$index" ]; then
     index=0
     else
     (( index ++ ))
     fi
-    if [ -z "$config_list" ]; then
-        config_list="$index \"$i\" off"
-    else
-        config_list="$config_list $index \"$i\" off"
-    fi
+    config_list+=("$index" \"$i\" off)
+    echo config list is "${config_list[@]}"
     done
-    refind_config_choice=$(kdialog --radiolist "Select a config to apply:" $config_list)
+    refind_config_choice=$(kdialog --radiolist "Select a config to apply:" "${config_list[@]}")
     refind_config_apply_dir=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/${configs_array[$refind_config_choice]}
 }
 
