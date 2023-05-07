@@ -80,7 +80,6 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
 
 
 ## Post install scripts and tools for Windows on Steam Deck
-- [SteamDeckPostInstallScript by ryanrudolfoba](https://github.com/ryanrudolfoba/SteamDeckPostInstallScript)
 - [SteamDeckAutomatedInstall by CelesteHeartsong](https://github.com/CelesteHeartsong/SteamDeckAutomatedInstall)
 - [Chris Titus Tech's Windows Utility](https://github.com/ChrisTitusTech/winutil)
 
