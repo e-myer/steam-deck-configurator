@@ -60,7 +60,6 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
   - Add the function to the end of the file, like this `tasks_array["Function title"]="function_name"`, replacing "function title" and "function name" with the function's title and name.
   - Add the entry to the configure_deck.sh file, in the tasks_array list, like this `"${tasks_array[Function title]}" "Function title" off \`, to have the entry preselected in the checklist dialog, replace "off" with "on", like this `"${tasks_array[Function title]}" "Function title" on \`
   - If the task is at the very end of the list in the configure_deck.sh file, then don't put a backslash and instead add a closing bracket, like this `"${tasks_array[Function title]}" "Function title" off)`
-  ```
 
 ## General Steam Deck Notes
 
