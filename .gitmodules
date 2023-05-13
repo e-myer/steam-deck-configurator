@@ -2,3 +2,6 @@
 	path = SteamDeck_rEFInd
 	url = https://github.com/e-myer/SteamDeck_rEFInd
 	branch = main
+[submodule "NonSteamLaunchers-On-Steam-Deck"]
+	path = NonSteamLaunchers-On-Steam-Deck
+	url = https://github.com/e-myer/NonSteamLaunchers-On-Steam-Deck
