@@ -352,6 +352,13 @@ install_proton_ge_in_steam() {
     fi
 }
 
+install_non_steam_launchers() {
+    print_log "running non steam launchers installer"
+    curl https://raw.githubusercontent.com/moraroy/NonSteamLaunchers-On-Steam-Deck/main/NonSteamLaunchers.sh --output "$HOME/.deck_setup/NonSteamLaunchers.sh"
+    chmod -v +x $HOME/.deck_setup/NonSteamLaunchers.sh
+    "$HOME/.deck_setup/NonSteamLaunchers.sh"
+}
+
 fix_barrier() {
     print_log "Fixing Barrier"
     echo "Are you using auto config for the ip address? (y/n)"
