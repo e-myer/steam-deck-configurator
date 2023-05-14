@@ -264,10 +264,10 @@ apply_refind_config() {
     cp -vr $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs $HOME/.deck_setup/rEFInd_configs
     fi
     num_of_dirs=$(find $HOME/.deck_setup/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
-    if [ "$num_of_dirs" -gt 1 ]; then #if there is more than 1 folder (or more than one config)
+    if [ "$num_of_dirs" -gt 1 ]; then
     refind_config=$(zenity --file-selection --title="select a file" --filename=$HOME/.deck_setup/ --directory)
     else
-    refind_config=$(find $HOME/.deck_setup/rEFInd_configs -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config apply dir to that
+    refind_config=$(find $HOME/.deck_setup/rEFInd_configs -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
     fi
 
     print_log "applying config: $refind_config"
@@ -289,7 +289,7 @@ save_refind_config() {
     then
     config_save_path=$(zenity --file-selection --save --title="Save config (whitespace is not allowed)" --filename=$HOME/.deck_setup/)
     mkdir -p "$config_save_path"
-    cp -v $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a custom directory
+    cp -v $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
         if [ $? == 0 ];
         then
         echo "config saved to $config_save_path"
