@@ -259,6 +259,10 @@ install_refind_bootloader() {
 
 apply_refind_config() {
     print_log "applying rEFInd config"
+    if [ ! -d $HOME/.deck_setup/rEFInd_configs ]
+    then
+    cp -vr $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs $HOME/.deck_setup/rEFInd_configs
+    fi
     num_of_dirs=$(find $HOME/.deck_setup/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then #if there is more than 1 folder (or more than one config)
     refind_config=$(zenity --file-selection --title="select a file" --filename=$HOME/.deck_setup/ --directory)
