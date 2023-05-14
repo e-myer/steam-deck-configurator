@@ -319,11 +319,16 @@ refind_uninstall_gui() {
 check_for_updates_proton_ge() {
     RELEASE=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
     VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
+    if compgen -G "$HOME/.deck_setup/GE-Proton*.tar.gz" > /dev/null; then
     proton_ge_downloaded_version="$(basename $HOME/.deck_setup/GE-Proton*.tar.gz)"
     if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then 
     print_log "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
     else
     print_log "ProtonGE is up to date"
+    fi
+    else
+    print_log "ProtonGE is not downloaded, please download and place it in the $HOME/.deck_setup folder first, skipping..."
+    sleep 3
     fi
 }
 
