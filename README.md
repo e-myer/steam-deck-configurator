@@ -54,7 +54,7 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
 
 ## Configuration
 
-- To edit the default tasks, edit the configure_deck.sh file and change the "on" and "off" texts in the "options" array
+- To edit the preselected tasks, edit the configure_deck.sh file and change the "on" and "off" texts in the "options" array
 - To add a task
   - Create a function in the function.sh file
   - Add the function to the end of the file, like this `tasks_array["Function title"]="function_name"`, replacing "function title" and "function name" with the function's title and name.
