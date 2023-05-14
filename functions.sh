@@ -265,7 +265,7 @@ apply_refind_config() {
     fi
     num_of_dirs=$(find $HOME/.deck_setup/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then
-    refind_config=$(zenity --file-selection --title="select a file" --filename=$HOME/.deck_setup/ --directory)
+    refind_config=$(zenity --file-selection --title="select a file" --filename=$HOME/.deck_setup/rEFInd_configs --directory)
     else
     refind_config=$(find $HOME/.deck_setup/rEFInd_configs -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
     fi
