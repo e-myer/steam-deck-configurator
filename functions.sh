@@ -433,6 +433,7 @@ tasks_array["Install rEFInd GUI"]="install_refind_GUI"
 tasks_array["Install rEFInd bootloader"]="install_refind_bootloader"
 tasks_array["Apply rEFInd config"]="apply_refind_config"
 tasks_array["Save rEFInd config"]="save_refind_config"
+tasks_array["Install Non Steam Launchers"]="install_non_steam_launchers"
 tasks_array["Uninstall Deckyloader"]="uninstall_deckyloader"
 tasks_array["Fix Barrier"]="fix_barrier"
 
