@@ -1,6 +1,6 @@
 #! /usr/bin/bash
 
-source ./functions.sh
+source $HOME/.deck_setup/steam-deck-configurator/functions.sh
 
 kdialog --title "password" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"
 
@@ -10,7 +10,6 @@ exit 0
 fi
 
 readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select tasks, click and drag to multiselect" \
-"${tasks_array[Update from pacman]}" "Update from pacman" on \
 "${tasks_array[Add Flathub if it does not exist]}" "Add Flathub if it doesn't exist" on \
 "${tasks_array[Update Flatpaks]}" "Update Flatpaks" on \
 "${tasks_array[Set up import and export Flatpaks]}" "Set up import and export Flatpaks" on \
@@ -34,7 +33,6 @@ readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select task
 "${tasks_array[Install Steam Rom Manager]}" "Install Steam Rom Manager" off \
 "${tasks_array[Install DeckyLoader]}" "Install DeckyLoader" on \
 "${tasks_array[Install Cryoutilities]}" "Install Cryoutilities" on \
-"${tasks_array[Run CryoUtilities with reccommended settings]}" "Run CryoUtilities with reccommended settings" off \
 "${tasks_array[Install Emudeck]}" "Install Emudeck" on \
 "${tasks_array[Install RetroDeck]}" "Install RetroDeck" off \
 "${tasks_array[Update Submodules]}" "Update Submodules" off \
@@ -46,7 +44,9 @@ readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select task
 "${tasks_array[Install Non Steam Launchers]}" "Install Non Steam Launchers" off \
 "${tasks_array[Fix Barrier]}" "Fix Barrier" off \
 "${tasks_array[Uninstall rEFInd GUI]}" "Uninstall rEFInd GUI" off \
-"${tasks_array[Check for Proton GE Updates]}" "Check for Proton GE Updates" off)
+"${tasks_array[Check for Proton GE Updates]}" "Check for Proton GE Updates" off \
+"${tasks_array[Update from pacman]}" "Update from pacman" on \
+"${tasks_array[Run CryoUtilities with recommended settings]}" "Run CryoUtilities with recommended settings" off)
 
 echo ${chosen_tasks[@]}
 if [ ${#chosen_tasks[@]} -eq 0 ]

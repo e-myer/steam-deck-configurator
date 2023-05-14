@@ -147,14 +147,14 @@ install_bauh() {
     fi
 }
 
-run_cryo_utilities_reccommended() {
-    print_log "Running Cryoutilities with reccommended settings"
+run_cryo_utilities_recommended() {
+    print_log "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
     sudo $HOME/.cryo_utilities/cryo_utilities recommended
 }
 
 export_flatpaks() {
     print_log "exporting flatpaks"
-    mkdir -p $HOME/.deck_setup/created_flatpaks
+    mkdir -p $HOME/.deck_setup/flatpaks
 
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
@@ -176,7 +176,7 @@ export_flatpaks() {
     do
     echo "${flatpak_ids[$flatpak]}"
     print_log "adding $flatpak to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/created_flatpaks "${flatpak_ids[$flatpak]}"
+    flatpak --verbose create-usb $HOME/.deck_setup/flatpaks "${flatpak_ids[$flatpak]}"
     done
 }
 
@@ -283,6 +283,7 @@ apply_refind_config() {
 }
 
 save_refind_config() {
+    print_log "saving rEFInd config"
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? == 0 ];
     then
@@ -410,7 +411,7 @@ tasks_array["Install rEFInd All"]="install_refind_all"
 tasks_array["Uninstall rEFInd GUI"]="refind_uninstall_gui"
 tasks_array["Check for Proton GE Updates"]="check_for_updates_proton_ge"
 tasks_array["Install Cryoutilities"]="install_cryoutilities"
-tasks_array["Run CryoUtilities with reccommended settings"]="run_cryo_utilities_reccommended"
+tasks_array["Run CryoUtilities with recommended settings"]="run_cryo_utilities_recommended"
 tasks_array["Install Emudeck"]="install_emudeck"
 tasks_array["Install RetroDeck"]="install_retrodeck"
 tasks_array["Update Submodules"]="update_submodules"
