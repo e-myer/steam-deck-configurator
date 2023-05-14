@@ -147,8 +147,8 @@ install_bauh() {
     fi
 }
 
-run_cryo_utilities_reccommended() {
-    print_log "Running Cryoutilities with reccommended settings"
+run_cryo_utilities_recommended() {
+    print_log "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
     sudo $HOME/.cryo_utilities/cryo_utilities recommended
 }
 
@@ -410,7 +410,7 @@ tasks_array["Install rEFInd All"]="install_refind_all"
 tasks_array["Uninstall rEFInd GUI"]="refind_uninstall_gui"
 tasks_array["Check for Proton GE Updates"]="check_for_updates_proton_ge"
 tasks_array["Install Cryoutilities"]="install_cryoutilities"
-tasks_array["Run CryoUtilities with reccommended settings"]="run_cryo_utilities_reccommended"
+tasks_array["Run CryoUtilities with recommended settings"]="run_cryo_utilities_recommended"
 tasks_array["Install Emudeck"]="install_emudeck"
 tasks_array["Install RetroDeck"]="install_retrodeck"
 tasks_array["Update Submodules"]="update_submodules"
