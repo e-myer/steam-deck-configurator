@@ -287,7 +287,6 @@ save_refind_config() {
     if [ $? == 0 ];
     then
     config_save_path=$(zenity --file-selection --save --title="Save config (whitespace is not allowed)" --filename=$HOME/.deck_setup/)
-    config_name=${config_name// /_}
     mkdir "$config_save_path"
     cp -v $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a custom directory
         if [ $? == 0 ];
