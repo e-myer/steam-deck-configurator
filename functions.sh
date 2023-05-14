@@ -327,7 +327,8 @@ check_for_updates_proton_ge() {
     print_log "ProtonGE is up to date"
     fi
     else
-    print_log "ProtonGE is not downloaded, please download and place it in the $HOME/.deck_setup folder first"
+    print_log "ProtonGE is not downloaded, please download and place it in the $HOME/.deck_setup folder first, skipping"
+    sleep 3
     fi
 }
 
