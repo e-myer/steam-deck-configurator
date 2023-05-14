@@ -1,6 +1,6 @@
 #! /usr/bin/bash
 
-source ./functions.sh
+source $HOME/.deck_setup/steam-deck-configurator/functions.sh
 
 kdialog --title "password" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"
 
