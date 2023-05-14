@@ -283,6 +283,7 @@ apply_refind_config() {
 }
 
 save_refind_config() {
+    print_log "saving rEFInd config"
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? == 0 ];
     then
