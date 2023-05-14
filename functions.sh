@@ -5,7 +5,7 @@ print_log() {
     log="$task_number/${#chosen_tasks[@]}: ${tasks[$i]}: $log_message"
     echo -e "$log"
     qdbus $dbusRef setLabelText "$log"
-    echo "$log" >> $HOME/.deck_setup/steam-deck-configurator/logs.log
+    echo "$log" >> $HOME/.deck_setup/logs.log
 }
 
 update_from_pacman() {
@@ -29,42 +29,42 @@ set_up_import_and_export_flatpaks() {
 
 import_firefox() {
     print_log "Importing Firefox"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub org.mozilla.firefox
+    flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub org.mozilla.firefox
 }
 
 import_corekeyboard() {
     print_log "Importing CoreKeyboard"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub org.cubocore.CoreKeyboard
+    flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub org.cubocore.CoreKeyboard
 }
 
 import_barrier() {
     print_log "Importing Barrier"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub com.github.debauchee.barrier
+    flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub com.github.debauchee.barrier
 }
 
 import_heroic_games() {
     print_log "Importing Heroic Games"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub com.heroicgameslauncher.hgl
+    flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub com.heroicgameslauncher.hgl
 }
 
 import_protonup_qt() {
     print_log "Importing ProtonUP QT"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub net.davidotek.pupgui2
+    flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub net.davidotek.pupgui2
 }
 
 import_boilr() {
     print_log "Importing BoilR"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub io.github.philipk.boilr
+    flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub io.github.philipk.boilr
 }
 
 import_flatseal() {
     print_log "Importing Flatseal"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub com.github.tchx84.Flatseal
+    flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub com.github.tchx84.Flatseal
 }
 
 import_steam_rom_manager() {
     print_log "Importing Steam ROM Manager"
-    flatpak install --sideload-repo=$HOME/.deck_setup/steam_deck_configurator/flatpaks flathub com.steamgriddb.steam-rom-manager
+    flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub com.steamgriddb.steam-rom-manager
 }
 
 install_firefox() {
@@ -114,8 +114,8 @@ install_retrodeck() {
 
 install_bauh() {
     print_log "Installing Bauh"
-    if [ -f $HOME/.deck_setup/steam-deck-configurator/applications/bauh-0.10.5-x86_64.AppImage ]; then
-    cp -v $HOME/.deck_setup/steam-deck-configurator/applications/bauh-0.10.5-x86_64.AppImage $HOME/Applications/
+    if [ -f $HOME/.deck_setup/applications/bauh-0.10.5-x86_64.AppImage ]; then
+    cp -v $HOME/.deck_setup/applications/bauh-0.10.5-x86_64.AppImage $HOME/Applications/
     chmod -v +x $HOME/Applications/bauh-0.10.5-x86_64.AppImage
     cat <<- EOF > $HOME/.local/share/applications/bauh.desktop
 	[Desktop Entry]
@@ -147,14 +147,14 @@ install_bauh() {
     fi
 }
 
-run_cryo_utilities_reccommended() {
-    print_log "Running Cryoutilities with reccommended settings"
+run_cryo_utilities_recommended() {
+    print_log "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
     sudo $HOME/.cryo_utilities/cryo_utilities recommended
 }
 
 export_flatpaks() {
     print_log "exporting flatpaks"
-    mkdir -p $HOME/.deck_setup/steam-deck-configurator/created_flatpaks
+    mkdir -p $HOME/.deck_setup/flatpaks
 
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
@@ -176,12 +176,12 @@ export_flatpaks() {
     do
     echo "${flatpak_ids[$flatpak]}"
     print_log "adding $flatpak to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/steam-deck-configurator/created_flatpaks "${flatpak_ids[$flatpak]}"
+    flatpak --verbose create-usb $HOME/.deck_setup/flatpaks "${flatpak_ids[$flatpak]}"
     done
 }
 
 install_deckyloader() {
-    if [ -f "$HOME/.deck_setup/steam-deck-configurator/deckyloader_installed_version" ]
+    if [ -f "$HOME/.deck_setup/deckyloader_installed_version" ]
     then
         print_log "Checking if latest version of DeckyLoader is installed"
         RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
@@ -193,27 +193,27 @@ install_deckyloader() {
             then
                 print_log "Installing Latest Version"
                 curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$HOME/.deck_setup/deckyloader_install_release.sh"
-                chmod -v +x "$HOME/.deck_setup/steam-deck-configurator/deckyloader_install_release.sh"
-                $HOME/.deck_setup/steam-deck-configurator/deckyloader_install_release.sh
-                echo "$VERSION" > "$HOME/.deck_setup/steam-deck-configurator/deckyloader_installed_version"
+                chmod -v +x "$HOME/.deck_setup/deckyloader_install_release.sh"
+                $HOME/.deck_setup/deckyloader_install_release.sh
+                echo "$VERSION" > "$HOME/.deck_setup/deckyloader_installed_version"
             else
                print_log "Latest Version of DeckyLoader is already installed"
             fi
     else
         print_log "Installing DeckyLoader"
         curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$HOME/.deck_setup/deckyloader_install_release.sh"
-        chmod -v +x "$HOME/.deck_setup/steam-deck-configurator/deckyloader_install_release.sh"
-        $HOME/.deck_setup/steam-deck-configurator/deckyloader_install_release.sh
-        echo "$VERSION" > "$HOME/.deck_setup/steam-deck-configurator/deckyloader_installed_version"
+        chmod -v +x "$HOME/.deck_setup/deckyloader_install_release.sh"
+        $HOME/.deck_setup/deckyloader_install_release.sh
+        echo "$VERSION" > "$HOME/.deck_setup/deckyloader_installed_version"
    fi
 }
 
 uninstall_deckyloader() {
     print_log "Uninstalling DeckyLoader"
     curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh  --output "$HOME/.deck_setup/deckyloader_uninstaller.sh"
-    chmod -v +x "$HOME/.deck_setup/steam-deck-configurator/deckyloader_uninstaller.sh"
-    $HOME/.deck_setup/steam-deck-configurator/deckyloader_uninstaller.sh
-    rm -f "$HOME/.deck_setup/steam-deck-configurator/deckyloader_installed_version"
+    chmod -v +x "$HOME/.deck_setup/deckyloader_uninstaller.sh"
+    $HOME/.deck_setup/deckyloader_uninstaller.sh
+    rm -f "$HOME/.deck_setup/deckyloader_installed_version"
 }
 
 install_cryoutilities() {
@@ -222,8 +222,8 @@ install_cryoutilities() {
     then
         print_log "cryoutilities is not installed, installing"
         curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$HOME/.deck_setup/cryoutilities_install.sh"
-        chmod -v +x "$HOME/.deck_setup/steam-deck-configurator/cryoutilities_install.sh"
-        $HOME/.deck_setup/steam-deck-configurator/cryoutilities_install.sh
+        chmod -v +x "$HOME/.deck_setup/cryoutilities_install.sh"
+        $HOME/.deck_setup/cryoutilities_install.sh
     else
         print_log "cryoutilities is already installed"
     fi
@@ -235,8 +235,8 @@ install_emudeck() {
     then
     print_log "emudeck is not installed, installing"
     curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh --output "$HOME/.deck_setup/emudeck_install.sh"
-    chmod -v +x "$HOME/.deck_setup/steam-deck-configurator/emudeck_install.sh"
-    $HOME/.deck_setup/steam-deck-configurator/emudeck_install.sh
+    chmod -v +x "$HOME/.deck_setup/emudeck_install.sh"
+    $HOME/.deck_setup/emudeck_install.sh
     else
     print_log "emudeck is already installed"
     fi
@@ -257,36 +257,22 @@ install_refind_bootloader() {
     "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
-choose_refind_config() {
-    configs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/ -mindepth 1 -maxdepth 1 -type d -printf :%f)
-    pre_ifs=$IFS
-    IFS=':'
-    read -r -a configs_array <<< "$configs" # split the input to an array
-    IFS=$pre_ifs
-    configs_array=("${configs_array[@]:1}") #remove first element
-    for i in "${configs_array[@]}"
-    do
-    if [ -z "$index" ]; then
-    index=0
-    else
-    (( index ++ ))
-    fi
-    config_list+=("$index" \"$i\" off)
-    done
-    refind_config_choice=$(kdialog --radiolist "Select a config to apply:" "${config_list[@]}")
-    refind_config_apply_dir=$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/${configs_array[$refind_config_choice]}
-}
-
 apply_refind_config() {
     print_log "applying rEFInd config"
-    num_of_dirs=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
-    if [ "$num_of_dirs" -gt 1 ]; then #if there is more than 1 folder (or more than one config)
-    choose_refind_config
+    if [ ! -d $HOME/.deck_setup/rEFInd_configs ]
+    then
+    cp -vr $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs $HOME/.deck_setup/rEFInd_configs
+    fi
+    num_of_dirs=$(find $HOME/.deck_setup/rEFInd_configs -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+    if [ "$num_of_dirs" -gt 1 ]; then
+    refind_config=$(zenity --file-selection --title="select a file" --filename="$HOME/.deck_setup/rEFInd_configs/" --directory)
     else
-    refind_config_apply_dir=$(find $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config apply dir to that
+    refind_config=$(find $HOME/.deck_setup/rEFInd_configs -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
     fi
 
-    cp -v "$refind_config_apply_dir"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
+    print_log "applying config: $refind_config"
+
+    cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
     if [ $? == 1 ];
     then
     print_log "error, config not applied"
@@ -297,17 +283,17 @@ apply_refind_config() {
 }
 
 save_refind_config() {
+    print_log "saving rEFInd config"
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? == 0 ];
     then
-    config_name=$(kdialog --title "Name of config" --inputbox "What would you like to name your config?")
-    config_name=${config_name// /_}
-    mkdir "$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/$config_name"
-    cp -v $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/$config_name" #copy files saved by rEFInd GUI to a custom directory
+    config_save_path=$(zenity --file-selection --save --title="Save config (whitespace is not allowed)" --filename=$HOME/.deck_setup/)
+    mkdir -p "$config_save_path"
+    cp -v $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
         if [ $? == 0 ];
         then
-        echo "config saved to $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/$config_name"
-        kdialog --msgbox "config saved to $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs/$config_name"
+        echo "config saved to $config_save_path"
+        kdialog --msgbox "config saved to $config_save_path"
         else
         cp_error=$?
         echo "error: $cp_error, config not saved"
@@ -333,7 +319,7 @@ refind_uninstall_gui() {
 check_for_updates_proton_ge() {
     RELEASE=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
     VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
-    proton_ge_downloaded_version="$(basename $HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz)"
+    proton_ge_downloaded_version="$(basename $HOME/.deck_setup/GE-Proton*.tar.gz)"
     if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then 
     print_log "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
     else
@@ -342,9 +328,9 @@ check_for_updates_proton_ge() {
 }
 
 install_proton_ge_in_steam() {
-    if compgen -G "$HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz" > /dev/null; then
+    if compgen -G "$HOME/.deck_setup/GE-Proton*.tar.gz" > /dev/null; then
     mkdir -p ~/.steam/root/compatibilitytools.d
-    tar -xf $HOME/.deck_setup/steam-deck-configurator/GE-Proton*.tar.gz -C ~/.steam/root/compatibilitytools.d/
+    tar -xf $HOME/.deck_setup/GE-Proton*.tar.gz -C ~/.steam/root/compatibilitytools.d/
     print_log "Proton GE installed, please restart Steam"
     else
     print_log "Proton GE doesn't exist in this folder, please download it first, skipping..."
@@ -425,7 +411,7 @@ tasks_array["Install rEFInd All"]="install_refind_all"
 tasks_array["Uninstall rEFInd GUI"]="refind_uninstall_gui"
 tasks_array["Check for Proton GE Updates"]="check_for_updates_proton_ge"
 tasks_array["Install Cryoutilities"]="install_cryoutilities"
-tasks_array["Run CryoUtilities with reccommended settings"]="run_cryo_utilities_reccommended"
+tasks_array["Run CryoUtilities with recommended settings"]="run_cryo_utilities_recommended"
 tasks_array["Install Emudeck"]="install_emudeck"
 tasks_array["Install RetroDeck"]="install_retrodeck"
 tasks_array["Update Submodules"]="update_submodules"
