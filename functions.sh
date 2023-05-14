@@ -154,7 +154,7 @@ run_cryo_utilities_recommended() {
 
 export_flatpaks() {
     print_log "exporting flatpaks"
-    mkdir -p $HOME/.deck_setup/created_flatpaks
+    mkdir -p $HOME/.deck_setup/flatpaks
 
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
@@ -176,7 +176,7 @@ export_flatpaks() {
     do
     echo "${flatpak_ids[$flatpak]}"
     print_log "adding $flatpak to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/created_flatpaks "${flatpak_ids[$flatpak]}"
+    flatpak --verbose create-usb $HOME/.deck_setup/flatpaks "${flatpak_ids[$flatpak]}"
     done
 }
 
