@@ -273,12 +273,15 @@ apply_refind_config() {
     print_log "applying config: $refind_config"
 
     cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
-    if [ $? == 1 ];
+    if [ $? == 0 ];
     then
-    print_log "error, config not applied"
-    else
     "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
     print_log "config applied"
+    else
+    cp_error=$?
+    print_log "error $cp_error, config not applied"
+    echo "error: $cp_error, config not saved"
+    kdialog --error "error: $cp_error, config not saved"
     fi
 }
 
@@ -301,6 +304,7 @@ save_refind_config() {
             kdialog --msgbox "config saved to $config_save_path"
             else
             cp_error=$?
+            print_log "error $cp_error, config not applied"
             echo "error: $cp_error, config not saved"
             kdialog --error "error: $cp_error, config not saved"
             fi
