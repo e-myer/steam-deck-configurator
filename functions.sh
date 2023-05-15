@@ -294,7 +294,7 @@ save_refind_config() {
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? == 0 ];
     then
-    config_save_path=$(zenity --file-selection --save --title="Save config (whitespace is not allowed)" --filename=$HOME/.deck_setup/rEFInd_configs)
+    config_save_path=$(zenity --file-selection --save --title="Save config" --filename=$HOME/.deck_setup/rEFInd_configs)
         if [ $? == 0 ]; then
         mkdir -p "$config_save_path"
         cp -v $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
