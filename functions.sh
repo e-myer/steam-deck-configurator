@@ -284,20 +284,26 @@ apply_refind_config() {
 
 save_refind_config() {
     print_log "saving rEFInd config"
+    if [ ! -d $HOME/.deck_setup/rEFInd_configs ]
+    then
+    cp -vr $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs $HOME/.deck_setup/rEFInd_configs
+    fi
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? == 0 ];
     then
     config_save_path=$(zenity --file-selection --save --title="Save config (whitespace is not allowed)" --filename=$HOME/.deck_setup/rEFInd_configs)
-    mkdir -p "$config_save_path"
-    cp -v $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
-        if [ $? == 0 ];
-        then
-        echo "config saved to $config_save_path"
-        kdialog --msgbox "config saved to $config_save_path"
-        else
-        cp_error=$?
-        echo "error: $cp_error, config not saved"
-        kdialog --error "error: $cp_error, config not saved"
+        if [ $? == 0 ]; then
+        mkdir -p "$config_save_path"
+        cp -v $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
+            if [ $? == 0 ];
+            then
+            echo "config saved to $config_save_path"
+            kdialog --msgbox "config saved to $config_save_path"
+            else
+            cp_error=$?
+            echo "error: $cp_error, config not saved"
+            kdialog --error "error: $cp_error, config not saved"
+            fi
         fi
     fi
 }
