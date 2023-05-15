@@ -153,6 +153,7 @@ run_cryo_utilities_recommended() {
 }
 
 export_flatpaks() {
+#    set +x
     print_log "exporting flatpaks"
     mkdir -p $HOME/.deck_setup/flatpaks
 
@@ -170,13 +171,17 @@ export_flatpaks() {
     done
 
     readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
-    echo ${chosen_flatpaks[@]}
+    echo \$chosen_flatpaks = ${chosen_flatpaks[@]}
 
     for flatpak in "${chosen_flatpaks[@]}"
     do
-    echo "${flatpak_ids[$flatpak]}"
-    print_log "adding $flatpak to usb"
-    flatpak --verbose create-usb $HOME/.deck_setup/flatpaks "${flatpak_ids[$flatpak]}"
+    echo $flatpak
+#    echo "${flatpak_ids[$flatpak]}"
+#    print_log "adding $flatpak to usb"
+#    flatpak --verbose create-usb $HOME/.deck_setup/flatpaks "${flatpak_ids[$flatpak]}"
+#    flatpak create-usb $HOME/.deck_setup/flatpaks "${flatpak_ids[$flatpak]}"
+#    echo "${flatpaks_array[$flatpak]}" "${flatpak_names[$flatpak]}" off >> flatpaks
+    echo \"\$\{flatpaks_array\["${flatpak_ids[$flatpak]}"\]\}\" \"${flatpak_names[$flatpak]}\" off >> flatpaks_list
     done
 }
 
@@ -436,5 +441,5 @@ tasks_array["Apply rEFInd config"]="apply_refind_config"
 tasks_array["Save rEFInd config"]="save_refind_config"
 tasks_array["Install Non Steam Launchers"]="install_non_steam_launchers"
 tasks_array["Uninstall Deckyloader"]="uninstall_deckyloader"
+tasks_array["Export Flatpaks"]="export_flatpaks"
 tasks_array["Fix Barrier"]="fix_barrier"
-
