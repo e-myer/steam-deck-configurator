@@ -168,16 +168,30 @@ export_flatpaks() {
     fi
     menu+=("$number" "$name" off)
     done
-
+    
     readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
-    echo ${chosen_flatpaks[@]}
-
     for flatpak in "${chosen_flatpaks[@]}"
     do
+    echo $flatpak
     echo "${flatpak_ids[$flatpak]}"
     print_log "adding $flatpak to usb"
     flatpak --verbose create-usb $HOME/.deck_setup/flatpaks "${flatpak_ids[$flatpak]}"
+    if [ -z "$flatpak_index" ]; then
+    flatpak_index=0
+    else
+    ((flatpak_index ++))
+    fi
+    echo -n $flatpak_index "${flatpak_ids[$flatpak]}" off" " >> flatpaks_list
     done
+}
+
+import_flatpaks() {
+readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select tasks, click and drag to multiselect" $(cat ./flatpaks_list))
+for flatpak in "${chosen_flatpaks[@]}"
+do
+    print_log "installing $flatpak"
+    flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub $flatpak
+done
 }
 
 install_deckyloader() {
@@ -273,31 +287,41 @@ apply_refind_config() {
     print_log "applying config: $refind_config"
 
     cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
-    if [ $? == 1 ];
+    if [ $? == 0 ];
     then
-    print_log "error, config not applied"
-    else
     "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
     print_log "config applied"
+    else
+    cp_error=$?
+    print_log "error $cp_error, config not applied"
+    echo "error: $cp_error, config not saved"
+    kdialog --error "error: $cp_error, config not saved"
     fi
 }
 
 save_refind_config() {
     print_log "saving rEFInd config"
+    if [ ! -d $HOME/.deck_setup/rEFInd_configs ]
+    then
+    cp -vr $HOME/.deck_setup/steam-deck-configurator/rEFInd_configs $HOME/.deck_setup/rEFInd_configs
+    fi
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? == 0 ];
     then
-    config_save_path=$(zenity --file-selection --save --title="Save config (whitespace is not allowed)" --filename=$HOME/.deck_setup/)
-    mkdir -p "$config_save_path"
-    cp -v $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
-        if [ $? == 0 ];
-        then
-        echo "config saved to $config_save_path"
-        kdialog --msgbox "config saved to $config_save_path"
-        else
-        cp_error=$?
-        echo "error: $cp_error, config not saved"
-        kdialog --error "error: $cp_error, config not saved"
+    config_save_path=$(zenity --file-selection --save --title="Save config" --filename=$HOME/.deck_setup/rEFInd_configs)
+        if [ $? == 0 ]; then
+        mkdir -p "$config_save_path"
+        cp -v $HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
+            if [ $? == 0 ];
+            then
+            echo "config saved to $config_save_path"
+            kdialog --msgbox "config saved to $config_save_path"
+            else
+            cp_error=$?
+            print_log "error $cp_error, config not applied"
+            echo "error: $cp_error, config not saved"
+            kdialog --error "error: $cp_error, config not saved"
+            fi
         fi
     fi
 }
@@ -426,5 +450,6 @@ tasks_array["Apply rEFInd config"]="apply_refind_config"
 tasks_array["Save rEFInd config"]="save_refind_config"
 tasks_array["Install Non Steam Launchers"]="install_non_steam_launchers"
 tasks_array["Uninstall Deckyloader"]="uninstall_deckyloader"
+tasks_array["Export Flatpaks"]="export_flatpaks"
+tasks_array["Import Flatpaks"]="import_flatpaks"
 tasks_array["Fix Barrier"]="fix_barrier"
-

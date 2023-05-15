@@ -40,6 +40,8 @@ readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select task
 "${tasks_array[Install rEFInd bootloader]}" "Install rEFInd bootloader" on \
 "${tasks_array[Apply rEFInd config]}" "Apply rEFInd config" on \
 "${tasks_array[Save rEFInd config]}" "Save rEFInd config" off \
+"${tasks_array[Export Flatpaks]}" "Export Flatpaks" off \
+"${tasks_array[Import Flatpaks]}" "Import Flatpaks" off \
 "${tasks_array[Uninstall Deckyloader]}" "Uninstall Deckyloader" off \
 "${tasks_array[Install Non Steam Launchers]}" "Install Non Steam Launchers" off \
 "${tasks_array[Fix Barrier]}" "Fix Barrier" off \
