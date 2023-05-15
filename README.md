@@ -46,8 +46,8 @@ And make the nessecary files executable using
 ```
 chmod -v +x $HOME/.deck_setup/steam-deck-configurator/functions.sh $HOME/.deck_setup/steam-deck-configurator/configure_deck.sh $HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/SteamDeck_rEFInd_install.sh $HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh
 ```
-For the Proton GE task to work, the Proton GE TAR needs to be downloaded placed in the steam-deck-configurator folder.
-For the Bauh task to work, the Bauh AppImage needs to be downloaded and placed in the steam-deck-configurator/applications folder.
+For the Proton GE task to work, the Proton GE TAR needs to be downloaded placed in the ~/.deck_setup folder.
+For the Bauh task to work, the Bauh AppImage needs to be downloaded and placed in the ~/.deck_setup/applications folder.
 
 ## Run instructions
 Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a terminal.
