@@ -176,13 +176,25 @@ export_flatpaks() {
     for flatpak in "${chosen_flatpaks[@]}"
     do
     echo $flatpak
-#    echo "${flatpak_ids[$flatpak]}"
-#    print_log "adding $flatpak to usb"
-#    flatpak --verbose create-usb $HOME/.deck_setup/flatpaks "${flatpak_ids[$flatpak]}"
-#    flatpak create-usb $HOME/.deck_setup/flatpaks "${flatpak_ids[$flatpak]}"
-#    echo "${flatpaks_array[$flatpak]}" "${flatpak_names[$flatpak]}" off >> flatpaks
-    echo \"\$\{flatpaks_array\["${flatpak_ids[$flatpak]}"\]\}\" \"${flatpak_names[$flatpak]}\" off >> flatpaks_list
+    echo "${flatpak_ids[$flatpak]}"
+    print_log "adding $flatpak to usb"
+    flatpak --verbose create-usb $HOME/.deck_setup/flatpaks "${flatpak_ids[$flatpak]}"
+    if [ -z "$flatpak_index" ]; then
+    flatpak_index=0
+    else
+    ((flatpak_index ++))
+    fi
+    echo -n $flatpak_index "${flatpak_ids[$flatpak]}" off" " >> flatpaks_list
     done
+}
+
+import_flatpaks() {
+readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select tasks, click and drag to multiselect" $(cat ./flatpaks_list))
+for flatpak in "${chosen_flatpaks[@]}"
+do
+    print_log "installing $flatpak"
+    flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub $flatpak
+done
 }
 
 install_deckyloader() {
@@ -442,4 +454,5 @@ tasks_array["Save rEFInd config"]="save_refind_config"
 tasks_array["Install Non Steam Launchers"]="install_non_steam_launchers"
 tasks_array["Uninstall Deckyloader"]="uninstall_deckyloader"
 tasks_array["Export Flatpaks"]="export_flatpaks"
+tasks_array["Import Flatpaks"]="import_flatpaks"
 tasks_array["Fix Barrier"]="fix_barrier"
