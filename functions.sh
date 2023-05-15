@@ -153,7 +153,6 @@ run_cryo_utilities_recommended() {
 }
 
 export_flatpaks() {
-#    set +x
     print_log "exporting flatpaks"
     mkdir -p $HOME/.deck_setup/flatpaks
 
