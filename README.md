@@ -26,7 +26,11 @@ And installs
 
 ## Installation Instrictions
 
+Run the code below in a terminal
+
 ```
+mkdir deck_setup # create a folder for the project, it could be named anything
+cd deck_setup # go into that folder
 git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git # clone this repository
 cd steam-deck-configurator # go into the repository
 chmod +x ./configure_deck.sh # make the configure_deck.sh file executable
