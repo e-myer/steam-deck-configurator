@@ -9,7 +9,7 @@ then
 exit 0
 fi
 
-readarray -t chosen_tasks < <(kdialog --separate-output --checklist "Select tasks, click and drag to multiselect" \
+readarray -t chosen_tasks < <(kdialog --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect" \
 "${tasks_array[Add Flathub if it does not exist]}" "Add Flathub if it doesn't exist" on \
 "${tasks_array[Update Flatpaks]}" "Update Flatpaks" on \
 "${tasks_array[Set up import and export Flatpaks]}" "Set up import and export Flatpaks" on \
