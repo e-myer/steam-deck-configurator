@@ -166,10 +166,10 @@ export_flatpaks() {
     else
     ((number ++))
     fi
-    menu+=("$number" "$name" off)
+    export_flatpaks_menu+=("$number" "$name" off)
     done
     
-    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
+    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${export_flatpaks_menu[@]}")
     for flatpak in "${chosen_flatpaks[@]}"
     do
     echo $flatpak
@@ -197,10 +197,10 @@ import_flatpaks() {
 
     for key in "${!flatpaks_array[@]}"
     do
-    menu+=("${flatpaks_array[$key]}" "$key" off)
+    import_flatpaks_menu+=("${flatpaks_array[$key]}" "$key" off)
     done
 
-    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
+    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
 
     for flatpak in "${chosen_flatpaks[@]}"
     do
