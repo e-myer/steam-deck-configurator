@@ -26,7 +26,7 @@ And installs
 
 ## Installation Instrictions
 
-Run the below code in a terminal
+Run the code below in a terminal
 
 ```
 mkdir deck_setup # create a folder for the project, it could be named anything
