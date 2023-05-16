@@ -186,27 +186,27 @@ export_flatpaks() {
 }
 
 import_flatpaks() {
-local -A flatpaks_array
-readarray -t lines < "$HOME/.deck_setup/flatpaks_list"
+    local -A flatpaks_array
+    readarray -t lines < "$HOME/.deck_setup/flatpaks_list"
 
-for line in "${lines[@]}"; do
-   key=${line%%=*}
-   value=${line#*=}
-   flatpaks_array[$key]=$value
-done
+    for line in "${lines[@]}"; do
+    key=${line%%=*}
+    value=${line#*=}
+    flatpaks_array[$key]=$value
+    done
 
-for key in "${!flatpaks_array[@]}"
-do
-menu+=("${flatpaks_array[$key]}" "$key" off)
-done
+    for key in "${!flatpaks_array[@]}"
+    do
+    menu+=("${flatpaks_array[$key]}" "$key" off)
+    done
 
-readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
+    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
 
-for flatpak in "${chosen_flatpaks[@]}"
-do
-print_log "installing $flatpak"
-flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub $flatpak
-done
+    for flatpak in "${chosen_flatpaks[@]}"
+    do
+    print_log "installing $flatpak"
+    flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub $flatpak
+    done
 }
 
 install_deckyloader() {
