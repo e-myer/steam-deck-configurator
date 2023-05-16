@@ -181,14 +181,13 @@ export_flatpaks() {
     else
     ((flatpak_index ++))
     fi
-    echo -n $flatpak_index "${flatpak_ids[$flatpak]}" off" " >> flatpaks_list
-    echo "${flatpak_names[$flatpak]}"="${flatpak_ids[$flatpak]}" >> flatpaks_array
+    echo "${flatpak_names[$flatpak]}"="${flatpak_ids[$flatpak]}" >> flatpaks_list
     done
 }
 
 import_flatpaks() {
 local -A flatpaks_array
-readarray -t lines < "./flatpaks_array"
+readarray -t lines < "./flatpaks_list"
 
 for line in "${lines[@]}"; do
    key=${line%%=*}
@@ -198,7 +197,7 @@ done
 
 for key in "${!flatpaks_array[@]}"
 do
-menu+=( "${flatpaks_array[$key]}" "$key" off)
+menu+=("${flatpaks_array[$key]}" "$key" off)
 done
 
 readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")

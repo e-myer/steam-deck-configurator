@@ -1,2 +1,3 @@
-0 com.discordapp.Discord off com.discordapp.Discord
-0 com.discordapp.Discord off 1 com.github.tchx84.Flatseal off 2 com.heroicgameslauncher.hgl off 0 com.discordapp.Discord off 1 com.github.tchx84.Flatseal off 2 com.heroicgameslauncher.hgl off 0 com.discordapp.Discord off 1 com.github.tchx84.Flatseal off 2 com.heroicgameslauncher.hgl off 
+Discord=com.discordapp.Discord
+Flatseal=com.github.tchx84.Flatseal
+Heroic Games Launcher=com.heroicgameslauncher.hgl
