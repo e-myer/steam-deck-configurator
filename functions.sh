@@ -181,13 +181,13 @@ export_flatpaks() {
     else
     ((flatpak_index ++))
     fi
-    echo "${flatpak_names[$flatpak]}"="${flatpak_ids[$flatpak]}" >> flatpaks_list
+    echo "${flatpak_names[$flatpak]}"="${flatpak_ids[$flatpak]}" >> $HOME/.deck_setup/flatpaks_list
     done
 }
 
 import_flatpaks() {
 local -A flatpaks_array
-readarray -t lines < "./flatpaks_list"
+readarray -t lines < "$HOME/.deck_setup/flatpaks_list"
 
 for line in "${lines[@]}"; do
    key=${line%%=*}
