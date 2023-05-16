@@ -15,7 +15,7 @@ print_log() {
     echo "$log" >> "$configurator_parent_dir/logs.log"
 }
 
-print_log "set configurator_parent_dir to $configurator_parent_dir"
+print_log "configurator_parent_dir set to $configurator_parent_dir"
 
 update_from_pacman() {
     print_log "Updating apps from Pacman"
