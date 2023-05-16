@@ -58,7 +58,6 @@ exit 0
 fi
 
 dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
-#qdbus $dbusRef org.kde.kdialog.ProgressDialog.autoClose true
 qdbus $dbusRef setLabelText "Initializing..."
 
 for task in "${chosen_tasks[@]}"
@@ -76,6 +75,4 @@ do
     exit 0
     fi
 done
-#qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
-#qdbus $dbusRef close
-#echo $dbusRef closed
+qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
