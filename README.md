@@ -26,28 +26,18 @@ And installs
 
 ## Installation Instrictions
 
-Create a directory in the home folder called .deck_setup or run`mkdir $HOME/.deck_setup`.
-
-Clone this repository to the folder inside it
-
+Run the code below in a terminal
 
 ```
-cd $HOME/.deck_setup
-git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git
-cd steam-deck-configurator
-chmod +x ./configure_deck.sh
+mkdir deck_setup # create a folder for the project, it could be named anything
+cd deck_setup # go into that folder
+git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git # clone this repository
+cd steam-deck-configurator # go into the repository
+chmod +x ./configure_deck.sh # make the configure_deck.sh file executable
 ```
 
-Alternatively, you can clone the repo to a USB, and mount it to the folder at $HOME/.deck_setup.
-
-To do so, first create the folder with `mkdir $HOME/.deck_setup`, identify the USB drive by running `lsblk`, then mount it to $HOME/.deck_setup. For example if the usb is mounted at /dev/sdc1, then run the command `sudo mount /dev/sdc1 $HOME/.deck_setup` in a terminal, then go to that directory using `cd $HOME/.deck_setup`.
-
-And make the nessecary files executable using
-```
-chmod -v +x $HOME/.deck_setup/steam-deck-configurator/functions.sh $HOME/.deck_setup/steam-deck-configurator/configure_deck.sh $HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/SteamDeck_rEFInd_install.sh $HOME/.deck_setup/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh
-```
-For the Proton GE task to work, the Proton GE TAR needs to be downloaded placed in the ~/.deck_setup folder.
-For the Bauh task to work, the Bauh AppImage needs to be downloaded and placed in the ~/.deck_setup/applications folder.
+For the Proton GE task to work, the Proton GE TAR needs to be downloaded placed in the parent folder of the steam-deck-configurator folder.  
+For the Bauh task to work, the Bauh AppImage needs to be downloaded and placed in a folder called "applications" in the parent folder of the steam-deck-configurator folder.
 
 ## Run instructions
 Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a terminal.
@@ -65,7 +55,6 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
 
 - Ensure you have the [latest steam deck recovery image](https://help.steampowered.com/en/faqs/view/1B71-EDF2-EB6D-2BB3).
 - SHA256 Checksum - steamdeck-recovery-4.img.bz2 = ac9c58fdd319d46120444875172eb56382098634f2075729f51426ba5cb788c6
-- After reimaging steam deck, don't press reboot. Instead press cancel, shutdown, remove the usb stick, then boot.
 - Flash your USB with the file "steamdeck-recovery-4.img.bz2", not the IMG file inside it.
 - If flashing with a usb is slow, try flashing with a high speed micro sd card.
 - It is recommended to install the rEFInd bootloader after installing Windows
