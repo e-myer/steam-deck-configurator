@@ -1,11 +1,7 @@
 #! /usr/bin/bash
 
-if [ -d $HOME/.deck_setup/steam_deck_stuff/steam-deck-configurator ]; then
-configurator_parent_dir="$HOME/.deck_setup/steam_deck_stuff"
-else
-configurator_dir=$(zenity --file-selection --title="select the steam deck configurator folder" --directory)
+configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 configurator_parent_dir="$(dirname "$configurator_dir")"
-fi
 
 print_log() {
     log_message=$1
@@ -14,8 +10,6 @@ print_log() {
     qdbus $dbusRef setLabelText "$log"
     echo "$log" >> "$configurator_parent_dir/logs.log"
 }
-
-print_log "configurator_parent_dir set to $configurator_parent_dir"
 
 update_from_pacman() {
     print_log "Updating apps from Pacman"
