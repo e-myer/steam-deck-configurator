@@ -182,16 +182,61 @@ export_flatpaks() {
     ((flatpak_index ++))
     fi
     echo -n $flatpak_index "${flatpak_ids[$flatpak]}" off" " >> flatpaks_list
+    echo "${flatpak_names[$flatpak]}"="${flatpak_ids[$flatpak]}" >> flatpaks_array
     done
 }
 
 import_flatpaks() {
-readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select tasks, click and drag to multiselect" $(cat ./flatpaks_list))
+#readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select tasks, click and drag to multiselect" $(cat ./flatpaks_list))
+local -A flatpaks_array
+readarray -t lines < "./flatpaks_array"
+
+for line in "${lines[@]}"; do
+   key=${line%%=*}
+   value=${line#*=}
+   flatpaks_array[$key]=$value  ## Or simply ary[${line%%=*}]=${line#*=}
+done
+
+#echo "type app name"
+#read key
+#echo "id of $key is ${flatpaks_array[$key]}"
+
+#local -A dialog_array
+
+for key in "${!flatpaks_array[@]}"
+do
+#echo -n \""${flatpaks_array[$key]}"\" \"\$\{dialog_array\[$key\]\}\" off" " >> ./dialog_array
+menu+=( "${flatpaks_array[$key]}" "$key" off)
+#echo "${menu[@]}"
+done
+
+readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
+
 for flatpak in "${chosen_flatpaks[@]}"
 do
-    print_log "installing $flatpak"
-    flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub $flatpak
+print_log "installing $flatpak"
+flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub $flatpak
 done
+
+
+#echo chosen flatpaks is: "${chosen_flatpaks[@]}"
+
+#local -A dialog_display_array
+#choices_var=$(cat ./dialog_array)
+#echo $choices_var
+#dialog_display_array=("$choices_var")
+#read -a dialog_display_array <<< "$choices_var"
+#echo "${dialog_display_array[@]}"
+#readarray -t chosen_flatpaks < <(kdialog --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect" ${dialog_display_array[@]})
+#readarray -t chosen_flatpaks < <(kdialog --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect" "$choices_var")
+#readarray -t chosen_flatpaks < <(kdialog --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect" "${dialog_array[Heroic Games Launcher]}" "com.heroicgameslauncher.hgl" off "${dialog_array[Flatseal]}" "com.github.tchx84.Flatseal" off "${dialog_array[Discord]}" "com.discordapp.Discord" off)
+#echo ${chosen_flatpaks[@]}
+
+#for flatpak in "${chosen_flatpaks[@]}"
+#do
+#    print_log "installing $flatpak"
+#    flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub $flatpak
+#done
 }
 
 install_deckyloader() {
