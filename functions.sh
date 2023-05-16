@@ -166,14 +166,12 @@ export_flatpaks() {
     else
     ((number ++))
     fi
-    menu+=("$number" "$name" off)
+    export_flatpaks_menu+=("$number" "$name" off)
     done
     
-    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${menu[@]}")
+    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${export_flatpaks_menu[@]}")
     for flatpak in "${chosen_flatpaks[@]}"
     do
-    echo $flatpak
-    echo "${flatpak_ids[$flatpak]}"
     print_log "adding $flatpak to usb"
     flatpak --verbose create-usb $HOME/.deck_setup/flatpaks "${flatpak_ids[$flatpak]}"
     if [ -z "$flatpak_index" ]; then
@@ -181,17 +179,32 @@ export_flatpaks() {
     else
     ((flatpak_index ++))
     fi
-    echo -n $flatpak_index "${flatpak_ids[$flatpak]}" off" " >> flatpaks_list
+    echo "${flatpak_names[$flatpak]}"="${flatpak_ids[$flatpak]}" >> $HOME/.deck_setup/flatpaks_list
     done
 }
 
 import_flatpaks() {
-readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select tasks, click and drag to multiselect" $(cat ./flatpaks_list))
-for flatpak in "${chosen_flatpaks[@]}"
-do
+    local -A flatpaks_array
+    readarray -t lines < "$HOME/.deck_setup/flatpaks_list"
+
+    for line in "${lines[@]}"; do
+    key=${line%%=*}
+    value=${line#*=}
+    flatpaks_array[$key]=$value
+    done
+
+    for key in "${!flatpaks_array[@]}"
+    do
+    import_flatpaks_menu+=("${flatpaks_array[$key]}" "$key" off)
+    done
+
+    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
+
+    for flatpak in "${chosen_flatpaks[@]}"
+    do
     print_log "installing $flatpak"
     flatpak install --sideload-repo=$HOME/.deck_setup/flatpaks flathub $flatpak
-done
+    done
 }
 
 install_deckyloader() {
