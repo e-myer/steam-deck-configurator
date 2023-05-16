@@ -63,8 +63,6 @@ qdbus $dbusRef setLabelText "Initializing..."
 for task in "${chosen_tasks[@]}"
 do
     ((task_number ++))
-#    sleep 0.5
-#    sleep 5
     if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
     then
     echo $task
