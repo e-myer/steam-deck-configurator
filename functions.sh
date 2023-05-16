@@ -1,5 +1,12 @@
 #! /usr/bin/bash
 
+if [ -d $HOME/.deck_setup/steam_deck_stuff/steam-deck-configurator ]; then
+configurator_parent_dir="$HOME/.deck_setup/steam_deck_stuff"
+else
+configurator_dir=$(zenity --file-selection --title="select the steam deck configurator folder" --directory)
+configurator_parent_dir="$(dirname "$configurator_dir")"
+fi
+
 print_log() {
     log_message=$1
     log="$task_number/${#chosen_tasks[@]}: ${tasks[$i]}: $log_message"
@@ -8,12 +15,6 @@ print_log() {
     echo "$log" >> "$configurator_parent_dir/logs.log"
 }
 
-if [ -d $HOME/.deck_setup/steam_deck_stuff/steam-deck-configurator ]; then
-configurator_parent_dir="$HOME/.deck_setup/steam_deck_stuff"
-else
-configurator_dir=$(zenity --file-selection --title="select the steam deck configurator folder" --directory)
-configurator_parent_dir="$(dirname "$configurator_dir")"
-fi
 print_log "set configurator_parent_dir to $configurator_parent_dir"
 
 update_from_pacman() {
