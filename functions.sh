@@ -432,7 +432,7 @@ create_menu() {
         if [[ " ${preselected[*]} " =~ " $key " ]]; then
         menu+="\"\${tasks_array[$key]}\" \"$key\" on "
         else
-        menu+="\"\${tasks_array[$key]}\" \"$key\" off "
+        menu+="\"${tasks_array[$key]}\" \"$key\" off "
         fi
     done
 }
