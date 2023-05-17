@@ -10,9 +10,12 @@ then
 exit 0
 fi
 
-config=$(kdialog --menu configs dualboot dualboot triple_boot triple_boot) ##make this a checklist, so that you can select multiple configs, and will preselect all relevant ones
+choose_config() {
+config_choice=$(kdialog --menu configs \
+dualboot dualboot \
+triple_boot triple_boot)
 
-case $config in
+case $config_choice in
 dualboot)
     config=( "Update Submodules" )
     ;;
@@ -20,19 +23,13 @@ triple_boot)
     config=( "Export Flatpaks" )
     ;;
 esac
+}
 
-echo config is $config
+choose_config
 
-for key in "${!tasks_array[@]}"; do
-    if [[ " ${config[*]} " =~ " ${key} " ]]; then
-    menu+="\"\${tasks_array[$key]}\" \"$key\" on "
-    else
-    menu+="\"\${tasks_array[$key]}\" \"$key\" off "
-    fi
-done
+create_menu
 
 echo $menu | xargs kdialog --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect"
-
 
 echo ${chosen_tasks[@]}
 if [ ${#chosen_tasks[@]} -eq 0 ]
