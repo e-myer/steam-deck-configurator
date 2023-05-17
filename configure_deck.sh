@@ -10,7 +10,7 @@ then
 exit 0
 fi
 
-#preselected=( "Update Submodules" )
+#preselected=( "Add Flathub if it does not exist" )
 
 create_menu
 

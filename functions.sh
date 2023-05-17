@@ -391,15 +391,15 @@ install_non_steam_launchers() {
 }
 
 
-create_menu() {
-    for key in "${!tasks_array[@]}"; do
-        if [[ " ${preselected[*]} " =~ " ${key} " ]]; then
-        menu+="\"\${tasks_array[$key]}\" \"$key\" on "
-        else
-        menu+="\"\${tasks_array[$key]}\" \"$key\" off "
-        fi
-    done
-}
+#create_menu() {
+#    for key in "${!tasks_array[@]}"; do
+#        if [[ " ${preselected[*]} " =~ " ${key} " ]]; then
+#        menu+="\"\${tasks_array[$key]}\" \"$key\" on "
+#        else
+#        menu+="\"\${tasks_array[$key]}\" \"$key\" off "
+#        fi
+#    done
+#}
 
 fix_barrier() {
     print_log "Fixing Barrier"
@@ -438,45 +438,96 @@ fix_barrier() {
     print_log "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
+create_menu() {
+    for key in "${tasks_array_order[@]}"; do
+        if [[ " ${preselected[*]} " =~ " $key " ]]; then
+        menu+="\"\${tasks_array[$key]}\" \"$key\" on "
+        else
+        menu+="\"\${tasks_array[$key]}\" \"$key\" off "
+        fi
+    done
+}
+
 declare -A tasks_array
 tasks_array["Update from pacman"]="update_from_pacman"
+tasks_array_order+=("Update from pacman")
 tasks_array["Add Flathub if it does not exist"]="add_flathub"
+tasks_array_order+=("Add Flathub if it does not exist")
 tasks_array["Update Flatpaks"]="update_flatpaks"
+tasks_array_order+=("Update Flatpaks")
 tasks_array["Set up import and export Flatpaks"]="set_up_import_and_export_flatpaks"
+tasks_array_order+=("Set up import and export Flatpaks")
 tasks_array["Import Firefox"]="import_firefox"
+tasks_array_order+=("Import Firefox")
 tasks_array["Import Corekeyboard"]="import_corekeyboard"
+tasks_array_order+=("Import Corekeyboard")
 tasks_array["Import Barrier"]="import_barrier"
+tasks_array_order+=("Import Barrier")
 tasks_array["Import Heroic_games"]="import_heroic_games"
+tasks_array_order+=("Import Heroic_games")
 tasks_array["Import ProtonUp_QT"]="import_protonup_qt"
+tasks_array_order+=("Import ProtonUp_QT")
 tasks_array["Install Proton GE in Steam"]="install_proton_ge_in_steam"
+tasks_array_order+=("Install Proton GE in Steam")
 tasks_array["Import BoilR"]="import_boilr"
+tasks_array_order+=("Import BoilR")
 tasks_array["Import Flatseal"]="import_flatseal"
+tasks_array_order+=("Import Flatseal")
 tasks_array["Import Steam ROM Manager"]="import_steam_rom_manager"
+tasks_array_order+=("Import Steam ROM Manager")
 tasks_array["Install Bauh"]="install_bauh"
+tasks_array_order+=("Install Bauh")
 tasks_array["Install Firefox"]="install_firefox"
+tasks_array_order+=("Install Firefox")
 tasks_array["Install Corekeyboard"]="install_corekeyboard"
+tasks_array_order+=("Install Corekeyboard")
 tasks_array["Install Barrier"]="install_barrier"
+tasks_array_order+=("Install Barrier")
 tasks_array["Install Heroic Games"]="install_heroic_games"
+tasks_array_order+=("Install Heroic Games")
 tasks_array["Install ProtonUp_QT"]="install_protonUp_qt"
+tasks_array_order+=("Install ProtonUp_QT")
 tasks_array["Install BoilR"]="install_boilr"
+tasks_array_order+=("Install BoilR")
 tasks_array["Install Flatseal"]="install_flatseal"
+tasks_array_order+=("Install Flatseal")
 tasks_array["Install Steam Rom Manager"]="install_steam_rom_manager"
+tasks_array_order+=("Install Steam Rom Manager")
 tasks_array["Install DeckyLoader"]="install_deckyloader"
+tasks_array_order+=("Install DeckyLoader")
 tasks_array["Uninstall DeckyLoader"]="uninstall_deckyloader"
+tasks_array_order+=("Uninstall DeckyLoader")
 tasks_array["Install rEFInd All"]="install_refind_all"
+tasks_array_order+=("Install rEFInd All")
 tasks_array["Uninstall rEFInd GUI"]="refind_uninstall_gui"
+tasks_array_order+=("Uninstall rEFInd GUI")
 tasks_array["Check for Proton GE Updates"]="check_for_updates_proton_ge"
+tasks_array_order+=("Check for Proton GE Updates")
 tasks_array["Install Cryoutilities"]="install_cryoutilities"
+tasks_array_order+=("Install Cryoutilities")
 tasks_array["Run CryoUtilities with recommended settings"]="run_cryo_utilities_recommended"
+tasks_array_order+=("Run CryoUtilities with recommended settings")
 tasks_array["Install Emudeck"]="install_emudeck"
+tasks_array_order+=("Install Emudeck")
 tasks_array["Install RetroDeck"]="install_retrodeck"
+tasks_array_order+=("Install RetroDeck")
 tasks_array["Update Submodules"]="update_submodules"
+tasks_array_order+=("Update Submodules")
 tasks_array["Install rEFInd GUI"]="install_refind_GUI"
+tasks_array_order+=("Install rEFInd GUI")
 tasks_array["Install rEFInd bootloader"]="install_refind_bootloader"
+tasks_array_order+=("Install rEFInd bootloader")
 tasks_array["Apply rEFInd config"]="apply_refind_config"
+tasks_array_order+=("Apply rEFInd config")
 tasks_array["Save rEFInd config"]="save_refind_config"
+tasks_array_order+=("Save rEFInd config")
 tasks_array["Install Non Steam Launchers"]="install_non_steam_launchers"
+tasks_array_order+=("Install Non Steam Launchers")
 tasks_array["Uninstall Deckyloader"]="uninstall_deckyloader"
+tasks_array_order+=("Uninstall Deckyloader")
 tasks_array["Export Flatpaks"]="export_flatpaks"
+tasks_array_order+=("Export Flatpaks")
 tasks_array["Import Flatpaks"]="import_flatpaks"
+tasks_array_order+=("Import Flatpaks")
 tasks_array["Fix Barrier"]="fix_barrier"
+tasks_array_order+=("Fix Barrier")
