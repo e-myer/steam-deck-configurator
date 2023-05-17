@@ -390,6 +390,17 @@ install_non_steam_launchers() {
     "$configurator_parent_dir/NonSteamLaunchers.sh"
 }
 
+
+create_menu() {
+    for key in "${!tasks_array[@]}"; do
+        if [[ " ${preselected[*]} " =~ " ${key} " ]]; then
+        menu+="\"\${tasks_array[$key]}\" \"$key\" on "
+        else
+        menu+="\"\${tasks_array[$key]}\" \"$key\" off "
+        fi
+    done
+}
+
 fix_barrier() {
     print_log "Fixing Barrier"
     echo "Are you using auto config for the ip address? (y/n)"
