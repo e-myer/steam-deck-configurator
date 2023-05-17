@@ -10,11 +10,11 @@ then
 exit 0
 fi
 
-#preselected=( "Update Submodules" )
+#preselected=( "Add Flathub if it does not exist" )
 
 create_menu
 
-echo $menu | xargs kdialog --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect"
+readarray -t chosen_tasks < <(echo $menu | xargs kdialog --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect")
 
 echo ${chosen_tasks[@]}
 if [ ${#chosen_tasks[@]} -eq 0 ]
