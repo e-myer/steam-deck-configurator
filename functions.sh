@@ -5,7 +5,7 @@ configurator_parent_dir="$(dirname "$configurator_dir")"
 
 print_log() {
     log_message=$1
-    log="$task_number/${#chosen_tasks[@]}: ${tasks[$i]}: $log_message"
+    log="$task_number/${#chosen_tasks[@]}: $task - $log_message"
     echo -e "$log"
     qdbus $dbusRef setLabelText "$log"
     echo "$log" >> "$configurator_parent_dir/logs.log"
