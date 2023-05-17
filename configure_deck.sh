@@ -10,22 +10,7 @@ then
 exit 0
 fi
 
-choose_config() {
-config_choice=$(kdialog --menu configs \
-dualboot dualboot \
-triple_boot triple_boot)
-
-case $config_choice in
-dualboot)
-    config=( "Update Submodules" )
-    ;;
-triple_boot)
-    config=( "Export Flatpaks" )
-    ;;
-esac
-}
-
-choose_config
+#preselected=( "Update Submodules" )
 
 create_menu
 

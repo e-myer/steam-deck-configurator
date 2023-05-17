@@ -393,7 +393,7 @@ install_non_steam_launchers() {
 
 create_menu() {
     for key in "${!tasks_array[@]}"; do
-        if [[ " ${config[*]} " =~ " ${key} " ]]; then
+        if [[ " ${preselected[*]} " =~ " ${key} " ]]; then
         menu+="\"\${tasks_array[$key]}\" \"$key\" on "
         else
         menu+="\"\${tasks_array[$key]}\" \"$key\" off "
