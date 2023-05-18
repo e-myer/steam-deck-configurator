@@ -383,13 +383,6 @@ install_proton_ge_in_steam() {
     fi
 }
 
-install_non_steam_launchers() {
-    print_log "running non steam launchers installer"
-    curl https://raw.githubusercontent.com/moraroy/NonSteamLaunchers-On-Steam-Deck/main/NonSteamLaunchers.sh --output "$configurator_parent_dir/NonSteamLaunchers.sh"
-    chmod -v +x "$configurator_parent_dir/NonSteamLaunchers.sh"
-    "$configurator_parent_dir/NonSteamLaunchers.sh"
-}
-
 fix_barrier() {
     print_log "Fixing Barrier"
     echo "Are you using auto config for the ip address? (y/n)"
@@ -464,7 +457,6 @@ tasks_array["Install rEFInd GUI"]="install_refind_GUI"
 tasks_array["Install rEFInd bootloader"]="install_refind_bootloader"
 tasks_array["Apply rEFInd config"]="apply_refind_config"
 tasks_array["Save rEFInd config"]="save_refind_config"
-tasks_array["Install Non Steam Launchers"]="install_non_steam_launchers"
 tasks_array["Uninstall Deckyloader"]="uninstall_deckyloader"
 tasks_array["Export Flatpaks"]="export_flatpaks"
 tasks_array["Import Flatpaks"]="import_flatpaks"
