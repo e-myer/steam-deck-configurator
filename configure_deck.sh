@@ -10,7 +10,7 @@ then
 exit 0
 fi
 
-#preselected=( "Add Flathub if it does not exist" )
+#preselected=( "Update Flatpaks" )
 
 create_menu
 
