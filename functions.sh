@@ -431,6 +431,12 @@ create_menu() {
     for key in "${tasks_array_order[@]}"; do
         if [[ " ${preselected[*]} " =~ " $key " ]]; then
         menu+="\"\${tasks_array[$key]}\" \"$key\" on "
+        elif [[ $key == "Import"* ]]; then
+        selected_flatpak_name=$(echo "$key" | cut -d' ' -f2-)
+        matching_lines=$(grep "^$selected_flatpak_name" "$configurator_parent_dir/flatpaks_list")
+            if [[ -n "$matching_lines" ]]; then
+            menu+="\"\${tasks_array[$key]}\" \"$key\" on "
+            fi
         else
         menu+="\"${tasks_array[$key]}\" \"$key\" off "
         fi
@@ -472,7 +478,7 @@ tasks_array["Install Corekeyboard"]="install_corekeyboard"
 tasks_array_order+=("Install Corekeyboard")
 tasks_array["Install Barrier"]="install_barrier"
 tasks_array_order+=("Install Barrier")
-tasks_array["Install Heroic Games"]="install_heroic_games"
+tasks_array["Install Heroic Games Launcher"]="install_heroic_games_launcher"
 tasks_array_order+=("Install Heroic Games")
 tasks_array["Install ProtonUp_QT"]="install_protonUp_qt"
 tasks_array_order+=("Install ProtonUp_QT")
