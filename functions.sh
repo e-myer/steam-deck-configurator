@@ -466,8 +466,11 @@ load_config() {
 }
 
 run_tasks() {
+    unset task_number
+    if [ -z ${dbusRef+x} ]; then
     dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
     qdbus $dbusRef setLabelText "Initializing..."
+    fi
 
     for task in "${chosen_tasks[@]}"
     do
