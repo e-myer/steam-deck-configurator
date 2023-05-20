@@ -27,7 +27,9 @@ if [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
 create_config
 elif [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
 load_config
-else
+fi
+
+
 dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
 qdbus $dbusRef setLabelText "Initializing..."
 
@@ -45,4 +47,3 @@ do
     fi
 done
 qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
-fi
