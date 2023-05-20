@@ -428,6 +428,7 @@ fix_barrier() {
 }
 
 create_menu() {
+    unset menu
     for key in "${tasks_array_order[@]}"; do
         if [[ " ${preselected[*]} " =~ " ${tasks_array["$key"]} " ]]; then
         menu+="\"\${tasks_array[$key]}\" \"$key\" on "
@@ -435,25 +436,39 @@ create_menu() {
         menu+="\"${tasks_array[$key]}\" \"$key\" off "
         fi
     done
+    readarray -t chosen_tasks < <(echo $menu | xargs kdialog --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect")
 }
 
 create_config() {
+    config=$(zenity --file-selection --save --title="select a file" --filename="$configurator_parent_dir/configs/")
     for selection in "${chosen_tasks[@]}"
     do
     if [ ! "$selection" == "create_config" ]; then
         if [ ! "$create_config_ran" == 1 ]; then
         create_config_ran=1
-        echo $selection > "$configurator_parent_dir/config"
+        echo "$selection" > "$config"
         else
-        echo $selection >> "$configurator_parent_dir/config"
+        echo "$selection" >> "$config"
         fi
     fi
     done
     print_log "created config"
-    exit 0
+    create_menu
+    run_tasks
+}
+
+
+load_config() {
+    config=$(zenity --file-selection --title="select a file" --filename="$configurator_parent_dir/configs/")
+    readarray -t preselected < "$config"
+    echo "${preselected[@]}"
+    create_menu
+    run_tasks
 }
 
 declare -A tasks_array
+tasks_array["Load Config"]="load_config"
+tasks_array_order+=("Load Config")
 tasks_array["Create Config"]="create_config"
 tasks_array_order+=("Create Config")
 tasks_array["Update from pacman"]="update_from_pacman"
