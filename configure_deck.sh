@@ -10,11 +10,7 @@ then
 exit 0
 fi
 
-#preselected=( "update_flatpaks" )
-
 create_menu
-
-#readarray -t chosen_tasks < <(echo $menu | xargs kdialog --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect")
 
 echo ${chosen_tasks[@]}
 if [ ${#chosen_tasks[@]} -eq 0 ]
