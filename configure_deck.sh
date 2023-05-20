@@ -9,17 +9,10 @@ if [ $? == 1 ];
 then
 exit 0
 fi
+    #remove these line breaks
 
-
-
-create_menu
-
-echo ${chosen_tasks[@]}
-if [ ${#chosen_tasks[@]} -eq 0 ]
-then
-echo No tasks chosen, exiting...
-exit 0
-fi
+set_menu
+create_dialog
 
 if [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
 create_config
