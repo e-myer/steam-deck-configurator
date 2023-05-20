@@ -429,7 +429,7 @@ fix_barrier() {
 
 create_menu() {
     for key in "${tasks_array_order[@]}"; do
-        if [[ " ${preselected[*]} " =~ " $key " ]]; then
+        if [[ " ${preselected[*]} " =~ " ${tasks_array["$key"]} " ]]; then
         menu+="\"\${tasks_array[$key]}\" \"$key\" on "
         else
         menu+="\"${tasks_array[$key]}\" \"$key\" off "
@@ -437,7 +437,25 @@ create_menu() {
     done
 }
 
+create_config() {
+    for selection in "${chosen_tasks[@]}"
+    do
+    if [ ! "$selection" == "create_config" ]; then
+        if [ ! "$create_config_ran" == 1 ]; then
+        create_config_ran=1
+        echo $selection > "$configurator_parent_dir/config"
+        else
+        echo $selection >> "$configurator_parent_dir/config"
+        fi
+    fi
+    done
+    print_log "created config"
+    exit 0
+}
+
 declare -A tasks_array
+tasks_array["Create Config"]="create_config"
+tasks_array_order+=("Create Config")
 tasks_array["Update from pacman"]="update_from_pacman"
 tasks_array_order+=("Update from pacman")
 tasks_array["Add Flathub if it does not exist"]="add_flathub"

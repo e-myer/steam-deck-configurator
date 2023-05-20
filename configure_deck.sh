@@ -10,7 +10,7 @@ then
 exit 0
 fi
 
-#preselected=( "Update Flatpaks" )
+#preselected=( "update_flatpaks" )
 
 create_menu
 
