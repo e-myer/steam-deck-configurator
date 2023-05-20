@@ -9,7 +9,6 @@ if [ $? == 1 ];
 then
 exit 0
 fi
-    #remove these line breaks
 
 set_menu
 create_dialog
