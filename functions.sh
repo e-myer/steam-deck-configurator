@@ -437,6 +437,7 @@ create_menu() {
         fi
     done
     readarray -t chosen_tasks < <(echo $menu | xargs kdialog --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect")
+    run_tasks
 }
 
 create_config() {
@@ -462,6 +463,26 @@ load_config() {
     readarray -t preselected < "$config"
     echo "${preselected[@]}"
     create_menu
+}
+
+run_tasks() {
+    dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
+    qdbus $dbusRef setLabelText "Initializing..."
+
+    for task in "${chosen_tasks[@]}"
+    do
+    ((task_number ++))
+    if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
+    then
+    echo $task
+    $task #run task
+    qdbus $dbusRef Set "" value $task_number
+    else
+    echo "Task $task not executed, exiting..."
+    exit 0
+    fi
+    done
+    qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
 }
 
 declare -A tasks_array
