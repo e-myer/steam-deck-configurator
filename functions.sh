@@ -454,7 +454,6 @@ create_config() {
     done
     print_log "created config"
     create_menu
-    run_tasks
 }
 
 
@@ -463,7 +462,6 @@ load_config() {
     readarray -t preselected < "$config"
     echo "${preselected[@]}"
     create_menu
-    run_tasks
 }
 
 declare -A tasks_array

@@ -10,26 +10,6 @@ then
 exit 0
 fi
 
-run_tasks() {
-    dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
-    qdbus $dbusRef setLabelText "Initializing..."
-
-    for task in "${chosen_tasks[@]}"
-    do
-        ((task_number ++))
-        if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
-        then
-        echo $task
-        $task #run task
-        qdbus $dbusRef Set "" value $task_number
-        else
-        echo "Task $task not executed, exiting..."
-        exit 0
-        fi
-    done
-    qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
-}
-
 #preselected=( "update_flatpaks" )
 
 create_menu
@@ -48,5 +28,21 @@ create_config
 elif [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
 load_config
 else
-run_tasks
+dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
+qdbus $dbusRef setLabelText "Initializing..."
+
+for task in "${chosen_tasks[@]}"
+do
+    ((task_number ++))
+    if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ];
+    then
+    echo $task
+    $task #run task
+    qdbus $dbusRef Set "" value $task_number
+    else
+    echo "Task $task not executed, exiting..."
+    exit 0
+    fi
+done
+qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
 fi
