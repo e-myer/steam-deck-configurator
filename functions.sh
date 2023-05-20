@@ -428,6 +428,7 @@ fix_barrier() {
 }
 
 create_menu() {
+    chosen_tasks=()
     unset menu
     for key in "${tasks_array_order[@]}"; do
         if [[ " ${preselected[*]} " =~ " ${tasks_array["$key"]} " ]]; then
@@ -467,10 +468,9 @@ load_config() {
 
 run_tasks() {
     unset task_number
-    if [ -z ${dbusRef+x} ]; then
+    qdbus $dbusRef close
     dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
     qdbus $dbusRef setLabelText "Initializing..."
-    fi
 
     for task in "${chosen_tasks[@]}"
     do
