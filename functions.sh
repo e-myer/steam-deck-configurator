@@ -27,7 +27,7 @@ update_flatpaks() {
 }
 
 set_up_import_and_export_flatpaks() {
-    flatpak remote-modify --collection-id=org.flathub.Stable flathub
+    flatpak remote-modify --collection-id=org.flathub.Stable flathub #find a way to detect this, and check when importing/exporting if it doen't exist. not a separate function
 }
 
 import_firefox() {
@@ -164,7 +164,7 @@ export_flatpaks() {
 
     for name in "${flatpak_names[@]}"
     do
-    if [ -z "$number" ]; then
+    if [ -z "$number" ]; then #indent the if statement lines
     number=0
     else
     ((number ++))
@@ -173,9 +173,9 @@ export_flatpaks() {
     done
     
     readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${export_flatpaks_menu[@]}")
-    for flatpak in "${chosen_flatpaks[@]}"
+    for flatpak in "${chosen_flatpaks[@]}" #indent for and if lines
     do
-    print_log "adding "${flatpak_names[$flatpak]}" to usb"
+    print_log "adding ${flatpak_names[$flatpak]} to usb"
     flatpak --verbose create-usb "$configurator_parent_dir/flatpaks" "${flatpak_ids[$flatpak]}"
     if [ -z "$flatpak_index" ]; then
     flatpak_index=0
@@ -420,44 +420,109 @@ fix_barrier() {
     print_log "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
-declare -A tasks_array
-tasks_array["Update from pacman"]="update_from_pacman"
-tasks_array["Add Flathub if it does not exist"]="add_flathub"
-tasks_array["Update Flatpaks"]="update_flatpaks"
-tasks_array["Set up import and export Flatpaks"]="set_up_import_and_export_flatpaks"
-tasks_array["Import Firefox"]="import_firefox"
-tasks_array["Import Corekeyboard"]="import_corekeyboard"
-tasks_array["Import Barrier"]="import_barrier"
-tasks_array["Import Heroic_games"]="import_heroic_games"
-tasks_array["Import ProtonUp_QT"]="import_protonup_qt"
-tasks_array["Install Proton GE in Steam"]="install_proton_ge_in_steam"
-tasks_array["Import BoilR"]="import_boilr"
-tasks_array["Import Flatseal"]="import_flatseal"
-tasks_array["Import Steam ROM Manager"]="import_steam_rom_manager"
-tasks_array["Install Bauh"]="install_bauh"
-tasks_array["Install Firefox"]="install_firefox"
-tasks_array["Install Corekeyboard"]="install_corekeyboard"
-tasks_array["Install Barrier"]="install_barrier"
-tasks_array["Install Heroic Games"]="install_heroic_games"
-tasks_array["Install ProtonUp_QT"]="install_protonUp_qt"
-tasks_array["Install BoilR"]="install_boilr"
-tasks_array["Install Flatseal"]="install_flatseal"
-tasks_array["Install Steam Rom Manager"]="install_steam_rom_manager"
-tasks_array["Install DeckyLoader"]="install_deckyloader"
-tasks_array["Uninstall DeckyLoader"]="uninstall_deckyloader"
-tasks_array["Install rEFInd All"]="install_refind_all"
-tasks_array["Uninstall rEFInd GUI"]="refind_uninstall_gui"
-tasks_array["Check for Proton GE Updates"]="check_for_updates_proton_ge"
-tasks_array["Install Cryoutilities"]="install_cryoutilities"
-tasks_array["Run CryoUtilities with recommended settings"]="run_cryo_utilities_recommended"
-tasks_array["Install Emudeck"]="install_emudeck"
-tasks_array["Install RetroDeck"]="install_retrodeck"
-tasks_array["Update Submodules"]="update_submodules"
-tasks_array["Install rEFInd GUI"]="install_refind_GUI"
-tasks_array["Install rEFInd bootloader"]="install_refind_bootloader"
-tasks_array["Apply rEFInd config"]="apply_refind_config"
-tasks_array["Save rEFInd config"]="save_refind_config"
-tasks_array["Uninstall Deckyloader"]="uninstall_deckyloader"
-tasks_array["Export Flatpaks"]="export_flatpaks"
-tasks_array["Import Flatpaks"]="import_flatpaks"
-tasks_array["Fix Barrier"]="fix_barrier"
+set_menu() {
+    menu='"load_config" "Load Config" off 
+    "create_config" "Create Config" off 
+    "update_from_pacman" "Update from pacman" off 
+    "add_flathub" "Add Flathub if it does not exist" off 
+    "update_flatpaks" "Update Flatpaks" off 
+    "set_up_import_and_export_flatpaks" "Set up import and export Flatpaks" off 
+    "import_firefox" "Import Firefox" off 
+    "import_corekeyboard" "Import Corekeyboard" off 
+    "import_barrier" "Import Barrier" off 
+    "import_heroic_games" "Import Heroic_games" off 
+    "import_protonup_qt" "Import ProtonUp_QT" off 
+    "install_proton_ge_in_steam" "Install Proton GE in Steam" off 
+    "import_boilr" "Import BoilR" off 
+    "import_flatseal" "Import Flatseal" off 
+    "import_steam_rom_manager" "Import Steam ROM Manager" off 
+    "install_bauh" "Install Bauh" off 
+    "install_firefox" "Install Firefox" off 
+    "install_corekeyboard" "Install Corekeyboard" off 
+    "install_barrier" "Install Barrier" off 
+    "install_heroic_games" "Install Heroic Games" off 
+    "install_protonUp_qt" "Install ProtonUp_QT" off 
+    "install_boilr" "Install BoilR" off 
+    "install_flatseal" "Install Flatseal" off 
+    "install_steam_rom_manager" "Install Steam Rom Manager" off 
+    "install_deckyloader" "Install DeckyLoader" off 
+    "uninstall_deckyloader" "Uninstall DeckyLoader" off 
+    "install_refind_all" "Install rEFInd All" off 
+    "refind_uninstall_gui" "Uninstall rEFInd GUI" off 
+    "check_for_updates_proton_ge" "Check for Proton GE Updates" off 
+    "install_cryoutilities" "Install Cryoutilities" off 
+    "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings" off 
+    "install_emudeck" "Install Emudeck" off 
+    "install_retrodeck" "Install RetroDeck" off 
+    "update_submodules" "Update Submodules" off 
+    "install_refind_GUI" "Install rEFInd GUI" off 
+    "install_refind_bootloader" "Install rEFInd bootloader" off 
+    "apply_refind_config" "Apply rEFInd config" off 
+    "save_refind_config" "Save rEFInd config" off 
+    "install_non_steam_launchers" "Install Non Steam Launchers" off 
+    "uninstall_deckyloader" "Uninstall Deckyloader" off 
+    "export_flatpaks" "Export Flatpaks" off 
+    "import_flatpaks" "Import Flatpaks" off 
+    "fix_barrier" "Fix Barrier" off'
+}
+
+load_config() {
+    readarray -t config_line < "$(zenity --file-selection --title="select a file" --filename="$configurator_parent_dir/configs/")"
+    for i in "${config_line[@]}"
+    do
+    echo $i
+    menu="${menu/\"$i\" off/\"$i\" on}"
+    echo $menu
+    done
+    create_dialog
+}
+
+create_dialog() {
+    readarray -t chosen_tasks < <(echo $menu | xargs kdialog --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect")
+    run_tasks
+}
+
+create_config() {
+    config=$(zenity --file-selection --save --title="select a file" --filename="$configurator_parent_dir/configs/")
+    for selection in "${chosen_tasks[@]}"
+    do
+    if [ ! "$selection" == "create_config" ]; then
+        if [ ! "$create_config_ran" == 1 ]; then
+        create_config_ran=1
+        echo "$selection" > "$config"
+        else
+        echo "$selection" >> "$config"
+        fi
+    fi
+    done
+    print_log "created config"
+    create_dialog
+}
+
+run_tasks() {
+    echo ${chosen_tasks[@]} #remove this echo
+    if [ ${#chosen_tasks[@]} -eq 0 ]
+    then
+    echo No tasks chosen, exiting...
+    exit 0
+    fi
+    unset task_number
+    qdbus $dbusRef close
+    dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
+    qdbus $dbusRef setLabelText "Initializing..."
+
+    for task in "${chosen_tasks[@]}"
+    do
+    ((task_number ++))
+    if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ] && [[ " ${chosen_tasks[*]} " =~ " ${task} " ]];
+    then
+    echo $task
+    $task #run task
+    qdbus $dbusRef Set "" value $task_number
+    else
+    echo "Task $task not executed, exiting..."
+    exit 0
+    fi
+    done
+    qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
+}
