@@ -293,7 +293,7 @@ apply_refind_config() {
     then
         cp -vr "$configurator_parent_dir/steam-deck-configurator/rEFInd_configs" "$configurator_parent_dir/rEFInd_configs"
     fi
-        num_of_dirs=$(find "$configurator_parent_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+    num_of_dirs=$(find "$configurator_parent_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then
         refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_parent_dir/rEFInd_configs/" --directory)
     else
@@ -339,6 +339,7 @@ save_refind_config() {
                 kdialog --error "error: $cp_error, config not saved"
             fi
         fi
+    fi
 }
 
 install_refind_all() {
