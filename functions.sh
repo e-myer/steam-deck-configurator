@@ -306,12 +306,12 @@ apply_refind_config() {
     if [ $? == 0 ];
     then
         "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
-    print_log "config applied"
+        print_log "config applied"
     else
         cp_error=$?
-    print_log "error $cp_error, config not applied"
-    echo "error: $cp_error, config not saved"
-    kdialog --error "error: $cp_error, config not saved"
+        print_log "error $cp_error, config not applied"
+        echo "error: $cp_error, config not saved"
+        kdialog --error "error: $cp_error, config not saved"
     fi
 }
 
@@ -361,11 +361,11 @@ check_for_updates_proton_ge() {
     VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
     if compgen -G "$configurator_parent_dir/GE-Proton*.tar.gz" > /dev/null; then
         proton_ge_downloaded_version="$(basename $configurator_parent_dir/GE-Proton*.tar.gz)"
-    if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then 
-        print_log "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
-    else
-        print_log "ProtonGE is up to date"
-    fi
+        if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then 
+            print_log "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+        else
+            print_log "ProtonGE is up to date"
+        fi
     else
         print_log "ProtonGE is not downloaded, please download and place it in the $configurator_parent_dir folder first, skipping..."
         sleep 3
