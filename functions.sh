@@ -268,7 +268,6 @@ install_emudeck() {
         chmod -v +x "$configurator_parent_dir/emudeck_install.sh"
         "$configurator_parent_dir/emudeck_install.sh"
     else
-
         print_log "emudeck is already installed"
     fi
 }
