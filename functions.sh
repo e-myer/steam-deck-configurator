@@ -457,10 +457,10 @@ set_menu() {
 
 load_config() {
     readarray -t config_line < "$(zenity --file-selection --title="select a file" --filename="$configurator_parent_dir/configs/")"
-    for i in "${config_line[@]}"
+    for option in "${config_line[@]}"
     do
-        echo $i
-        menu="${menu/\"$i\" off/\"$i\" on}"
+        echo $option
+        menu="${menu/\"$option\" off/\"$option\" on}"
         echo $menu
     done
     create_dialog
