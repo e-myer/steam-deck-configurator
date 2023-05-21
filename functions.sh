@@ -164,7 +164,7 @@ export_flatpaks() {
 
     for name in "${flatpak_names[@]}"
     do
-        if [ -z "$number" ]; then #indent the if statement lines
+        if [ -z "$number" ]; then
             number=0
         else
             ((number ++))
@@ -211,16 +211,14 @@ import_flatpaks() {
 }
 
 install_deckyloader() {
-    if [ -f "$configurator_parent_dir/deckyloader_installed_version" ]
-    then
+    if [ -f "$configurator_parent_dir/deckyloader_installed_version" ]; then
         print_log "Checking if latest version of DeckyLoader is installed"
         RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
         VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
         DECKYLOADER_INSTALLED_VERSION=$(cat "$configurator_parent_dir/deckyloader_installed_version")
         print_log "DeckyLoader Latest Version is $VERSION"
         print_log "DeckyLoader Installed Version is $VERSION"
-            if [ "$VERSION" != "$DECKYLOADER_INSTALLED_VERSION" ];
-            then
+            if [ "$VERSION" != "$DECKYLOADER_INSTALLED_VERSION" ]; then
                 print_log "Installing Latest Version"
                 curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_parent_dir/deckyloader_install_release.sh"
                 chmod -v +x "$configurator_parent_dir/deckyloader_install_release.sh"
@@ -248,8 +246,7 @@ uninstall_deckyloader() {
 
 install_cryoutilities() {
     print_log "checking if cryoutilities is installed"
-    if [ ! -d "$HOME/.cryo_utilities" ]
-    then
+    if [ ! -d "$HOME/.cryo_utilities" ]; then
         print_log "cryoutilities is not installed, installing"
         curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_parent_dir/cryoutilities_install.sh"
         chmod -v +x "$configurator_parent_dir/cryoutilities_install.sh"
@@ -261,8 +258,7 @@ install_cryoutilities() {
 
 install_emudeck() {
     print_log "checking if emudeck is installed"
-    if [ ! -d "$HOME/emudeck" ]
-    then
+    if [ ! -d "$HOME/emudeck" ]; then
         print_log "emudeck is not installed, installing"
         curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh --output "$configurator_parent_dir/emudeck_install.sh"
         chmod -v +x "$configurator_parent_dir/emudeck_install.sh"
@@ -289,8 +285,7 @@ install_refind_bootloader() {
 
 apply_refind_config() {
     print_log "applying rEFInd config"
-    if [ ! -d "$configurator_parent_dir/rEFInd_configs" ]
-    then
+    if [ ! -d "$configurator_parent_dir/rEFInd_configs" ]; then
         cp -vr "$configurator_parent_dir/steam-deck-configurator/rEFInd_configs" "$configurator_parent_dir/rEFInd_configs"
     fi
     num_of_dirs=$(find "$configurator_parent_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
@@ -303,8 +298,7 @@ apply_refind_config() {
     print_log "applying config at: $refind_config"
 
     cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
-    if [ $? == 0 ];
-    then
+    if [ $? == 0 ]; then
         "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
         print_log "config applied"
     else
@@ -317,19 +311,16 @@ apply_refind_config() {
 
 save_refind_config() {
     print_log "saving rEFInd config"
-    if [ ! -d "$configurator_parent_dir/rEFInd_configs" ]
-    then
+    if [ ! -d "$configurator_parent_dir/rEFInd_configs" ]; then
         cp -vr "$configurator_parent_dir/steam-deck-configurator/rEFInd_configs" "$configurator_parent_dir/rEFInd_configs"
     fi
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
-    if [ $? == 0 ];
-    then
+    if [ $? == 0 ]; then
         config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_parent_dir/rEFInd_configs")
         if [ $? == 0 ]; then
             mkdir -p "$config_save_path"
             cp -v "$HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
-            if [ $? == 0 ];
-            then
+            if [ $? == 0 ]; then
                 echo "config saved to $config_save_path"
                 kdialog --msgbox "config saved to $config_save_path"
             else
@@ -361,7 +352,7 @@ check_for_updates_proton_ge() {
     VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
     if compgen -G "$configurator_parent_dir/GE-Proton*.tar.gz" > /dev/null; then
         proton_ge_downloaded_version="$(basename $configurator_parent_dir/GE-Proton*.tar.gz)"
-        if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then 
+        if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then
             print_log "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
         else
             print_log "ProtonGE is up to date"
@@ -387,11 +378,9 @@ fix_barrier() {
     print_log "Fixing Barrier"
     echo "Are you using auto config for the ip address? (y/n)"
     read barrier_auto_config
-    if [ "$barrier_auto_config" != y ] && [ "$barrier_auto_config" != n ]
-    then
+    if [ "$barrier_auto_config" != y ] && [ "$barrier_auto_config" != n ]; then
         echo "error, invalid input"
-    elif [ "$barrier_auto_config" == n ]
-    then
+    elif [ "$barrier_auto_config" == n ]; then
         ip_address=$(read -p "input server ip address from the barrier app")
     fi
 
@@ -500,8 +489,7 @@ create_config() {
 }
 
 run_tasks() {
-    if [ ${#chosen_tasks[@]} -eq 0 ]
-    then
+    if [ ${#chosen_tasks[@]} -eq 0 ]; then
         echo No tasks chosen, exiting...
         exit 0
     fi
@@ -513,8 +501,7 @@ run_tasks() {
     for task in "${chosen_tasks[@]}"
     do
         ((task_number ++))
-        if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ] && [[ " ${chosen_tasks[*]} " =~ " ${task} " ]];
-        then
+        if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ] && [[ " ${chosen_tasks[*]} " =~ " ${task} " ]]; then
             echo $task
             $task #run task
             qdbus $dbusRef Set "" value $task_number
