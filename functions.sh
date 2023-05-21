@@ -268,7 +268,8 @@ install_emudeck() {
         chmod -v +x "$configurator_parent_dir/emudeck_install.sh"
         "$configurator_parent_dir/emudeck_install.sh"
     else
-       print_log "emudeck is already installed"
+
+        print_log "emudeck is already installed"
     fi
 }
 
@@ -293,7 +294,7 @@ apply_refind_config() {
     then
         cp -vr "$configurator_parent_dir/steam-deck-configurator/rEFInd_configs" "$configurator_parent_dir/rEFInd_configs"
     fi
-    num_of_dirs=$(find "$configurator_parent_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+        num_of_dirs=$(find "$configurator_parent_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then
         refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_parent_dir/rEFInd_configs/" --directory)
     else
@@ -325,19 +326,18 @@ save_refind_config() {
     if [ $? == 0 ];
     then
         config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_parent_dir/rEFInd_configs")
-            if [ $? == 0 ]; then
-                mkdir -p "$config_save_path"
-                cp -v "$HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
-                    if [ $? == 0 ];
-                    then
-                        echo "config saved to $config_save_path"
-                        kdialog --msgbox "config saved to $config_save_path"
-                    else
-                        cp_error=$?
-                        print_log "error $cp_error, config not applied"
-                        echo "error: $cp_error, config not saved"
-                        kdialog --error "error: $cp_error, config not saved"
-                    fi
+        if [ $? == 0 ]; then
+            mkdir -p "$config_save_path"
+            cp -v "$HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
+            if [ $? == 0 ];
+            then
+                echo "config saved to $config_save_path"
+                kdialog --msgbox "config saved to $config_save_path"
+            else
+                cp_error=$?
+                print_log "error $cp_error, config not applied"
+                echo "error: $cp_error, config not saved"
+                kdialog --error "error: $cp_error, config not saved"
             fi
         fi
 }
@@ -500,7 +500,6 @@ create_config() {
 }
 
 run_tasks() {
-    echo ${chosen_tasks[@]} #remove this echo
     if [ ${#chosen_tasks[@]} -eq 0 ]
     then
         echo No tasks chosen, exiting...
@@ -513,7 +512,7 @@ run_tasks() {
 
     for task in "${chosen_tasks[@]}"
     do
-            ((task_number ++))
+        ((task_number ++))
         if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ] && [[ " ${chosen_tasks[*]} " =~ " ${task} " ]];
         then
             echo $task
