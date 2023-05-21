@@ -328,16 +328,16 @@ save_refind_config() {
         if [ $? == 0 ]; then
             mkdir -p "$config_save_path"
             cp -v "$HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
-                if [ $? == 0 ];
-                then
-                    echo "config saved to $config_save_path"
-                    kdialog --msgbox "config saved to $config_save_path"
-                else
-                    cp_error=$?
-                    print_log "error $cp_error, config not applied"
-                    echo "error: $cp_error, config not saved"
-                    kdialog --error "error: $cp_error, config not saved"
-                fi
+            if [ $? == 0 ];
+            then
+                echo "config saved to $config_save_path"
+                kdialog --msgbox "config saved to $config_save_path"
+            else
+                cp_error=$?
+                print_log "error $cp_error, config not applied"
+                echo "error: $cp_error, config not saved"
+                kdialog --error "error: $cp_error, config not saved"
+            fi
         fi
     fi
 }
