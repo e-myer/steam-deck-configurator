@@ -116,10 +116,10 @@ install_retrodeck() {
 }
 
 install_bauh() {
-	print_log "Installing Bauh"
-	if [ -f "$configurator_parent_dir/applications/bauh-0.10.5-x86_64.AppImage" ]; then
-		cp -v "$configurator_parent_dir/applications/bauh-0.10.5-x86_64.AppImage" "$HOME/Applications/"
-		chmod -v +x "$HOME/Applications/bauh-0.10.5-x86_64.AppImage"
+    print_log "Installing Bauh"
+    if [ -f "$configurator_parent_dir/applications/bauh-0.10.5-x86_64.AppImage" ]; then
+        cp -v "$configurator_parent_dir/applications/bauh-0.10.5-x86_64.AppImage" "$HOME/Applications/"
+        chmod -v +x "$HOME/Applications/bauh-0.10.5-x86_64.AppImage"
 		cat <<- EOF > "$HOME/.local/share/applications/bauh.desktop"
 		[Desktop Entry]
 		Type=Application
@@ -143,11 +143,11 @@ install_bauh() {
 		Exec=$HOME/Applications/bauh-0.10.5-x86_64.AppImage
 		Icon=bauh
 		EOF
-		cp -v "$configurator_parent_dir/steam-deck-configurator/desktop_icons/bauh.svg" "$HOME/.local/share/icons/"
-	else
-	print_log "bauh appimage doesn't exist in this folder, download it first, skipping..."
-	sleep 3
-	fi
+        cp -v "$configurator_parent_dir/steam-deck-configurator/desktop_icons/bauh.svg" "$HOME/.local/share/icons/"
+    else
+    print_log "bauh appimage doesn't exist in this folder, download it first, skipping..."
+    sleep 3
+    fi
 }
 
 run_cryo_utilities_recommended() {
