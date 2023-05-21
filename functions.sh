@@ -173,7 +173,7 @@ export_flatpaks() {
     done
     
     readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${export_flatpaks_menu[@]}")
-    for flatpak in "${chosen_flatpaks[@]}" #indent for and if lines
+    for flatpak in "${chosen_flatpaks[@]}"
     do
         print_log "adding ${flatpak_names[$flatpak]} to usb"
         flatpak --verbose create-usb "$configurator_parent_dir/flatpaks" "${flatpak_ids[$flatpak]}"
