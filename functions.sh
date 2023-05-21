@@ -118,32 +118,32 @@ install_retrodeck() {
 install_bauh() {
     print_log "Installing Bauh"
     if [ -f "$configurator_parent_dir/applications/bauh-0.10.5-x86_64.AppImage" ]; then
-    cp -v "$configurator_parent_dir/applications/bauh-0.10.5-x86_64.AppImage" "$HOME/Applications/"
-    chmod -v +x "$HOME/Applications/bauh-0.10.5-x86_64.AppImage"
-    cat <<- EOF > "$HOME/.local/share/applications/bauh.desktop"
-	[Desktop Entry]
-	Type=Application
-	Name=Applications (bauh)
-	Name[pt]=Aplicativos (bauh)
-	Name[es]=Aplicaciones (bauh)
-	Name[ca]=Aplicacions (bauh)
-	Name[it]=Applicazioni (bauh)
-	Name[de]=Anwendungen (bauh)
-	Name[ru]=Приложения (bauh)
-	Name[tr]=Paket Yönetici (bauh)
-	Categories=System;
-	Comment=Install and remove applications (AppImage, Arch, Flatpak, Snap, Web)
-	Comment[pt]=Instale e remova aplicativos (AppImage, Arch, Flatpak, Snap, Web)
-	Comment[es]=Instalar y eliminar aplicaciones (AppImage, Arch, Flatpak, Snap, Web)
-	Comment[it]=Installa e rimuovi applicazioni (AppImage, Arch, Flatpak, Snap, Web)
-	Comment[de]=Anwendungen installieren und entfernen (AppImage, Arch, Flatpak, Snap, Web)
-	Comment[ca]=Instal·lar i eliminar aplicacions (AppImage, Arch, Flatpak, Snap, Web)
-	Comment[ru]=Установка и удаление приложений (AppImage, Arch, Flatpak, Snap, Web)
-	Comment[tr]=Uygulama yükle/kaldır (AppImage, Arch, Flatpak, Snap, Web)
-	Exec=$HOME/Applications/bauh-0.10.5-x86_64.AppImage
-	Icon=bauh
-	EOF
-    cp -v "$configurator_parent_dir/steam-deck-configurator/desktop_icons/bauh.svg" "$HOME/.local/share/icons/"
+        cp -v "$configurator_parent_dir/applications/bauh-0.10.5-x86_64.AppImage" "$HOME/Applications/"
+        chmod -v +x "$HOME/Applications/bauh-0.10.5-x86_64.AppImage"
+		cat <<- EOF > "$HOME/.local/share/applications/bauh.desktop"
+		[Desktop Entry]
+		Type=Application
+		Name=Applications (bauh)
+		Name[pt]=Aplicativos (bauh)
+		Name[es]=Aplicaciones (bauh)
+		Name[ca]=Aplicacions (bauh)
+		Name[it]=Applicazioni (bauh)
+		Name[de]=Anwendungen (bauh)
+		Name[ru]=Приложения (bauh)
+		Name[tr]=Paket Yönetici (bauh)
+		Categories=System;
+		Comment=Install and remove applications (AppImage, Arch, Flatpak, Snap, Web)
+		Comment[pt]=Instale e remova aplicativos (AppImage, Arch, Flatpak, Snap, Web)
+		Comment[es]=Instalar y eliminar aplicaciones (AppImage, Arch, Flatpak, Snap, Web)
+		Comment[it]=Installa e rimuovi applicazioni (AppImage, Arch, Flatpak, Snap, Web)
+		Comment[de]=Anwendungen installieren und entfernen (AppImage, Arch, Flatpak, Snap, Web)
+		Comment[ca]=Instal·lar i eliminar aplicacions (AppImage, Arch, Flatpak, Snap, Web)
+		Comment[ru]=Установка и удаление приложений (AppImage, Arch, Flatpak, Snap, Web)
+		Comment[tr]=Uygulama yükle/kaldır (AppImage, Arch, Flatpak, Snap, Web)
+		Exec=$HOME/Applications/bauh-0.10.5-x86_64.AppImage
+		Icon=bauh
+		EOF
+        cp -v "$configurator_parent_dir/steam-deck-configurator/desktop_icons/bauh.svg" "$HOME/.local/share/icons/"
     else
     print_log "bauh appimage doesn't exist in this folder, download it first, skipping..."
     sleep 3
