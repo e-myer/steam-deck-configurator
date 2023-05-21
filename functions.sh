@@ -27,7 +27,7 @@ update_flatpaks() {
 }
 
 set_up_import_and_export_flatpaks() {
-    flatpak remote-modify --collection-id=org.flathub.Stable flathub #find a way to detect this, and check when importing/exporting if it doen't exist. not a separate function
+    flatpak remote-modify --collection-id=org.flathub.Stable flathub
 }
 
 import_firefox() {
@@ -164,25 +164,25 @@ export_flatpaks() {
 
     for name in "${flatpak_names[@]}"
     do
-    if [ -z "$number" ]; then #indent the if statement lines
-    number=0
-    else
-    ((number ++))
-    fi
-    export_flatpaks_menu+=("$number" "$name" off)
+        if [ -z "$number" ]; then #indent the if statement lines
+            number=0
+        else
+            ((number ++))
+        fi
+        export_flatpaks_menu+=("$number" "$name" off)
     done
     
     readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${export_flatpaks_menu[@]}")
     for flatpak in "${chosen_flatpaks[@]}" #indent for and if lines
     do
-    print_log "adding ${flatpak_names[$flatpak]} to usb"
-    flatpak --verbose create-usb "$configurator_parent_dir/flatpaks" "${flatpak_ids[$flatpak]}"
-    if [ -z "$flatpak_index" ]; then
-    flatpak_index=0
-    else
-    ((flatpak_index ++))
-    fi
-    echo "${flatpak_names[$flatpak]}"="${flatpak_ids[$flatpak]}" >> "$configurator_parent_dir/flatpaks_list"
+        print_log "adding ${flatpak_names[$flatpak]} to usb"
+        flatpak --verbose create-usb "$configurator_parent_dir/flatpaks" "${flatpak_ids[$flatpak]}"
+        if [ -z "$flatpak_index" ]; then
+            flatpak_index=0
+        else
+            ((flatpak_index ++))
+        fi
+        echo "${flatpak_names[$flatpak]}"="${flatpak_ids[$flatpak]}" >> "$configurator_parent_dir/flatpaks_list"
     done
 }
 
@@ -191,22 +191,22 @@ import_flatpaks() {
     readarray -t lines < "$configurator_parent_dir/flatpaks_list"
 
     for line in "${lines[@]}"; do
-    key=${line%%=*}
-    value=${line#*=}
-    flatpaks_array[$key]=$value
+        key=${line%%=*}
+        value=${line#*=}
+        flatpaks_array[$key]=$value
     done
 
     for key in "${!flatpaks_array[@]}"
     do
-    import_flatpaks_menu+=("${flatpaks_array[$key]}" "$key" off)
+        import_flatpaks_menu+=("${flatpaks_array[$key]}" "$key" off)
     done
 
     readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
 
     for flatpak in "${chosen_flatpaks[@]}"
     do
-    print_log "installing $flatpak"
-    flatpak install --sideload-repo="$configurator_parent_dir/flatpaks" flathub $flatpak
+        print_log "installing $flatpak"
+        flatpak install --sideload-repo="$configurator_parent_dir/flatpaks" flathub $flatpak
     done
 }
 
@@ -263,12 +263,12 @@ install_emudeck() {
     print_log "checking if emudeck is installed"
     if [ ! -d "$HOME/emudeck" ]
     then
-    print_log "emudeck is not installed, installing"
-    curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh --output "$configurator_parent_dir/emudeck_install.sh"
-    chmod -v +x "$configurator_parent_dir/emudeck_install.sh"
-    "$configurator_parent_dir/emudeck_install.sh"
+        print_log "emudeck is not installed, installing"
+        curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh --output "$configurator_parent_dir/emudeck_install.sh"
+        chmod -v +x "$configurator_parent_dir/emudeck_install.sh"
+        "$configurator_parent_dir/emudeck_install.sh"
     else
-    print_log "emudeck is already installed"
+        print_log "emudeck is already installed"
     fi
 }
 
@@ -291,13 +291,13 @@ apply_refind_config() {
     print_log "applying rEFInd config"
     if [ ! -d "$configurator_parent_dir/rEFInd_configs" ]
     then
-    cp -vr "$configurator_parent_dir/steam-deck-configurator/rEFInd_configs" "$configurator_parent_dir/rEFInd_configs"
+        cp -vr "$configurator_parent_dir/steam-deck-configurator/rEFInd_configs" "$configurator_parent_dir/rEFInd_configs"
     fi
-    num_of_dirs=$(find "$configurator_parent_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+        num_of_dirs=$(find "$configurator_parent_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then
-    refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_parent_dir/rEFInd_configs/" --directory)
+        refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_parent_dir/rEFInd_configs/" --directory)
     else
-    refind_config=$(find "$configurator_parent_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
+        refind_config=$(find "$configurator_parent_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
     fi
 
     print_log "applying config at: $refind_config"
@@ -305,13 +305,13 @@ apply_refind_config() {
     cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
     if [ $? == 0 ];
     then
-    "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
-    print_log "config applied"
+        "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
+        print_log "config applied"
     else
-    cp_error=$?
-    print_log "error $cp_error, config not applied"
-    echo "error: $cp_error, config not saved"
-    kdialog --error "error: $cp_error, config not saved"
+        cp_error=$?
+        print_log "error $cp_error, config not applied"
+        echo "error: $cp_error, config not saved"
+        kdialog --error "error: $cp_error, config not saved"
     fi
 }
 
@@ -319,25 +319,25 @@ save_refind_config() {
     print_log "saving rEFInd config"
     if [ ! -d "$configurator_parent_dir/rEFInd_configs" ]
     then
-    cp -vr "$configurator_parent_dir/steam-deck-configurator/rEFInd_configs" "$configurator_parent_dir/rEFInd_configs"
+        cp -vr "$configurator_parent_dir/steam-deck-configurator/rEFInd_configs" "$configurator_parent_dir/rEFInd_configs"
     fi
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? == 0 ];
     then
-    config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_parent_dir/rEFInd_configs")
+        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_parent_dir/rEFInd_configs")
         if [ $? == 0 ]; then
-        mkdir -p "$config_save_path"
-        cp -v "$HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
-            if [ $? == 0 ];
-            then
-            echo "config saved to $config_save_path"
-            kdialog --msgbox "config saved to $config_save_path"
-            else
-            cp_error=$?
-            print_log "error $cp_error, config not applied"
-            echo "error: $cp_error, config not saved"
-            kdialog --error "error: $cp_error, config not saved"
-            fi
+            mkdir -p "$config_save_path"
+            cp -v "$HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
+                if [ $? == 0 ];
+                then
+                    echo "config saved to $config_save_path"
+                    kdialog --msgbox "config saved to $config_save_path"
+                else
+                    cp_error=$?
+                    print_log "error $cp_error, config not applied"
+                    echo "error: $cp_error, config not saved"
+                    kdialog --error "error: $cp_error, config not saved"
+                fi
         fi
     fi
 }
@@ -360,26 +360,26 @@ check_for_updates_proton_ge() {
     RELEASE=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
     VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
     if compgen -G "$configurator_parent_dir/GE-Proton*.tar.gz" > /dev/null; then
-    proton_ge_downloaded_version="$(basename $configurator_parent_dir/GE-Proton*.tar.gz)"
-    if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then 
-    print_log "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+        proton_ge_downloaded_version="$(basename $configurator_parent_dir/GE-Proton*.tar.gz)"
+        if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then 
+            print_log "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+        else
+            print_log "ProtonGE is up to date"
+        fi
     else
-    print_log "ProtonGE is up to date"
-    fi
-    else
-    print_log "ProtonGE is not downloaded, please download and place it in the $configurator_parent_dir folder first, skipping..."
-    sleep 3
+        print_log "ProtonGE is not downloaded, please download and place it in the $configurator_parent_dir folder first, skipping..."
+        sleep 3
     fi
 }
 
 install_proton_ge_in_steam() {
     if compgen -G "$configurator_parent_dir/GE-Proton*.tar.gz" > /dev/null; then
-    mkdir -p ~/.steam/root/compatibilitytools.d
-    tar -xf "$configurator_parent_dir/GE-Proton*.tar.gz" -C ~/.steam/root/compatibilitytools.d/
-    print_log "Proton GE installed, please restart Steam"
+        mkdir -p ~/.steam/root/compatibilitytools.d
+        tar -xf "$configurator_parent_dir/GE-Proton*.tar.gz" -C ~/.steam/root/compatibilitytools.d/
+        print_log "Proton GE installed, please restart Steam"
     else
-    print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_parent_dir first, skipping..."
-    sleep 3
+        print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_parent_dir first, skipping..."
+        sleep 3
     fi
 }
 
@@ -389,10 +389,10 @@ fix_barrier() {
     read barrier_auto_config
     if [ "$barrier_auto_config" != y ] && [ "$barrier_auto_config" != n ]
     then
-    echo "error, invalid input"
+        echo "error, invalid input"
     elif [ "$barrier_auto_config" == n ]
     then
-    ip_address=$(read -p "input server ip address from the barrier app")
+        ip_address=$(read -p "input server ip address from the barrier app")
     fi
 
     touch "$HOME/.config/systemd/user/barrier.service"
@@ -470,9 +470,9 @@ load_config() {
     readarray -t config_line < "$(zenity --file-selection --title="select a file" --filename="$configurator_parent_dir/configs/")"
     for i in "${config_line[@]}"
     do
-    echo $i
-    menu="${menu/\"$i\" off/\"$i\" on}"
-    echo $menu
+        echo $i
+        menu="${menu/\"$i\" off/\"$i\" on}"
+        echo $menu
     done
     create_dialog
 }
@@ -486,25 +486,24 @@ create_config() {
     config=$(zenity --file-selection --save --title="select a file" --filename="$configurator_parent_dir/configs/")
     for selection in "${chosen_tasks[@]}"
     do
-    if [ ! "$selection" == "create_config" ]; then
-        if [ ! "$create_config_ran" == 1 ]; then
-        create_config_ran=1
-        echo "$selection" > "$config"
-        else
-        echo "$selection" >> "$config"
+        if [ ! "$selection" == "create_config" ]; then
+            if [ ! "$create_config_ran" == 1 ]; then
+                create_config_ran=1
+                echo "$selection" > "$config"
+            else
+                echo "$selection" >> "$config"
+            fi
         fi
-    fi
     done
     print_log "created config"
     create_dialog
 }
 
 run_tasks() {
-    echo ${chosen_tasks[@]} #remove this echo
     if [ ${#chosen_tasks[@]} -eq 0 ]
     then
-    echo No tasks chosen, exiting...
-    exit 0
+        echo No tasks chosen, exiting...
+        exit 0
     fi
     unset task_number
     qdbus $dbusRef close
@@ -513,16 +512,16 @@ run_tasks() {
 
     for task in "${chosen_tasks[@]}"
     do
-    ((task_number ++))
-    if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ] && [[ " ${chosen_tasks[*]} " =~ " ${task} " ]];
-    then
-    echo $task
-    $task #run task
-    qdbus $dbusRef Set "" value $task_number
-    else
-    echo "Task $task not executed, exiting..."
-    exit 0
-    fi
+        ((task_number ++))
+        if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ] && [[ " ${chosen_tasks[*]} " =~ " ${task} " ]];
+        then
+            echo $task
+            $task #run task
+            qdbus $dbusRef Set "" value $task_number
+        else
+            echo "Task $task not executed, exiting..."
+            exit 0
+        fi
     done
     qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
 }
