@@ -268,6 +268,7 @@ install_emudeck() {
         chmod -v +x "$configurator_parent_dir/emudeck_install.sh"
         "$configurator_parent_dir/emudeck_install.sh"
     else
+
         print_log "emudeck is already installed"
     fi
 }
@@ -339,7 +340,6 @@ save_refind_config() {
                 kdialog --error "error: $cp_error, config not saved"
             fi
         fi
-    fi
 }
 
 install_refind_all() {
