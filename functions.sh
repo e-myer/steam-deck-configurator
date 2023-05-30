@@ -278,12 +278,12 @@ install_refind_GUI() {
 }
 
 install_refind_bootloader() {
-    print_log "Installing rEFInd bootloader"
+    print_log "Installing rEFInd bootloader, please input the sudo passowrd when prompted"
     "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
 apply_refind_config() {
-    print_log "applying rEFInd config"
+    print_log "applying rEFInd config, please input the sudo passowrd when prompted"
     if [ ! -d "$configurator_dir/configs" ]; then
         kdialog --msgbox "No configs found, please create one first"
         return
