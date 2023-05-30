@@ -288,11 +288,13 @@ apply_refind_config() {
     if [ "$num_of_dirs" -gt 1 ]; then
         refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
         if [ $? != 0 ]; then
+            print_log "cancelled"
             return
         fi
     else
         refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
         if [ $? != 0 ]; then
+            print_log "cancelled"
             return
         fi    
     fi
@@ -317,6 +319,7 @@ save_refind_config() {
     if [ $? == 0 ]; then
         config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs")
         if [ $? != 0 ]; then
+            print_log "cancelled"
             return
         fi
         mkdir -p "$config_save_path"
@@ -456,10 +459,11 @@ set_menu() {
 }
 
 load_config() {
-    if [ -d "$configurator_dir/configs"]; then
+    if [ -d "$configurator_dir/configs" ]; then
         set_menu
         readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="select a file" --filename="$configurator_dir/configs/")
         if [ $? != 0 ]; then
+            print_log "cancelled"
             return
         fi
         for file in "${config_files[@]}"
@@ -484,11 +488,12 @@ create_dialog() {
 }
 
 create_config() {
-    if [ ! -d "$configurator_dir/configs"]; then
+    if [ ! -d "$configurator_dir/configs" ]; then
         mkdir "$configurator_dir/configs/"
     fi
     config=$(zenity --file-selection --save --title="select a file" --filename="$configurator_dir/configs/")
     if [ $? != 0 ]; then
+        print_log "cancelled"
         return
     fi
 
@@ -504,7 +509,6 @@ create_config() {
         fi
     done
     print_log "created config"
-    fi
     create_dialog
 }
 
