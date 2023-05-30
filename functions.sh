@@ -488,6 +488,12 @@ create_dialog() {
 }
 
 create_config() {
+    if [ ${#chosen_tasks[@]} == 1 ]; then
+        kdialog --error "Please choose the tasks to save as a config."
+        create_dialog
+        return
+    fi
+
     if [ ! -d "$configurator_dir/configs" ]; then
         mkdir "$configurator_dir/configs"
     fi
