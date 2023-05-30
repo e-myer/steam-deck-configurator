@@ -202,17 +202,17 @@ import_flatpaks() {
 
     readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
 
-#    if [ ${#chosen_flatpaks[@]} -eq 0 ]; then
-#        echo No flatpaks chosen
-#        create_dialog
-#        return
-#    else
+    if [ ${#chosen_flatpaks[@]} -eq 0 ]; then
+        echo No flatpaks chosen
+        create_dialog
+        return
+    else
         for flatpak in "${chosen_flatpaks[@]}"
         do
             print_log "installing $flatpak"
             flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $flatpak -y
         done
-#    fi
+    fi
 }
 
 install_deckyloader() {
