@@ -312,7 +312,6 @@ apply_refind_config() {
     else
         cp_error=$?
         print_log "error $cp_error, config not applied"
-        echo "error: $cp_error, config not saved"
         kdialog --error "error: $cp_error, config not saved"
     fi
 }
@@ -332,12 +331,11 @@ save_refind_config() {
         mkdir -p "$config_save_path"
         cp -v "$HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
         if [ $? == 0 ]; then
-            echo "config saved to $config_save_path"
+            print_log "config saved to $config_save_path"
             kdialog --msgbox "config saved to $config_save_path"
         else
             cp_error=$?
-            print_log "error $cp_error, config not applied"
-            echo "error: $cp_error, config not saved"
+            print_log "error $cp_error, config not saved"
             kdialog --error "error: $cp_error, config not saved"
         fi
     fi
@@ -389,7 +387,7 @@ fix_barrier() {
     echo "Are you using auto config for the ip address? (y/n)"
     read barrier_auto_config
     if [ "$barrier_auto_config" != y ] && [ "$barrier_auto_config" != n ]; then
-        echo "error, invalid input"
+        print_log "error, invalid input"
     elif [ "$barrier_auto_config" == n ]; then
         ip_address=$(read -p "input server ip address from the barrier app")
     fi
