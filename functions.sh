@@ -537,8 +537,8 @@ run_tasks() {
     fi
     unset task_number
     qdbus $dbusRef close
-    dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
-    qdbus $dbusRef setLabelText "Initializing..."
+    dbusRef=$(kdialog --progressbar "Steam Deck Configurator" ${#chosen_tasks[@]})
+    qdbus $dbusRef setLabelText "Steam Deck Configurator"
 
 
     for task in "${chosen_tasks[@]}"
