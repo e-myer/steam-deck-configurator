@@ -8,7 +8,7 @@ print_log() {
     log="$task_number/${#chosen_tasks[@]}: $task - $log_message"
     echo -e "$log"
     qdbus $dbusRef setLabelText "$log"
-    echo "$log" >> "$configurator_parent_dir/logs.log"
+    echo "$log" >> "$configurator_dir/logs.log"
 }
 
 update_from_pacman() {
@@ -32,42 +32,42 @@ set_up_import_and_export_flatpaks() {
 
 import_firefox() {
     print_log "Importing Firefox"
-    flatpak install --sideload-repo="$configurator_parent_dir/flatpaks" flathub org.mozilla.firefox
+    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub org.mozilla.firefox
 }
 
 import_corekeyboard() {
     print_log "Importing CoreKeyboard"
-    flatpak install --sideload-repo="$configurator_parent_dir/flatpaks" flathub org.cubocore.CoreKeyboard
+    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub org.cubocore.CoreKeyboard
 }
 
 import_barrier() {
     print_log "Importing Barrier"
-    flatpak install --sideload-repo="$configurator_parent_dir/flatpaks flathub com.github.debauchee.barrier"
+    flatpak install --sideload-repo="$configurator_dir/flatpaks flathub com.github.debauchee.barrier"
 }
 
 import_heroic_games() {
     print_log "Importing Heroic Games"
-    flatpak install --sideload-repo="$configurator_parent_dir/flatpaks flathub com.heroicgameslauncher.hgl"
+    flatpak install --sideload-repo="$configurator_dir/flatpaks flathub com.heroicgameslauncher.hgl"
 }
 
 import_protonup_qt() {
     print_log "Importing ProtonUP QT"
-    flatpak install --sideload-repo="$configurator_parent_dir/flatpaks flathub net.davidotek.pupgui2"
+    flatpak install --sideload-repo="$configurator_dir/flatpaks flathub net.davidotek.pupgui2"
 }
 
 import_boilr() {
     print_log "Importing BoilR"
-    flatpak install --sideload-repo="$configurator_parent_dir/flatpaks flathub io.github.philipk.boilr"
+    flatpak install --sideload-repo="$configurator_dir/flatpaks flathub io.github.philipk.boilr"
 }
 
 import_flatseal() {
     print_log "Importing Flatseal"
-    flatpak install --sideload-repo="$configurator_parent_dir/flatpaks flathub com.github.tchx84.Flatseal"
+    flatpak install --sideload-repo="$configurator_dir/flatpaks flathub com.github.tchx84.Flatseal"
 }
 
 import_steam_rom_manager() {
     print_log "Importing Steam ROM Manager"
-    flatpak install --sideload-repo="$configurator_parent_dir/flatpaks flathub com.steamgriddb.steam-rom-manager"
+    flatpak install --sideload-repo="$configurator_dir/flatpaks flathub com.steamgriddb.steam-rom-manager"
 }
 
 install_firefox() {
@@ -117,8 +117,8 @@ install_retrodeck() {
 
 install_bauh() {
     print_log "Installing Bauh"
-    if [ -f "$configurator_parent_dir/applications/bauh-0.10.5-x86_64.AppImage" ]; then
-        cp -v "$configurator_parent_dir/applications/bauh-0.10.5-x86_64.AppImage" "$HOME/Applications/"
+    if [ -f "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" ]; then
+        cp -v "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" "$HOME/Applications/"
         chmod -v +x "$HOME/Applications/bauh-0.10.5-x86_64.AppImage"
 		cat <<- EOF > "$HOME/.local/share/applications/bauh.desktop"
 		[Desktop Entry]
@@ -143,7 +143,7 @@ install_bauh() {
 		Exec=$HOME/Applications/bauh-0.10.5-x86_64.AppImage
 		Icon=bauh
 		EOF
-        cp -v "$configurator_parent_dir/steam-deck-configurator/desktop_icons/bauh.svg" "$HOME/.local/share/icons/"
+        cp -v "$configurator_dir/desktop_icons/bauh.svg" "$HOME/.local/share/icons/"
     else
     print_log "bauh appimage doesn't exist in this folder, download it first, skipping..."
     sleep 3
@@ -157,7 +157,7 @@ run_cryo_utilities_recommended() {
 
 export_flatpaks() {
     print_log "exporting flatpaks"
-    mkdir -p "$configurator_parent_dir/flatpaks"
+    mkdir -p "$configurator_dir/flatpaks"
 
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
@@ -176,19 +176,19 @@ export_flatpaks() {
     for flatpak in "${chosen_flatpaks[@]}"
     do
         print_log "adding ${flatpak_names[$flatpak]} to usb"
-        flatpak --verbose create-usb "$configurator_parent_dir/flatpaks" "${flatpak_ids[$flatpak]}"
+        flatpak --verbose create-usb "$configurator_dir/flatpaks" "${flatpak_ids[$flatpak]}"
         if [ -z "$flatpak_index" ]; then
             flatpak_index=0
         else
             ((flatpak_index ++))
         fi
-        echo "${flatpak_names[$flatpak]}"="${flatpak_ids[$flatpak]}" >> "$configurator_parent_dir/flatpaks_list"
+        echo "${flatpak_names[$flatpak]}"="${flatpak_ids[$flatpak]}" >> "$configurator_dir/flatpaks_list"
     done
 }
 
 import_flatpaks() {
     local -A flatpaks_array
-    readarray -t lines < "$configurator_parent_dir/flatpaks_list"
+    readarray -t lines < "$configurator_dir/flatpaks_list"
 
     for line in "${lines[@]}"; do
         key=${line%%=*}
@@ -206,51 +206,51 @@ import_flatpaks() {
     for flatpak in "${chosen_flatpaks[@]}"
     do
         print_log "installing $flatpak"
-        flatpak install --sideload-repo="$configurator_parent_dir/flatpaks" flathub $flatpak
+        flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $flatpak
     done
 }
 
 install_deckyloader() {
-    if [ -f "$configurator_parent_dir/deckyloader_installed_version" ]; then
+    if [ -f "$configurator_dir/deckyloader_installed_version" ]; then
         print_log "Checking if latest version of DeckyLoader is installed"
         RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
         VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
-        DECKYLOADER_INSTALLED_VERSION=$(cat "$configurator_parent_dir/deckyloader_installed_version")
+        DECKYLOADER_INSTALLED_VERSION=$(cat "$configurator_dir/deckyloader_installed_version")
         print_log "DeckyLoader Latest Version is $VERSION"
         print_log "DeckyLoader Installed Version is $VERSION"
             if [ "$VERSION" != "$DECKYLOADER_INSTALLED_VERSION" ]; then
                 print_log "Installing Latest Version"
-                curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_parent_dir/deckyloader_install_release.sh"
-                chmod -v +x "$configurator_parent_dir/deckyloader_install_release.sh"
-                "$configurator_parent_dir/deckyloader_install_release.sh"
-                echo "$VERSION" > "$configurator_parent_dir/deckyloader_installed_version"
+                curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
+                chmod -v +x "$configurator_dir/deckyloader_install_release.sh"
+                "$configurator_dir/deckyloader_install_release.sh"
+                echo "$VERSION" > "$configurator_dir/deckyloader_installed_version"
             else
                print_log "Latest Version of DeckyLoader is already installed"
             fi
     else
         print_log "Installing DeckyLoader"
-        curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_parent_dir/deckyloader_install_release.sh"
-        chmod -v +x "$configurator_parent_dir/deckyloader_install_release.sh"
-        "$configurator_parent_dir/deckyloader_install_release.sh"
-        echo "$VERSION" > "$configurator_parent_dir/deckyloader_installed_version"
+        curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
+        chmod -v +x "$configurator_dir/deckyloader_install_release.sh"
+        "$configurator_dir/deckyloader_install_release.sh"
+        echo "$VERSION" > "$configurator_dir/deckyloader_installed_version"
    fi
 }
 
 uninstall_deckyloader() {
     print_log "Uninstalling DeckyLoader"
-    curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh  --output "$configurator_parent_dir/deckyloader_uninstaller.sh"
-    chmod -v +x "$configurator_parent_dir/deckyloader_uninstaller.sh"
-    "$configurator_parent_dir/deckyloader_uninstaller.sh"
-    rm -f "$configurator_parent_dir/deckyloader_installed_version"
+    curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh  --output "$configurator_dir/deckyloader_uninstaller.sh"
+    chmod -v +x "$configurator_dir/deckyloader_uninstaller.sh"
+    "$configurator_dir/deckyloader_uninstaller.sh"
+    rm -f "$configurator_dir/deckyloader_installed_version"
 }
 
 install_cryoutilities() {
     print_log "checking if cryoutilities is installed"
     if [ ! -d "$HOME/.cryo_utilities" ]; then
         print_log "cryoutilities is not installed, installing"
-        curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_parent_dir/cryoutilities_install.sh"
-        chmod -v +x "$configurator_parent_dir/cryoutilities_install.sh"
-        "$configurator_parent_dir/cryoutilities_install.sh"
+        curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_dir/cryoutilities_install.sh"
+        chmod -v +x "$configurator_dir/cryoutilities_install.sh"
+        "$configurator_dir/cryoutilities_install.sh"
     else
         print_log "cryoutilities is already installed"
     fi
@@ -260,9 +260,9 @@ install_emudeck() {
     print_log "checking if emudeck is installed"
     if [ ! -d "$HOME/emudeck" ]; then
         print_log "emudeck is not installed, installing"
-        curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh --output "$configurator_parent_dir/emudeck_install.sh"
-        chmod -v +x "$configurator_parent_dir/emudeck_install.sh"
-        "$configurator_parent_dir/emudeck_install.sh"
+        curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh --output "$configurator_dir/emudeck_install.sh"
+        chmod -v +x "$configurator_dir/emudeck_install.sh"
+        "$configurator_dir/emudeck_install.sh"
     else
         print_log "emudeck is already installed"
     fi
@@ -274,8 +274,8 @@ update_submodules() {
 
 install_refind_GUI() {
     print_log "installing rEFInd GUI"
-    chmod -v +x "$configurator_parent_dir/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh"
-    "$configurator_parent_dir/steam-deck-configurator/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd" # install the GUI, run the script with the argument "path for SteamDeck_rEFInd folder is $PWD/SteamDeck_rEFInd"
+    chmod -v +x "$configurator_dir/SteamDeck_rEFInd/install-GUI.sh"
+    "$configurator_dir/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd" # install the GUI, run the script with the argument "path for SteamDeck_rEFInd folder is $PWD/SteamDeck_rEFInd"
 }
 
 install_refind_bootloader() {
@@ -285,14 +285,11 @@ install_refind_bootloader() {
 
 apply_refind_config() {
     print_log "applying rEFInd config"
-    if [ ! -d "$configurator_parent_dir/rEFInd_configs" ]; then
-        cp -vr "$configurator_parent_dir/steam-deck-configurator/rEFInd_configs" "$configurator_parent_dir/rEFInd_configs"
-    fi
-    num_of_dirs=$(find "$configurator_parent_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+    num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then
-        refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_parent_dir/rEFInd_configs/" --directory)
+        refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
     else
-        refind_config=$(find "$configurator_parent_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
+        refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
     fi
 
     print_log "applying config at: $refind_config"
@@ -311,12 +308,9 @@ apply_refind_config() {
 
 save_refind_config() {
     print_log "saving rEFInd config"
-    if [ ! -d "$configurator_parent_dir/rEFInd_configs" ]; then
-        cp -vr "$configurator_parent_dir/steam-deck-configurator/rEFInd_configs" "$configurator_parent_dir/rEFInd_configs"
-    fi
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? == 0 ]; then
-        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_parent_dir/rEFInd_configs")
+        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs")
         if [ $? == 0 ]; then
             mkdir -p "$config_save_path"
             cp -v "$HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
@@ -350,26 +344,26 @@ refind_uninstall_gui() {
 check_for_updates_proton_ge() {
     RELEASE=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
     VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
-    if compgen -G "$configurator_parent_dir/GE-Proton*.tar.gz" > /dev/null; then
-        proton_ge_downloaded_version="$(basename $configurator_parent_dir/GE-Proton*.tar.gz)"
+    if compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
+        proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
         if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then
             print_log "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
         else
             print_log "ProtonGE is up to date"
         fi
     else
-        print_log "ProtonGE is not downloaded, please download and place it in the $configurator_parent_dir folder first, skipping..."
+        print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
         sleep 3
     fi
 }
 
 install_proton_ge_in_steam() {
-    if compgen -G "$configurator_parent_dir/GE-Proton*.tar.gz" > /dev/null; then
+    if compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         mkdir -p ~/.steam/root/compatibilitytools.d
-        tar -xf "$configurator_parent_dir/GE-Proton*.tar.gz" -C ~/.steam/root/compatibilitytools.d/
+        tar -xf "$configurator_dir/GE-Proton*.tar.gz" -C ~/.steam/root/compatibilitytools.d/
         print_log "Proton GE installed, please restart Steam"
     else
-        print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_parent_dir first, skipping..."
+        print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
         sleep 3
     fi
 }
@@ -457,7 +451,7 @@ set_menu() {
 
 load_config() {
     set_menu
-    readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="select a file" --filename="$configurator_parent_dir/configs/")
+    readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="select a file" --filename="$configurator_dir/configs/")
     for file in "${config_files[@]}"
     do
         readarray -t config_line < $file
@@ -475,7 +469,7 @@ create_dialog() {
 }
 
 create_config() {
-    config=$(zenity --file-selection --save --title="select a file" --filename="$configurator_parent_dir/configs/")
+    config=$(zenity --file-selection --save --title="select a file" --filename="$configurator_dir/configs/")
     for selection in "${chosen_tasks[@]}"
     do
         if [ ! "$selection" == "create_config" ]; then
@@ -500,6 +494,7 @@ run_tasks() {
     qdbus $dbusRef close
     dbusRef=$(kdialog --progressbar "Initializing" ${#chosen_tasks[@]})
     qdbus $dbusRef setLabelText "Initializing..."
+
 
     for task in "${chosen_tasks[@]}"
     do
