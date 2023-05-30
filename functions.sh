@@ -31,7 +31,7 @@ set_up_import_and_export_flatpaks() {
 
 import_firefox() {
     print_log "Importing Firefox"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub org.mozilla.firefox
+    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub org.mozilla.firefox -y
 }
 
 import_corekeyboard() {
