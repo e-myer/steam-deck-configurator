@@ -485,8 +485,6 @@ load_config() {
         kdialog --msgbox "No configs found, please create one first"
     fi
     create_dialog
-
-    
 }
 
 create_dialog() {
