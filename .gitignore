@@ -1,13 +1,13 @@
 logs.log
-applications #directory
-desktop_icons #directory
-flatpaks #directory
+applications/
+desktop_icons/
+flatpaks/
 flatpaks_list
 deckyloader_installed_version
 deckyloader_install_release.sh
 deckyloader_uninstaller.sh
 cryoutilities_install.sh
 emudeck_install.sh
-rEFInd_configs
+rEFInd_configs/
 GE-Proton*.tar.gz
-configs #directory
+configs/

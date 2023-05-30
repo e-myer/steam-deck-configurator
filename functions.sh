@@ -1,7 +1,6 @@
 #! /usr/bin/bash
 
 configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-configurator_parent_dir="$(dirname "$configurator_dir")"
 
 print_log() {
     log_message=$1
