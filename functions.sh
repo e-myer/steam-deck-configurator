@@ -323,7 +323,7 @@ save_refind_config() {
         mkdir "$configurator_dir/configs"
     fi
     if [ $? == 0 ]; then
-        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs")
+        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
         if [ $? != 0 ]; then
             print_log "cancelled"
             return
