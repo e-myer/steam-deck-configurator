@@ -384,10 +384,8 @@ install_proton_ge_in_steam() {
 
 fix_barrier() {
     print_log "Fixing Barrier"
-    barrier_auto_config=$(kdialog --title "Barrier Auto Config" --yesno "Are you using auto config for the ip address?")
-    if [ "$barrier_auto_config" != y ] && [ "$barrier_auto_config" != n ]; then
-        print_log "error, invalid input"
-    elif [ "$barrier_auto_config" == n ]; then
+    kdialog --title "Barrier Auto Config" --yesno "Are you using auto config for the ip address?"
+    if [ $? == 1 ]; then
         ip_address=$(kdialog --title "Input dialog" --inputbox "input server ip address from the barrier app")
     fi
 
