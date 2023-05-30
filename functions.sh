@@ -36,37 +36,37 @@ import_firefox() {
 
 import_corekeyboard() {
     print_log "Importing CoreKeyboard"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub org.cubocore.CoreKeyboard
+    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub org.cubocore.CoreKeyboard -y
 }
 
 import_barrier() {
     print_log "Importing Barrier"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks flathub com.github.debauchee.barrier"
+    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub com.github.debauchee.barrier -y
 }
 
 import_heroic_games() {
     print_log "Importing Heroic Games"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks flathub com.heroicgameslauncher.hgl"
+    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub com.heroicgameslauncher.hgl -y
 }
 
 import_protonup_qt() {
     print_log "Importing ProtonUP QT"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks flathub net.davidotek.pupgui2"
+    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub net.davidotek.pupgui2 -y
 }
 
 import_boilr() {
     print_log "Importing BoilR"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks flathub io.github.philipk.boilr"
+    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub io.github.philipk.boilr -y
 }
 
 import_flatseal() {
     print_log "Importing Flatseal"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks flathub com.github.tchx84.Flatseal"
+    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub com.github.tchx84.Flatseal -y
 }
 
 import_steam_rom_manager() {
     print_log "Importing Steam ROM Manager"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks flathub com.steamgriddb.steam-rom-manager"
+    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub com.steamgriddb.steam-rom-manager -y
 }
 
 install_firefox() {
@@ -205,7 +205,7 @@ import_flatpaks() {
     for flatpak in "${chosen_flatpaks[@]}"
     do
         print_log "installing $flatpak"
-        flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $flatpak
+        flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $flatpak -y
     done
 }
 
