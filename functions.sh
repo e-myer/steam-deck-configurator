@@ -543,14 +543,11 @@ run_tasks() {
 
     for task in "${chosen_tasks[@]}"
     do
-        ((task_number ++))
         if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ] && [[ " ${chosen_tasks[*]} " =~ " ${task} " ]]; then
+            ((task_number ++))
             echo $task
             $task #run task
             qdbus $dbusRef Set "" value $task_number
-        else
-            echo "Task $task not executed, exiting..."
-            exit 0
         fi
     done
     qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
