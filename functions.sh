@@ -284,6 +284,10 @@ install_refind_bootloader() {
 
 apply_refind_config() {
     print_log "applying rEFInd config"
+    if [ ! -d "$configurator_dir/configs" ]; then
+        kdialog --msgbox "No configs found, please create one first"
+        return
+    fi
     num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then
         refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
@@ -316,6 +320,9 @@ apply_refind_config() {
 save_refind_config() {
     print_log "saving rEFInd config"
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
+    if [ ! -d "$configurator_dir/configs" ]; then
+        mkdir "$configurator_dir/configs"
+    fi
     if [ $? == 0 ]; then
         config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs")
         if [ $? != 0 ]; then
