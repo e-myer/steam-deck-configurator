@@ -284,11 +284,23 @@ install_refind_bootloader() {
 
 apply_refind_config() {
     print_log "applying rEFInd config"
+    if [ ! -d "$configurator_dir/configs" ]; then
+        kdialog --msgbox "No configs found, please create one first"
+        return
+    fi
     num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then
         refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
+        if [ $? != 0 ]; then
+            print_log "cancelled"
+            return
+        fi
     else
         refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
+        if [ $? != 0 ]; then
+            print_log "cancelled"
+            return
+        fi    
     fi
 
     print_log "applying config at: $refind_config"
@@ -300,7 +312,6 @@ apply_refind_config() {
     else
         cp_error=$?
         print_log "error $cp_error, config not applied"
-        echo "error: $cp_error, config not saved"
         kdialog --error "error: $cp_error, config not saved"
     fi
 }
@@ -308,20 +319,24 @@ apply_refind_config() {
 save_refind_config() {
     print_log "saving rEFInd config"
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
+    if [ ! -d "$configurator_dir/configs" ]; then
+        mkdir "$configurator_dir/configs"
+    fi
     if [ $? == 0 ]; then
-        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs")
+        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
+        if [ $? != 0 ]; then
+            print_log "cancelled"
+            return
+        fi
+        mkdir -p "$config_save_path"
+        cp -v "$HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
         if [ $? == 0 ]; then
-            mkdir -p "$config_save_path"
-            cp -v "$HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
-            if [ $? == 0 ]; then
-                echo "config saved to $config_save_path"
-                kdialog --msgbox "config saved to $config_save_path"
-            else
-                cp_error=$?
-                print_log "error $cp_error, config not applied"
-                echo "error: $cp_error, config not saved"
-                kdialog --error "error: $cp_error, config not saved"
-            fi
+            print_log "config saved to $config_save_path"
+            kdialog --msgbox "config saved to $config_save_path"
+        else
+            cp_error=$?
+            print_log "error $cp_error, config not saved"
+            kdialog --error "error: $cp_error, config not saved"
         fi
     fi
 }
@@ -372,7 +387,7 @@ fix_barrier() {
     echo "Are you using auto config for the ip address? (y/n)"
     read barrier_auto_config
     if [ "$barrier_auto_config" != y ] && [ "$barrier_auto_config" != n ]; then
-        echo "error, invalid input"
+        print_log "error, invalid input"
     elif [ "$barrier_auto_config" == n ]; then
         ip_address=$(read -p "input server ip address from the barrier app")
     fi
@@ -449,16 +464,24 @@ set_menu() {
 }
 
 load_config() {
-    set_menu
-    readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="select a file" --filename="$configurator_dir/configs/")
-    for file in "${config_files[@]}"
-    do
-        readarray -t config_line < $file
-        for option in "${config_line[@]}"
+    if [ -d "$configurator_dir/configs" ]; then
+        set_menu
+        readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="select a file" --filename="$configurator_dir/configs/")
+        if [ $? != 0 ]; then
+            print_log "cancelled"
+            return
+        fi
+        for file in "${config_files[@]}"
         do
-            menu=$(sed -r "s/(\"$option\" ".+?") off/\1 on/" <<< $menu)
+            readarray -t config_line < $file
+            for option in "${config_line[@]}"
+            do
+                menu=$(sed -r "s/(\"$option\" ".+?") off/\1 on/" <<< $menu)
+            done
         done
-    done
+    else
+        kdialog --msgbox "No configs found, please create one first"
+    fi
     create_dialog
 }
 
@@ -468,7 +491,15 @@ create_dialog() {
 }
 
 create_config() {
+    if [ ! -d "$configurator_dir/configs" ]; then
+        mkdir "$configurator_dir/configs"
+    fi
     config=$(zenity --file-selection --save --title="select a file" --filename="$configurator_dir/configs/")
+    if [ $? != 0 ]; then
+        print_log "cancelled"
+        return
+    fi
+
     for selection in "${chosen_tasks[@]}"
     do
         if [ ! "$selection" == "create_config" ]; then
