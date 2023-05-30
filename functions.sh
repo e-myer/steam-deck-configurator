@@ -489,7 +489,7 @@ create_dialog() {
 
 create_config() {
     if [ ! -d "$configurator_dir/configs" ]; then
-        mkdir "$configurator_dir/configs/"
+        mkdir "$configurator_dir/configs"
     fi
     config=$(zenity --file-selection --save --title="select a file" --filename="$configurator_dir/configs/")
     if [ $? != 0 ]; then
