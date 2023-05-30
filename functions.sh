@@ -202,11 +202,17 @@ import_flatpaks() {
 
     readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
 
-    for flatpak in "${chosen_flatpaks[@]}"
-    do
-        print_log "installing $flatpak"
-        flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $flatpak -y
-    done
+#    if [ ${#chosen_flatpaks[@]} -eq 0 ]; then
+#        echo No flatpaks chosen
+#        create_dialog
+#        return
+#    else
+        for flatpak in "${chosen_flatpaks[@]}"
+        do
+            print_log "installing $flatpak"
+            flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $flatpak -y
+        done
+#    fi
 }
 
 install_deckyloader() {
@@ -286,6 +292,7 @@ apply_refind_config() {
     print_log "applying rEFInd config, please input the sudo passowrd when prompted"
     if [ ! -d "$configurator_dir/configs" ]; then
         kdialog --msgbox "No configs found, please create one first"
+        create_dialog
         return
     fi
     num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
@@ -293,12 +300,14 @@ apply_refind_config() {
         refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
         if [ $? != 0 ]; then
             print_log "cancelled"
+            create_dialog
             return
         fi
     else
         refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
         if [ $? != 0 ]; then
             print_log "cancelled"
+            create_dialog
             return
         fi    
     fi
@@ -326,6 +335,7 @@ save_refind_config() {
         config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
         if [ $? != 0 ]; then
             print_log "cancelled"
+            create_dialog
             return
         fi
         mkdir -p "$config_save_path"
@@ -466,6 +476,7 @@ load_config() {
         readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="select a file" --filename="$configurator_dir/configs/")
         if [ $? != 0 ]; then
             print_log "cancelled"
+            create_dialog
             return
         fi
         for file in "${config_files[@]}"
@@ -500,6 +511,7 @@ create_config() {
     config=$(zenity --file-selection --save --title="select a file" --filename="$configurator_dir/configs/")
     if [ $? != 0 ]; then
         print_log "cancelled"
+        create_dialog
         return
     fi
 
