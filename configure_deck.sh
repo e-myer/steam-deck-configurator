@@ -12,9 +12,3 @@ fi
 
 set_menu
 create_dialog
-
-if [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
-create_config
-elif [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
-load_config
-fi
