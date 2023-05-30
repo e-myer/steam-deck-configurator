@@ -35,7 +35,7 @@ chmod +x ./configure_deck.sh # make the configure_deck.sh file executable
 ```
 
 For the Proton GE task to work, the Proton GE TAR needs to be downloaded placed in the steam-deck-configurator folder.  
-For the Bauh task to work, the Bauh AppImage needs to be downloaded and placed in a folder called "applications" in steam-deck-configurator folder.
+For the Bauh task to work, the Bauh AppImage needs to be downloaded and placed in a folder called "applications" in the steam-deck-configurator folder.
 
 ## Run instructions
 Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a terminal.
