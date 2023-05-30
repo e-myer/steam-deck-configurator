@@ -29,27 +29,23 @@ And installs
 Run the code below in a terminal
 
 ```
-mkdir deck_setup # create a folder for the project, it could be named anything
-cd deck_setup # go into that folder
 git clone --recurse-submodules https://github.com/e-myer/steam-deck-configurator.git # clone this repository
 cd steam-deck-configurator # go into the repository
 chmod +x ./configure_deck.sh # make the configure_deck.sh file executable
 ```
 
-For the Proton GE task to work, the Proton GE TAR needs to be downloaded placed in the parent folder of the steam-deck-configurator folder.  
-For the Bauh task to work, the Bauh AppImage needs to be downloaded and placed in a folder called "applications" in the parent folder of the steam-deck-configurator folder.
+For the Proton GE task to work, the Proton GE TAR needs to be downloaded placed in the steam-deck-configurator folder.  
+For the Bauh task to work, the Bauh AppImage needs to be downloaded and placed in a folder called "applications" in the steam-deck-configurator folder.
 
 ## Run instructions
 Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a terminal.
 
 ## Configuration
 
-- To edit the preselected tasks, edit the configure_deck.sh file and change the "on" and "off" texts in the "options" array
 - To add a task
-  - Create a function in the function.sh file
-  - Add the function to the end of the file, like this `tasks_array["Function title"]="function_name"`, replacing "function title" and "function name" with the function's title and name.
-  - Add the entry to the configure_deck.sh file, in the tasks_array list, like this `"${tasks_array[Function title]}" "Function title" off \`, to have the entry preselected in the checklist dialog, replace "off" with "on", like this `"${tasks_array[Function title]}" "Function title" on \`
-  - If the task is at the very end of the list in the configure_deck.sh file, then don't put a backslash and instead add a closing bracket, like this `"${tasks_array[Function title]}" "Function title" off)`
+  - Create a function in the functions.sh file
+  - Add the name of the function to the "set_menu" function in the "menu" variable. Like this `"function_name" "Function Title" off`, replacing "function title" and "function name" with the function's title and name.
+  - If the task is at the very end of the list, then move the single apostrophe to the end.
 
 ## General Steam Deck Notes
 
