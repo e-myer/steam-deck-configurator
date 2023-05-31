@@ -340,6 +340,8 @@ set_menu() {
     "install_steam_rom_manager" "Install Steam Rom Manager" off 
     "install_deckyloader" "Install DeckyLoader" off 
     "uninstall_deckyloader" "Uninstall DeckyLoader" off 
+    "import_flatpaks" "Import Flatpaks" off 
+    "export_flatpaks" "Export Flatpaks" off 
     "refind_uninstall_gui" "Uninstall rEFInd GUI" off 
     "check_for_updates_proton_ge" "Check for Proton GE Updates" off 
     "install_cryoutilities" "Install Cryoutilities" off 
@@ -352,8 +354,6 @@ set_menu() {
     "apply_refind_config" "Apply rEFInd config" off 
     "save_refind_config" "Save rEFInd config" off 
     "install_non_steam_launchers" "Install Non Steam Launchers" off 
-    "export_flatpaks" "Export Flatpaks" off 
-    "import_flatpaks" "Import Flatpaks" off 
     "fix_barrier" "Fix Barrier" off'
 }
 
