@@ -292,7 +292,7 @@ install_refind_bootloader() {
 }
 
 apply_refind_config() {
-    print_log "applying rEFInd config, please input the sudo passowrd when prompted"
+    print_log "applying rEFInd config"
     if [ ! -d "$configurator_dir/configs" ]; then
         kdialog --msgbox "No configs found, please create one first"
         create_dialog
@@ -318,7 +318,7 @@ apply_refind_config() {
         fi    
     fi
 
-    print_log "applying config at: $refind_config"
+    print_log "applying config at: $refind_config, please input the sudo passowrd when prompted"
 
     cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
     if [ $? == 0 ]; then
