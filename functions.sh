@@ -29,46 +29,6 @@ set_up_import_and_export_flatpaks() {
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
 }
 
-import_firefox() {
-    print_log "Importing Firefox"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub org.mozilla.firefox -y
-}
-
-import_corekeyboard() {
-    print_log "Importing CoreKeyboard"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub org.cubocore.CoreKeyboard -y
-}
-
-import_barrier() {
-    print_log "Importing Barrier"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub com.github.debauchee.barrier -y
-}
-
-import_heroic_games() {
-    print_log "Importing Heroic Games"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub com.heroicgameslauncher.hgl -y
-}
-
-import_protonup_qt() {
-    print_log "Importing ProtonUP QT"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub net.davidotek.pupgui2 -y
-}
-
-import_boilr() {
-    print_log "Importing BoilR"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub io.github.philipk.boilr -y
-}
-
-import_flatseal() {
-    print_log "Importing Flatseal"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub com.github.tchx84.Flatseal -y
-}
-
-import_steam_rom_manager() {
-    print_log "Importing Steam ROM Manager"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub com.steamgriddb.steam-rom-manager -y
-}
-
 install_firefox() {
     print_log "Installing Firefox"
     flatpak install flathub org.mozilla.firefox -y
@@ -156,7 +116,7 @@ run_cryo_utilities_recommended() {
 
 export_flatpaks() {
     print_log "exporting flatpaks"
-    for flatpak in "${chosen_flatpaks[@]}"
+    for flatpak in "${chosen_export_flatpaks[@]}"
     do
         print_log "exporting ${flatpak_names[$flatpak]}"
         flatpak --verbose create-usb "$configurator_dir/flatpaks" "${flatpak_ids[$flatpak]}"
@@ -169,17 +129,53 @@ export_flatpaks() {
     done
 }
 
+interaction_export_flatpaks() {
+    mkdir -p "$configurator_dir/flatpaks"
+    readarray -t flatpak_names < <(flatpak list --app --columns=name)
+    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
+
+    for name in "${flatpak_names[@]}"
+    do
+        if [ -z "$number" ]; then
+            local number=0
+        else
+            ((number ++))
+        fi
+        export_flatpaks_menu+=("$number" "$name" off)
+    done
+    
+    readarray -t chosen_export_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${export_flatpaks_menu[@]}")
+}
+
 import_flatpaks() {
-    if [ ${#chosen_flatpaks[@]} -eq 0 ]; then
+    if [ ${#chosen_import_flatpaks[@]} -eq 0 ]; then
         echo No flatpaks chosen
         return
     else
-        for flatpak in "${chosen_flatpaks[@]}"
+        for flatpak in "${chosen_import_flatpaks[@]}"
         do
             print_log "installing $flatpak"
             flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $flatpak -y
         done
     fi
+}
+
+interaction_import_flatpaks() {
+    local -A flatpaks_array
+    readarray -t lines < "$configurator_dir/flatpaks_list"
+
+    for line in "${lines[@]}"; do
+        key=${line%%=*}
+        value=${line#*=}
+        flatpaks_array[$key]=$value
+    done
+
+    for key in "${!flatpaks_array[@]}"
+    do
+        import_flatpaks_menu+=("${flatpaks_array[$key]}" "$key" off)
+    done
+
+    readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
 }
 
 install_deckyloader() {
@@ -272,6 +268,30 @@ apply_refind_config() {
     fi
 }
 
+interaction_apply_refind_config() {
+    print_log "applying rEFInd config"
+    if [ ! -d "$configurator_dir/configs" ]; then
+        kdialog --msgbox "No rEFInd configs found, please create one first, skipping..."
+        return
+    fi
+    local num_of_dirs
+    num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+    if [ "$num_of_dirs" -gt 1 ]; then
+        refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
+        if [ $? != 0 ]; then
+            print_log "cancelled"
+            return
+        fi
+    else
+        refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
+        if [ $? != 0 ]; then
+            print_log "cancelled"
+            return
+        fi    
+    fi
+
+}
+
 save_refind_config() {
     print_log "saving rEFInd config"
         mkdir -p "$config_save_path"
@@ -284,6 +304,20 @@ save_refind_config() {
             print_log "error $cp_error, config not saved"
             kdialog --error "error: $cp_error, config not saved"
         fi
+}
+
+interaction_save_refind_config() {
+    kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
+    if [ ! -d "$configurator_dir/configs" ]; then
+        mkdir "$configurator_dir/configs"
+    fi
+    if [ $? == 0 ]; then
+        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
+        if [ $? != 0 ]; then
+            print_log "cancelled"
+            return
+        fi
+    fi
 }
 
 install_refind_all() {
@@ -368,15 +402,7 @@ set_menu() {
     "add_flathub" "Add Flathub if it does not exist" off 
     "update_flatpaks" "Update Flatpaks" off 
     "set_up_import_and_export_flatpaks" "Set up import and export Flatpaks" off 
-    "import_firefox" "Import Firefox" off 
-    "import_corekeyboard" "Import Corekeyboard" off 
-    "import_barrier" "Import Barrier" off 
-    "import_heroic_games" "Import Heroic_games" off 
-    "import_protonup_qt" "Import ProtonUp_QT" off 
     "install_proton_ge_in_steam" "Install Proton GE in Steam" off 
-    "import_boilr" "Import BoilR" off 
-    "import_flatseal" "Import Flatseal" off 
-    "import_steam_rom_manager" "Import Steam ROM Manager" off 
     "install_bauh" "Install Bauh" off 
     "install_firefox" "Install Firefox" off 
     "install_corekeyboard" "Install Corekeyboard" off 
@@ -388,6 +414,8 @@ set_menu() {
     "install_steam_rom_manager" "Install Steam Rom Manager" off 
     "install_deckyloader" "Install DeckyLoader" off 
     "uninstall_deckyloader" "Uninstall DeckyLoader" off 
+    "import_flatpaks" "Import Flatpaks" off 
+    "export_flatpaks" "Export Flatpaks" off 
     "refind_uninstall_gui" "Uninstall rEFInd GUI" off 
     "check_for_updates_proton_ge" "Check for Proton GE Updates" off 
     "install_cryoutilities" "Install Cryoutilities" off 
@@ -400,8 +428,6 @@ set_menu() {
     "apply_refind_config" "Apply rEFInd config" off 
     "save_refind_config" "Save rEFInd config" off 
     "install_non_steam_launchers" "Install Non Steam Launchers" off 
-    "export_flatpaks" "Export Flatpaks" off 
-    "import_flatpaks" "Import Flatpaks" off 
     "fix_barrier" "Fix Barrier" off'
 }
 
@@ -465,84 +491,9 @@ create_config() {
     print_log "created config"
 }
 
-interaction_save_refind_config() {
-    kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
-    if [ ! -d "$configurator_dir/configs" ]; then
-        mkdir "$configurator_dir/configs"
-    fi
-    if [ $? == 0 ]; then
-        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
-        if [ $? != 0 ]; then
-            print_log "cancelled"
-            return
-        fi
-    fi
-}
-
-interaction_apply_refind_config() {
-    print_log "applying rEFInd config"
-    if [ ! -d "$configurator_dir/configs" ]; then
-        kdialog --msgbox "No rEFInd configs found, please create one first, skipping..."
-        return
-    fi
-    local num_of_dirs
-    num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
-    if [ "$num_of_dirs" -gt 1 ]; then
-        refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
-        if [ $? != 0 ]; then
-            print_log "cancelled"
-            return
-        fi
-    else
-        refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
-        if [ $? != 0 ]; then
-            print_log "cancelled"
-            return
-        fi    
-    fi
-
-}
-
-interactive_export_flatpaks() {
-    mkdir -p "$configurator_dir/flatpaks"
-    readarray -t flatpak_names < <(flatpak list --app --columns=name)
-    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
-
-    for name in "${flatpak_names[@]}"
-    do
-        if [ -z "$number" ]; then
-            local number=0
-        else
-            ((number ++))
-        fi
-        export_flatpaks_menu+=("$number" "$name" off)
-    done
-    
-    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${export_flatpaks_menu[@]}")
-}
-
-interactive_import_flatpaks() {
-    local -A flatpaks_array
-    readarray -t lines < "$configurator_dir/flatpaks_list"
-
-    for line in "${lines[@]}"; do
-        key=${line%%=*}
-        value=${line#*=}
-        flatpaks_array[$key]=$value
-    done
-
-    for key in "${!flatpaks_array[@]}"
-    do
-        import_flatpaks_menu+=("${flatpaks_array[$key]}" "$key" off)
-    done
-
-    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
-}
-
 set_interactive_tasks() {
     interactive_tasks=(save_refind_config apply_refind_config import_flatpaks export_flatpaks)
 }
-
 
 run_tasks() {
     if [ ${#chosen_tasks[@]} -eq 0 ]; then
