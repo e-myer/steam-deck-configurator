@@ -164,7 +164,7 @@ export_flatpaks() {
     for name in "${flatpak_names[@]}"
     do
         if [ -z "$number" ]; then
-            number=0
+            local number=0
         else
             ((number ++))
         fi
@@ -177,7 +177,7 @@ export_flatpaks() {
         print_log "exporting ${flatpak_names[$flatpak]}"
         flatpak --verbose create-usb "$configurator_dir/flatpaks" "${flatpak_ids[$flatpak]}"
         if [ -z "$flatpak_index" ]; then
-            flatpak_index=0
+            local flatpak_index=0
         else
             ((flatpak_index ++))
         fi
@@ -218,8 +218,11 @@ import_flatpaks() {
 install_deckyloader() {
     if [ -f "$configurator_dir/deckyloader_installed_version" ]; then
         print_log "Checking if latest version of DeckyLoader is installed"
+        local release
         release=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+        local version
         version=$(jq -r '.tag_name' <<< ${release} )
+        local deckyloader_installed_version
         deckyloader_installed_version=$(cat "$configurator_dir/deckyloader_installed_version")
         print_log "DeckyLoader Latest Version is $version"
         print_log "DeckyLoader Installed Version is $version"
@@ -295,8 +298,10 @@ apply_refind_config() {
         create_dialog
         return
     fi
+    local num_of_dirs
     num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then
+        local refind_config
         refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
         if [ $? != 0 ]; then
             print_log "cancelled"
@@ -304,6 +309,7 @@ apply_refind_config() {
             return
         fi
     else
+        local refind_config
         refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
         if [ $? != 0 ]; then
             print_log "cancelled"
@@ -332,6 +338,7 @@ save_refind_config() {
         mkdir "$configurator_dir/configs"
     fi
     if [ $? == 0 ]; then
+        local config_save_path
         config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
         if [ $? != 0 ]; then
             print_log "cancelled"
@@ -366,9 +373,11 @@ refind_uninstall_gui() {
 }
 
 check_for_updates_proton_ge() {
+    local version
     version=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
     version=$(jq -r '.tag_name' <<< ${release} )
     if compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
+        local proton_ge_downloaded_version
         proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
         if [ ! "$proton_ge_downloaded_version" == "$version.tar.gz" ]; then
             print_log "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
@@ -508,6 +517,7 @@ create_config() {
     if [ ! -d "$configurator_dir/configs" ]; then
         mkdir "$configurator_dir/configs"
     fi
+    local config
     config=$(zenity --file-selection --save --title="select a file" --filename="$configurator_dir/configs/")
     if [ $? != 0 ]; then
         print_log "cancelled"
