@@ -156,22 +156,6 @@ run_cryo_utilities_recommended() {
 
 export_flatpaks() {
     print_log "exporting flatpaks"
-    mkdir -p "$configurator_dir/flatpaks"
-
-    readarray -t flatpak_names < <(flatpak list --app --columns=name)
-    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
-
-    for name in "${flatpak_names[@]}"
-    do
-        if [ -z "$number" ]; then
-            local number=0
-        else
-            ((number ++))
-        fi
-        export_flatpaks_menu+=("$number" "$name" off)
-    done
-    
-    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${export_flatpaks_menu[@]}")
     for flatpak in "${chosen_flatpaks[@]}"
     do
         print_log "exporting ${flatpak_names[$flatpak]}"
@@ -186,22 +170,6 @@ export_flatpaks() {
 }
 
 import_flatpaks() {
-    local -A flatpaks_array
-    readarray -t lines < "$configurator_dir/flatpaks_list"
-
-    for line in "${lines[@]}"; do
-        key=${line%%=*}
-        value=${line#*=}
-        flatpaks_array[$key]=$value
-    done
-
-    for key in "${!flatpaks_array[@]}"
-    do
-        import_flatpaks_menu+=("${flatpaks_array[$key]}" "$key" off)
-    done
-
-    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
-
     if [ ${#chosen_flatpaks[@]} -eq 0 ]; then
         echo No flatpaks chosen
         create_dialog
@@ -292,32 +260,6 @@ install_refind_bootloader() {
 }
 
 apply_refind_config() {
-    print_log "applying rEFInd config"
-    if [ ! -d "$configurator_dir/configs" ]; then
-        kdialog --msgbox "No configs found, please create one first"
-        create_dialog
-        return
-    fi
-    local num_of_dirs
-    num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
-    if [ "$num_of_dirs" -gt 1 ]; then
-        local refind_config
-        refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
-        if [ $? != 0 ]; then
-            print_log "cancelled"
-            create_dialog
-            return
-        fi
-    else
-        local refind_config
-        refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
-        if [ $? != 0 ]; then
-            print_log "cancelled"
-            create_dialog
-            return
-        fi    
-    fi
-
     print_log "applying config at: $refind_config, please input the sudo passowrd when prompted"
 
     cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
@@ -333,18 +275,6 @@ apply_refind_config() {
 
 save_refind_config() {
     print_log "saving rEFInd config"
-    kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
-    if [ ! -d "$configurator_dir/configs" ]; then
-        mkdir "$configurator_dir/configs"
-    fi
-    if [ $? == 0 ]; then
-        local config_save_path
-        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
-        if [ $? != 0 ]; then
-            print_log "cancelled"
-            create_dialog
-            return
-        fi
         mkdir -p "$config_save_path"
         cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
         if [ $? == 0 ]; then
@@ -355,7 +285,6 @@ save_refind_config() {
             print_log "error $cp_error, config not saved"
             kdialog --error "error: $cp_error, config not saved"
         fi
-    fi
 }
 
 install_refind_all() {
@@ -460,7 +389,6 @@ set_menu() {
     "install_steam_rom_manager" "Install Steam Rom Manager" off 
     "install_deckyloader" "Install DeckyLoader" off 
     "uninstall_deckyloader" "Uninstall DeckyLoader" off 
-    "install_refind_all" "Install rEFInd All" off 
     "refind_uninstall_gui" "Uninstall rEFInd GUI" off 
     "check_for_updates_proton_ge" "Check for Proton GE Updates" off 
     "install_cryoutilities" "Install Cryoutilities" off 
@@ -539,6 +467,90 @@ create_config() {
     create_dialog
 }
 
+interaction_save_refind_config() {
+    kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
+    if [ ! -d "$configurator_dir/configs" ]; then
+        mkdir "$configurator_dir/configs"
+    fi
+    if [ $? == 0 ]; then
+        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
+        if [ $? != 0 ]; then
+            print_log "cancelled"
+            create_dialog
+            return
+        fi
+    fi
+}
+
+interaction_apply_refind_config() {
+    print_log "applying rEFInd config"
+    if [ ! -d "$configurator_dir/configs" ]; then
+        kdialog --msgbox "No rEFInd configs found, please create one first, skipping..."
+        create_dialog
+        return
+    fi
+    local num_of_dirs
+    num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+    if [ "$num_of_dirs" -gt 1 ]; then
+        refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
+        if [ $? != 0 ]; then
+            print_log "cancelled"
+            create_dialog
+            return
+        fi
+    else
+        refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
+        if [ $? != 0 ]; then
+            print_log "cancelled"
+            create_dialog
+            return
+        fi    
+    fi
+
+}
+
+interactive_export_flatpaks() {
+    mkdir -p "$configurator_dir/flatpaks"
+
+    readarray -t flatpak_names < <(flatpak list --app --columns=name)
+    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
+
+    for name in "${flatpak_names[@]}"
+    do
+        if [ -z "$number" ]; then
+            local number=0
+        else
+            ((number ++))
+        fi
+        export_flatpaks_menu+=("$number" "$name" off)
+    done
+    
+    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${export_flatpaks_menu[@]}")
+}
+
+interactive_import_flatpaks() {
+    local -A flatpaks_array
+    readarray -t lines < "$configurator_dir/flatpaks_list"
+
+    for line in "${lines[@]}"; do
+        key=${line%%=*}
+        value=${line#*=}
+        flatpaks_array[$key]=$value
+    done
+
+    for key in "${!flatpaks_array[@]}"
+    do
+        import_flatpaks_menu+=("${flatpaks_array[$key]}" "$key" off)
+    done
+
+    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
+}
+
+set_interactive_tasks() {
+    interactive_tasks=(save_refind_config apply_refind_config import_flatpaks export_flatpaks)
+}
+
+
 run_tasks() {
     if [ ${#chosen_tasks[@]} -eq 0 ]; then
         echo No tasks chosen, exiting...
@@ -549,6 +561,15 @@ run_tasks() {
     dbusRef=$(kdialog --progressbar "Steam Deck Configurator" ${#chosen_tasks[@]})
     qdbus $dbusRef setLabelText "Steam Deck Configurator"
 
+    sorted_chosen_tasks=($(echo "${chosen_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
+    interactive_tasks=($(echo "${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
+    intersection_set=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
+
+    echo "${intersection_set[@]}"
+    for task in "${intersection_set[@]}"
+    do
+    interaction_$task
+    done
 
     for task in "${chosen_tasks[@]}"
     do
