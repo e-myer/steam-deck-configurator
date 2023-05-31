@@ -164,7 +164,7 @@ export_flatpaks() {
     for name in "${flatpak_names[@]}"
     do
         if [ -z "$number" ]; then
-            number=0
+            local number=0
         else
             ((number ++))
         fi
@@ -177,7 +177,7 @@ export_flatpaks() {
         print_log "exporting ${flatpak_names[$flatpak]}"
         flatpak --verbose create-usb "$configurator_dir/flatpaks" "${flatpak_ids[$flatpak]}"
         if [ -z "$flatpak_index" ]; then
-            flatpak_index=0
+            local flatpak_index=0
         else
             ((flatpak_index ++))
         fi
@@ -218,17 +218,20 @@ import_flatpaks() {
 install_deckyloader() {
     if [ -f "$configurator_dir/deckyloader_installed_version" ]; then
         print_log "Checking if latest version of DeckyLoader is installed"
-        RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
-        VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
-        DECKYLOADER_INSTALLED_VERSION=$(cat "$configurator_dir/deckyloader_installed_version")
-        print_log "DeckyLoader Latest Version is $VERSION"
-        print_log "DeckyLoader Installed Version is $VERSION"
-            if [ "$VERSION" != "$DECKYLOADER_INSTALLED_VERSION" ]; then
+        local release
+        release=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+        local version
+        version=$(jq -r '.tag_name' <<< ${release} )
+        local deckyloader_installed_version
+        deckyloader_installed_version=$(cat "$configurator_dir/deckyloader_installed_version")
+        print_log "DeckyLoader Latest Version is $version"
+        print_log "DeckyLoader Installed Version is $deckyloader_installed_version"
+            if [ "$version" != "$deckyloader_installed_version" ]; then
                 print_log "Installing Latest Version"
                 curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
                 chmod -v +x "$configurator_dir/deckyloader_install_release.sh"
                 "$configurator_dir/deckyloader_install_release.sh"
-                echo "$VERSION" > "$configurator_dir/deckyloader_installed_version"
+                echo "$version" > "$configurator_dir/deckyloader_installed_version"
             else
                print_log "Latest Version of DeckyLoader is already installed"
             fi
@@ -237,7 +240,7 @@ install_deckyloader() {
         curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
         chmod -v +x "$configurator_dir/deckyloader_install_release.sh"
         "$configurator_dir/deckyloader_install_release.sh"
-        echo "$VERSION" > "$configurator_dir/deckyloader_installed_version"
+        echo "$version" > "$configurator_dir/deckyloader_installed_version"
    fi
 }
 
@@ -289,14 +292,16 @@ install_refind_bootloader() {
 }
 
 apply_refind_config() {
-    print_log "applying rEFInd config, please input the sudo passowrd when prompted"
+    print_log "applying rEFInd config"
     if [ ! -d "$configurator_dir/configs" ]; then
         kdialog --msgbox "No configs found, please create one first"
         create_dialog
         return
     fi
+    local num_of_dirs
     num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
     if [ "$num_of_dirs" -gt 1 ]; then
+        local refind_config
         refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
         if [ $? != 0 ]; then
             print_log "cancelled"
@@ -304,6 +309,7 @@ apply_refind_config() {
             return
         fi
     else
+        local refind_config
         refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
         if [ $? != 0 ]; then
             print_log "cancelled"
@@ -312,7 +318,7 @@ apply_refind_config() {
         fi    
     fi
 
-    print_log "applying config at: $refind_config"
+    print_log "applying config at: $refind_config, please input the sudo passowrd when prompted"
 
     cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
     if [ $? == 0 ]; then
@@ -332,6 +338,7 @@ save_refind_config() {
         mkdir "$configurator_dir/configs"
     fi
     if [ $? == 0 ]; then
+        local config_save_path
         config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
         if [ $? != 0 ]; then
             print_log "cancelled"
@@ -339,7 +346,7 @@ save_refind_config() {
             return
         fi
         mkdir -p "$config_save_path"
-        cp -v "$HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
+        cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
         if [ $? == 0 ]; then
             print_log "config saved to $config_save_path"
             kdialog --msgbox "config saved to $config_save_path"
@@ -366,12 +373,14 @@ refind_uninstall_gui() {
 }
 
 check_for_updates_proton_ge() {
-    RELEASE=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
-    VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
     if compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
+        local version
+        version=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+        version=$(jq -r '.tag_name' <<< ${release} )
+        local proton_ge_downloaded_version
         proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
-        if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then
-            print_log "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+        if [ ! "$proton_ge_downloaded_version" == "$version.tar.gz" ]; then
+            print_log "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
         else
             print_log "ProtonGE is up to date"
         fi
@@ -464,7 +473,6 @@ set_menu() {
     "apply_refind_config" "Apply rEFInd config" off 
     "save_refind_config" "Save rEFInd config" off 
     "install_non_steam_launchers" "Install Non Steam Launchers" off 
-    "uninstall_deckyloader" "Uninstall Deckyloader" off 
     "export_flatpaks" "Export Flatpaks" off 
     "import_flatpaks" "Import Flatpaks" off 
     "fix_barrier" "Fix Barrier" off'
@@ -508,6 +516,7 @@ create_config() {
     if [ ! -d "$configurator_dir/configs" ]; then
         mkdir "$configurator_dir/configs"
     fi
+    local config
     config=$(zenity --file-selection --save --title="select a file" --filename="$configurator_dir/configs/")
     if [ $? != 0 ]; then
         print_log "cancelled"
