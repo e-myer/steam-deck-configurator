@@ -172,7 +172,6 @@ export_flatpaks() {
 import_flatpaks() {
     if [ ${#chosen_flatpaks[@]} -eq 0 ]; then
         echo No flatpaks chosen
-        create_dialog
         return
     else
         for flatpak in "${chosen_flatpaks[@]}"
@@ -412,7 +411,6 @@ load_config() {
         readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="select a file" --filename="$configurator_dir/configs/")
         if [ $? != 0 ]; then
             print_log "cancelled"
-            create_dialog
             return
         fi
         for file in "${config_files[@]}"
@@ -426,18 +424,18 @@ load_config() {
     else
         kdialog --msgbox "No configs found, please create one first"
     fi
-    create_dialog
 }
 
 create_dialog() {
+    while true; do
     readarray -t chosen_tasks < <(echo $menu | xargs kdialog --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect")
     run_tasks
+    done
 }
 
 create_config() {
     if [ ${#chosen_tasks[@]} == 1 ]; then
         kdialog --error "Please choose the tasks to save as a config."
-        create_dialog
         return
     fi
 
@@ -448,7 +446,7 @@ create_config() {
     config=$(zenity --file-selection --save --title="select a file" --filename="$configurator_dir/configs/")
     if [ $? != 0 ]; then
         print_log "cancelled"
-        create_dialog
+        chosen_tasks=()
         return
     fi
 
@@ -463,8 +461,8 @@ create_config() {
             fi
         fi
     done
+    chosen_tasks=()
     print_log "created config"
-    create_dialog
 }
 
 interaction_save_refind_config() {
@@ -476,7 +474,6 @@ interaction_save_refind_config() {
         config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
         if [ $? != 0 ]; then
             print_log "cancelled"
-            create_dialog
             return
         fi
     fi
@@ -486,7 +483,6 @@ interaction_apply_refind_config() {
     print_log "applying rEFInd config"
     if [ ! -d "$configurator_dir/configs" ]; then
         kdialog --msgbox "No rEFInd configs found, please create one first, skipping..."
-        create_dialog
         return
     fi
     local num_of_dirs
@@ -495,14 +491,12 @@ interaction_apply_refind_config() {
         refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
         if [ $? != 0 ]; then
             print_log "cancelled"
-            create_dialog
             return
         fi
     else
         refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
         if [ $? != 0 ]; then
             print_log "cancelled"
-            create_dialog
             return
         fi    
     fi
