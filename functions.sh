@@ -29,46 +29,6 @@ set_up_import_and_export_flatpaks() {
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
 }
 
-import_firefox() {
-    print_log "Importing Firefox"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub org.mozilla.firefox -y
-}
-
-import_corekeyboard() {
-    print_log "Importing CoreKeyboard"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub org.cubocore.CoreKeyboard -y
-}
-
-import_barrier() {
-    print_log "Importing Barrier"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub com.github.debauchee.barrier -y
-}
-
-import_heroic_games() {
-    print_log "Importing Heroic Games"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub com.heroicgameslauncher.hgl -y
-}
-
-import_protonup_qt() {
-    print_log "Importing ProtonUP QT"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub net.davidotek.pupgui2 -y
-}
-
-import_boilr() {
-    print_log "Importing BoilR"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub io.github.philipk.boilr -y
-}
-
-import_flatseal() {
-    print_log "Importing Flatseal"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub com.github.tchx84.Flatseal -y
-}
-
-import_steam_rom_manager() {
-    print_log "Importing Steam ROM Manager"
-    flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub com.steamgriddb.steam-rom-manager -y
-}
-
 install_firefox() {
     print_log "Installing Firefox"
     flatpak install flathub org.mozilla.firefox -y
@@ -368,15 +328,7 @@ set_menu() {
     "add_flathub" "Add Flathub if it does not exist" off 
     "update_flatpaks" "Update Flatpaks" off 
     "set_up_import_and_export_flatpaks" "Set up import and export Flatpaks" off 
-    "import_firefox" "Import Firefox" off 
-    "import_corekeyboard" "Import Corekeyboard" off 
-    "import_barrier" "Import Barrier" off 
-    "import_heroic_games" "Import Heroic_games" off 
-    "import_protonup_qt" "Import ProtonUp_QT" off 
     "install_proton_ge_in_steam" "Install Proton GE in Steam" off 
-    "import_boilr" "Import BoilR" off 
-    "import_flatseal" "Import Flatseal" off 
-    "import_steam_rom_manager" "Import Steam ROM Manager" off 
     "install_bauh" "Install Bauh" off 
     "install_firefox" "Install Firefox" off 
     "install_corekeyboard" "Install Corekeyboard" off 
