@@ -218,17 +218,17 @@ import_flatpaks() {
 install_deckyloader() {
     if [ -f "$configurator_dir/deckyloader_installed_version" ]; then
         print_log "Checking if latest version of DeckyLoader is installed"
-        RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
-        VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
-        DECKYLOADER_INSTALLED_VERSION=$(cat "$configurator_dir/deckyloader_installed_version")
-        print_log "DeckyLoader Latest Version is $VERSION"
-        print_log "DeckyLoader Installed Version is $VERSION"
-            if [ "$VERSION" != "$DECKYLOADER_INSTALLED_VERSION" ]; then
+        release=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+        version=$(jq -r '.tag_name' <<< ${release} )
+        deckyloader_installed_version=$(cat "$configurator_dir/deckyloader_installed_version")
+        print_log "DeckyLoader Latest Version is $version"
+        print_log "DeckyLoader Installed Version is $version"
+            if [ "$version" != "$deckyloader_installed_version" ]; then
                 print_log "Installing Latest Version"
                 curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
                 chmod -v +x "$configurator_dir/deckyloader_install_release.sh"
                 "$configurator_dir/deckyloader_install_release.sh"
-                echo "$VERSION" > "$configurator_dir/deckyloader_installed_version"
+                echo "$version" > "$configurator_dir/deckyloader_installed_version"
             else
                print_log "Latest Version of DeckyLoader is already installed"
             fi
@@ -237,7 +237,7 @@ install_deckyloader() {
         curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
         chmod -v +x "$configurator_dir/deckyloader_install_release.sh"
         "$configurator_dir/deckyloader_install_release.sh"
-        echo "$VERSION" > "$configurator_dir/deckyloader_installed_version"
+        echo "$version" > "$configurator_dir/deckyloader_installed_version"
    fi
 }
 
@@ -366,12 +366,12 @@ refind_uninstall_gui() {
 }
 
 check_for_updates_proton_ge() {
-    RELEASE=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
-    VERSION=$(jq -r '.tag_name' <<< ${RELEASE} )
+    version=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+    version=$(jq -r '.tag_name' <<< ${release} )
     if compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
-        if [ ! "$proton_ge_downloaded_version" == "$VERSION.tar.gz" ]; then
-            print_log "ProtonGE not up to date, \n Latest Version: $VERSION.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+        if [ ! "$proton_ge_downloaded_version" == "$version.tar.gz" ]; then
+            print_log "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
         else
             print_log "ProtonGE is up to date"
         fi
