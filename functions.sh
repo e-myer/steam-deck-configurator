@@ -105,8 +105,8 @@ install_bauh() {
 		EOF
         cp -v "$configurator_dir/desktop_icons/bauh.svg" "$HOME/.local/share/icons/"
     else
-    print_log "bauh appimage doesn't exist in this folder, download it first, skipping..."
-    sleep 3
+        print_log "bauh appimage doesn't exist in this folder, download it first, skipping..."
+        sleep 3
     fi
 }
 
