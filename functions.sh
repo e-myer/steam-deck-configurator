@@ -339,7 +339,7 @@ save_refind_config() {
             return
         fi
         mkdir -p "$config_save_path"
-        cp -v "$HOME/.SteamDeck_rEFInd/GUI/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png}" "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
+        cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
         if [ $? == 0 ]; then
             print_log "config saved to $config_save_path"
             kdialog --msgbox "config saved to $config_save_path"
