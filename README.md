@@ -58,6 +58,8 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
 - You can use Steam Link for remote desktop.
 - If you run the reccomended settings on CryoByte33's steam-deck-utilities tool, you might want to increase the UMA Frame Buffer Size. To do so, first shut the Steam Deck down, then hold the power button and the volume up button until you hear a sound, then let it go. In the screen that appears, go to Setup Utility on the lower right. Go to Advanced and change the UMA Frame Buffer size from 1G to 4G. Then press the Steam Deck's select button and then press Yes to save and exit. The Steam Deck will reboot. To configrm the change, you can go to Settings, System and scrolling down to VRAM Size. There is more information on this tweak in [CryoByte33's video](https://www.youtube.com/watch?v=C9EjXYZUqUs) on his tool. Note: Red Dead Redemption 2 doesn't work with the tweak set.
 
+## Other useful projects for Steam Deck
+- [NonSteamLaunchers-On-Steam-Deck](https://github.com/moraroy/NonSteamLaunchers-On-Steam-Deck) - Automatic installation of the most popular launchers in your Steam Deck
 
 ## Post install scripts and tools for Windows on Steam Deck
 - [SteamDeckAutomatedInstall by CelesteHeartsong](https://github.com/CelesteHeartsong/SteamDeckAutomatedInstall)
@@ -67,4 +69,4 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
 - This project includes code from [CryoByte33's steam-deck-utilities](https://github.com/CryoByte33/steam-deck-utilities/blob/main/LICENSE). The line to install CryoUtilities has been copied and modified from the desktop file in his repo.
 - This project includes the Bauh desktop file and the Bauh icon, copied from the [Bauh repo](https://github.com/vinifmor/bauh)
 - This project includes a dualboot config file created by [jlobue10's SteamDeck_rEFInd tool](https://github.com/jlobue10/SteamDeck_rEFInd), and OS Icons, taken from his [repo](https://github.com/jlobue10/SteamDeck_rEFInd)
-- Credit to jlobue10 for creating the rEFInd installer script. This project uses my fork, which only contains some minor edits to make it compatible with this repo.
+- Credit to jlobue10 for creating the [SteamDeck_rEFInd script](https://github.com/jlobue10/SteamDeck_rEFInd). This project uses my fork, which only contains some minor edits to make it compatible with this repo.
