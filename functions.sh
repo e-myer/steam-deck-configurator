@@ -225,7 +225,7 @@ install_deckyloader() {
         local deckyloader_installed_version
         deckyloader_installed_version=$(cat "$configurator_dir/deckyloader_installed_version")
         print_log "DeckyLoader Latest Version is $version"
-        print_log "DeckyLoader Installed Version is $version"
+        print_log "DeckyLoader Installed Version is $deckyloader_installed_version"
             if [ "$version" != "$deckyloader_installed_version" ]; then
                 print_log "Installing Latest Version"
                 curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
