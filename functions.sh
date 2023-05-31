@@ -574,5 +574,4 @@ run_tasks() {
         fi
     done
     qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
-#    create_dialog
 }
