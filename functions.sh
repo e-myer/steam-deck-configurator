@@ -16,7 +16,7 @@ update_from_pacman() {
 }
 
 add_flathub() {
-    print_log "Adding Flathub"
+    print_log "Adding Flathub, please enter your password in the prompt"
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 }
 
