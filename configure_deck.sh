@@ -10,5 +10,6 @@ then
 exit 0
 fi
 
+set_interactive_tasks
 set_menu
 create_dialog
