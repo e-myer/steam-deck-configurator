@@ -120,12 +120,17 @@ export_flatpaks() {
     do
         print_log "exporting ${flatpak_names[$flatpak]}"
         flatpak --verbose create-usb "$configurator_dir/flatpaks" "${flatpak_ids[$flatpak]}"
-        if [ -z "$flatpak_index" ]; then
-            local flatpak_index=0
+        if [ $? == 0 ]; then
+            if ! grep -Fxq "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" "$configurator_dir/flatpaks_list"; then
+                if [[ -s "$configurator_dir/flatpaks_list" ]]; then
+                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" >> "$configurator_dir/flatpaks_list"
+                else
+                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" > "$configurator_dir/flatpaks_list"
+                fi
+            fi
         else
-            ((flatpak_index ++))
+            print_log "error"
         fi
-        echo "${flatpak_names[$flatpak]}"="${flatpak_ids[$flatpak]}" >> "$configurator_dir/flatpaks_list"
     done
 }
 
