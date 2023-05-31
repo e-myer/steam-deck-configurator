@@ -511,7 +511,6 @@ interaction_apply_refind_config() {
 
 interactive_export_flatpaks() {
     mkdir -p "$configurator_dir/flatpaks"
-
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
 
