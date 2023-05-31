@@ -473,7 +473,6 @@ set_menu() {
     "apply_refind_config" "Apply rEFInd config" off 
     "save_refind_config" "Save rEFInd config" off 
     "install_non_steam_launchers" "Install Non Steam Launchers" off 
-    "uninstall_deckyloader" "Uninstall Deckyloader" off 
     "export_flatpaks" "Export Flatpaks" off 
     "import_flatpaks" "Import Flatpaks" off 
     "fix_barrier" "Fix Barrier" off'
