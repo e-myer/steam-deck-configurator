@@ -432,7 +432,6 @@ set_menu() {
     "install_refind_bootloader" "Install rEFInd bootloader" off 
     "apply_refind_config" "Apply rEFInd config" off 
     "save_refind_config" "Save rEFInd config" off 
-    "install_non_steam_launchers" "Install Non Steam Launchers" off 
     "fix_barrier" "Fix Barrier" off'
 }
 
