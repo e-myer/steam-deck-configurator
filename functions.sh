@@ -373,10 +373,10 @@ refind_uninstall_gui() {
 }
 
 check_for_updates_proton_ge() {
-    local version
-    version=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
-    version=$(jq -r '.tag_name' <<< ${release} )
     if compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
+        local version
+        version=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+        version=$(jq -r '.tag_name' <<< ${release} )
         local proton_ge_downloaded_version
         proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
         if [ ! "$proton_ge_downloaded_version" == "$version.tar.gz" ]; then
