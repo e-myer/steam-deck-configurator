@@ -402,6 +402,8 @@ set_menu() {
     "add_flathub" "Add Flathub if it does not exist" off 
     "update_flatpaks" "Update Flatpaks" off 
     "set_up_import_and_export_flatpaks" "Set up import and export Flatpaks" off 
+    "import_flatpaks" "Import Flatpaks" off 
+    "export_flatpaks" "Export Flatpaks" off 
     "install_proton_ge_in_steam" "Install Proton GE in Steam" off 
     "install_bauh" "Install Bauh" off 
     "install_firefox" "Install Firefox" off 
@@ -414,8 +416,6 @@ set_menu() {
     "install_steam_rom_manager" "Install Steam Rom Manager" off 
     "install_deckyloader" "Install DeckyLoader" off 
     "uninstall_deckyloader" "Uninstall DeckyLoader" off 
-    "import_flatpaks" "Import Flatpaks" off 
-    "export_flatpaks" "Export Flatpaks" off 
     "refind_uninstall_gui" "Uninstall rEFInd GUI" off 
     "check_for_updates_proton_ge" "Check for Proton GE Updates" off 
     "install_cryoutilities" "Install Cryoutilities" off 
