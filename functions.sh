@@ -116,7 +116,7 @@ run_cryo_utilities_recommended() {
 
 export_flatpaks() {
     print_log "exporting flatpaks"
-    for flatpak in "${chosen_flatpaks[@]}"
+    for flatpak in "${chosen_export_flatpaks[@]}"
     do
         print_log "exporting ${flatpak_names[$flatpak]}"
         flatpak --verbose create-usb "$configurator_dir/flatpaks" "${flatpak_ids[$flatpak]}"
@@ -129,17 +129,53 @@ export_flatpaks() {
     done
 }
 
+interaction_export_flatpaks() {
+    mkdir -p "$configurator_dir/flatpaks"
+    readarray -t flatpak_names < <(flatpak list --app --columns=name)
+    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
+
+    for name in "${flatpak_names[@]}"
+    do
+        if [ -z "$number" ]; then
+            local number=0
+        else
+            ((number ++))
+        fi
+        export_flatpaks_menu+=("$number" "$name" off)
+    done
+    
+    readarray -t chosen_export_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${export_flatpaks_menu[@]}")
+}
+
 import_flatpaks() {
-    if [ ${#chosen_flatpaks[@]} -eq 0 ]; then
+    if [ ${#chosen_import_flatpaks[@]} -eq 0 ]; then
         echo No flatpaks chosen
         return
     else
-        for flatpak in "${chosen_flatpaks[@]}"
+        for flatpak in "${chosen_import_flatpaks[@]}"
         do
             print_log "installing $flatpak"
             flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $flatpak -y
         done
     fi
+}
+
+interaction_import_flatpaks() {
+    local -A flatpaks_array
+    readarray -t lines < "$configurator_dir/flatpaks_list"
+
+    for line in "${lines[@]}"; do
+        key=${line%%=*}
+        value=${line#*=}
+        flatpaks_array[$key]=$value
+    done
+
+    for key in "${!flatpaks_array[@]}"
+    do
+        import_flatpaks_menu+=("${flatpaks_array[$key]}" "$key" off)
+    done
+
+    readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
 }
 
 install_deckyloader() {
@@ -232,6 +268,30 @@ apply_refind_config() {
     fi
 }
 
+interaction_apply_refind_config() {
+    print_log "applying rEFInd config"
+    if [ ! -d "$configurator_dir/configs" ]; then
+        kdialog --msgbox "No rEFInd configs found, please create one first, skipping..."
+        return
+    fi
+    local num_of_dirs
+    num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+    if [ "$num_of_dirs" -gt 1 ]; then
+        refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
+        if [ $? != 0 ]; then
+            print_log "cancelled"
+            return
+        fi
+    else
+        refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
+        if [ $? != 0 ]; then
+            print_log "cancelled"
+            return
+        fi    
+    fi
+
+}
+
 save_refind_config() {
     print_log "saving rEFInd config"
         mkdir -p "$config_save_path"
@@ -244,6 +304,20 @@ save_refind_config() {
             print_log "error $cp_error, config not saved"
             kdialog --error "error: $cp_error, config not saved"
         fi
+}
+
+interaction_save_refind_config() {
+    kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
+    if [ ! -d "$configurator_dir/configs" ]; then
+        mkdir "$configurator_dir/configs"
+    fi
+    if [ $? == 0 ]; then
+        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
+        if [ $? != 0 ]; then
+            print_log "cancelled"
+            return
+        fi
+    fi
 }
 
 install_refind_all() {
@@ -417,84 +491,9 @@ create_config() {
     print_log "created config"
 }
 
-interaction_save_refind_config() {
-    kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
-    if [ ! -d "$configurator_dir/configs" ]; then
-        mkdir "$configurator_dir/configs"
-    fi
-    if [ $? == 0 ]; then
-        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
-        if [ $? != 0 ]; then
-            print_log "cancelled"
-            return
-        fi
-    fi
-}
-
-interaction_apply_refind_config() {
-    print_log "applying rEFInd config"
-    if [ ! -d "$configurator_dir/configs" ]; then
-        kdialog --msgbox "No rEFInd configs found, please create one first, skipping..."
-        return
-    fi
-    local num_of_dirs
-    num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
-    if [ "$num_of_dirs" -gt 1 ]; then
-        refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
-        if [ $? != 0 ]; then
-            print_log "cancelled"
-            return
-        fi
-    else
-        refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
-        if [ $? != 0 ]; then
-            print_log "cancelled"
-            return
-        fi    
-    fi
-
-}
-
-interactive_export_flatpaks() {
-    mkdir -p "$configurator_dir/flatpaks"
-    readarray -t flatpak_names < <(flatpak list --app --columns=name)
-    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
-
-    for name in "${flatpak_names[@]}"
-    do
-        if [ -z "$number" ]; then
-            local number=0
-        else
-            ((number ++))
-        fi
-        export_flatpaks_menu+=("$number" "$name" off)
-    done
-    
-    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${export_flatpaks_menu[@]}")
-}
-
-interactive_import_flatpaks() {
-    local -A flatpaks_array
-    readarray -t lines < "$configurator_dir/flatpaks_list"
-
-    for line in "${lines[@]}"; do
-        key=${line%%=*}
-        value=${line#*=}
-        flatpaks_array[$key]=$value
-    done
-
-    for key in "${!flatpaks_array[@]}"
-    do
-        import_flatpaks_menu+=("${flatpaks_array[$key]}" "$key" off)
-    done
-
-    readarray -t chosen_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
-}
-
 set_interactive_tasks() {
     interactive_tasks=(save_refind_config apply_refind_config import_flatpaks export_flatpaks)
 }
-
 
 run_tasks() {
     if [ ${#chosen_tasks[@]} -eq 0 ]; then
