@@ -442,16 +442,10 @@ set_menu() {
     "set_up_import_and_export_flatpaks" "Set up import and export Flatpaks" off 
     "import_flatpaks" "Import Flatpaks" off 
     "export_flatpaks" "Export Flatpaks" off 
+    "install_flatpaks" "Install Flatpaks" off
+    "save_flatpaks_install" "Save Flatpaks List" off
     "install_proton_ge_in_steam" "Install Proton GE in Steam" off 
     "install_bauh" "Install Bauh" off 
-    "install_firefox" "Install Firefox" off 
-    "install_corekeyboard" "Install Corekeyboard" off 
-    "install_barrier" "Install Barrier" off 
-    "install_heroic_games" "Install Heroic Games" off 
-    "install_protonUp_qt" "Install ProtonUp_QT" off 
-    "install_boilr" "Install BoilR" off 
-    "install_flatseal" "Install Flatseal" off 
-    "install_steam_rom_manager" "Install Steam Rom Manager" off 
     "install_deckyloader" "Install DeckyLoader" off 
     "uninstall_deckyloader" "Uninstall DeckyLoader" off 
     "refind_uninstall_gui" "Uninstall rEFInd GUI" off 
@@ -468,13 +462,50 @@ set_menu() {
     "fix_barrier" "Fix Barrier" off'
 }
 
+
+interaction_save_flatpaks_install() {
+    readarray -t flatpak_names < <(flatpak list --app --columns=name)
+    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
+
+    for name in "${flatpak_names[@]}"
+    do
+        if [ -z "$number" ]; then
+            local number=0
+        else
+            ((number ++))
+        fi
+        save_flatpaks_menu+=("$number" "$name" off)
+    done
+    
+    readarray -t chosen_save_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${save_flatpaks_menu[@]}")
+}
+
+save_flatpaks_install() {
+    print_log "saving flatpaks list"
+    for flatpak in "${chosen_save_flatpaks[@]}"
+    do
+        print_log "saving ${flatpak_names[$flatpak]}"
+            if ! grep -Fxq "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" "$configurator_dir/flatpaks_install_list"; then
+                if [[ -s "$configurator_dir/flatpaks_list" ]]; then
+                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" >> "$configurator_dir/flatpaks_install_list"
+                else
+                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" > "$configurator_dir/flatpaks_install_list"
+                fi
+            fi
+    done
+}
+
 install_flatpaks() {
     if [ ${#chosen_install_flatpaks[@]} -eq 0 ]; then
         echo No flatpaks chosen
         return
+    elif [[ " ${chosen_install_flatpaks[*]} " =~ " clear_list " ]]; then
+        echo Clear List=clear_list > "$configurator_dir/flatpaks_install_list"
+        echo List cleared
     else
-        for flatpak in "${chosen_import_flatpaks[@]}"
+        for flatpak in "${chosen_install_flatpaks[@]}"
         do
+        echo $flatpak
             print_log "installing $flatpak"
             flatpak install flathub $flatpak -y
         done
@@ -482,13 +513,15 @@ install_flatpaks() {
 }
 
 interaction_install_flatpaks() {
+    unset install_flatpaks_menu
     local -A flatpaks_install_array
-    readarray -t lines < "$configurator_dir/flatpaks_list" #change to flatpaks_install_list
+    readarray -t lines < "$configurator_dir/flatpaks_install_list"
 
     for line in "${lines[@]}"; do
         key=${line%%=*}
         value=${line#*=}
         flatpaks_install_array[$key]=$value
+#add the order code thing to keep the array in order
     done
 
     for key in "${!flatpaks_install_array[@]}"
@@ -561,7 +594,7 @@ create_config() {
 }
 
 set_interactive_tasks() {
-    interactive_tasks=(save_refind_config apply_refind_config import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks)
+    interactive_tasks=(save_refind_config apply_refind_config import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install)
 }
 
 run_tasks() {
