@@ -119,20 +119,25 @@ import_flatpaks() {
 
 interaction_import_flatpaks() {
     local -A flatpaks_array
-    readarray -t lines < "$configurator_dir/flatpaks_exported_list"
+    if [ -f "$configurator_dir/flatpaks_exported_list" ]; then
+        readarray -t lines < "$configurator_dir/flatpaks_exported_list"
+        
+        for line in "${lines[@]}"; do
+            key=${line%%=*}
+            value=${line#*=}
+            flatpaks_array[$key]=$value
+        done
 
-    for line in "${lines[@]}"; do
-        key=${line%%=*}
-        value=${line#*=}
-        flatpaks_array[$key]=$value
-    done
+        for key in "${!flatpaks_array[@]}"
+        do
+            import_flatpaks_menu+=("${flatpaks_array[$key]}" "$key" off)
+        done
 
-    for key in "${!flatpaks_array[@]}"
-    do
-        import_flatpaks_menu+=("${flatpaks_array[$key]}" "$key" off)
-    done
-
-    readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
+        readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
+    else
+        print_log "no exported flatpak found"
+        dialog --error "error: no exported flatpak found"
+    fi
 }
 
 install_deckyloader() {
