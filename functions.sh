@@ -521,9 +521,10 @@ interaction_install_flatpaks() {
         key=${line%%=*}
         value=${line#*=}
         flatpaks_install_array[$key]=$value
+        order+=("$key")
     done
 
-    for key in "${!flatpaks_install_array[@]}"
+    for key in "${order[@]}"
     do
         install_flatpaks_menu+=("${flatpaks_install_array[$key]}" "$key" off)
     done
