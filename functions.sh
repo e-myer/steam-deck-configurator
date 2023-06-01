@@ -388,36 +388,6 @@ fix_barrier() {
     kdialog --msgbox "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
-set_menu() {
-    menu='"load_config" "Load Config" off 
-    "create_config" "Create Config" off 
-    "update_from_pacman" "Update from pacman" off 
-    "add_flathub" "Add Flathub if it does not exist" off 
-    "update_flatpaks" "Update Flatpaks" off 
-    "set_up_import_and_export_flatpaks" "Set up import and export Flatpaks" off 
-    "import_flatpaks" "Import Flatpaks" off 
-    "export_flatpaks" "Export Flatpaks" off 
-    "install_flatpaks" "Install Flatpaks" off
-    "save_flatpaks_install" "Save Flatpaks List" off
-    "install_proton_ge_in_steam" "Install Proton GE in Steam" off 
-    "install_bauh" "Install Bauh" off 
-    "install_deckyloader" "Install DeckyLoader" off 
-    "uninstall_deckyloader" "Uninstall DeckyLoader" off 
-    "refind_uninstall_gui" "Uninstall rEFInd GUI" off 
-    "check_for_updates_proton_ge" "Check for Proton GE Updates" off 
-    "install_cryoutilities" "Install Cryoutilities" off 
-    "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings" off 
-    "install_emudeck" "Install Emudeck" off 
-    "install_retrodeck" "Install RetroDeck" off 
-    "update_submodules" "Update Submodules" off 
-    "install_refind_GUI" "Install rEFInd GUI" off 
-    "install_refind_bootloader" "Install rEFInd bootloader" off 
-    "apply_refind_config" "Apply rEFInd config" off 
-    "save_refind_config" "Save rEFInd config" off 
-    "fix_barrier" "Fix Barrier" off'
-}
-
-
 interaction_save_flatpaks_install() {
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
@@ -597,4 +567,33 @@ run_tasks() {
     done
     ran_interactive_tasks=no
     qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
+}
+
+set_menu() {
+    menu='"load_config" "Load Config" off 
+    "create_config" "Create Config" off 
+    "update_from_pacman" "Update from pacman" off 
+    "add_flathub" "Add Flathub if it does not exist" off 
+    "update_flatpaks" "Update Flatpaks" off 
+    "set_up_import_and_export_flatpaks" "Set up import and export Flatpaks" off 
+    "import_flatpaks" "Import Flatpaks" off 
+    "export_flatpaks" "Export Flatpaks" off 
+    "install_flatpaks" "Install Flatpaks" off
+    "save_flatpaks_install" "Save Flatpaks List" off
+    "install_proton_ge_in_steam" "Install Proton GE in Steam" off 
+    "install_bauh" "Install Bauh" off 
+    "install_deckyloader" "Install DeckyLoader" off 
+    "uninstall_deckyloader" "Uninstall DeckyLoader" off 
+    "refind_uninstall_gui" "Uninstall rEFInd GUI" off 
+    "check_for_updates_proton_ge" "Check for Proton GE Updates" off 
+    "install_cryoutilities" "Install Cryoutilities" off 
+    "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings" off 
+    "install_emudeck" "Install Emudeck" off 
+    "install_retrodeck" "Install RetroDeck" off 
+    "update_submodules" "Update Submodules" off 
+    "install_refind_GUI" "Install rEFInd GUI" off 
+    "install_refind_bootloader" "Install rEFInd bootloader" off 
+    "apply_refind_config" "Apply rEFInd config" off 
+    "save_refind_config" "Save rEFInd config" off 
+    "fix_barrier" "Fix Barrier" off'
 }
