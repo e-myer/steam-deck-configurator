@@ -551,30 +551,25 @@ dbusRef=$(kdialog --progressbar "Steam Deck Configurator" ${#chosen_tasks[@]})
 touch progress
 while true
 do
-text="$log "
-text+=$(tail --lines 1 ./progress)
-qdbus $dbusRef setLabelText "$text"
-sleep 1
+    #text="$log "
+    text=$(tail --lines 1 ./progress)
+    text="$log"
+    #echo log is "$log"
+    qdbus $dbusRef setLabelText "$text"
+    sleep 1
 done &
 show_progress_pid=$!
+echo $show_progress_pid > pid
 }
 
+test_function() {
+    for i in {1..10}; do
+    echo output is $i
+    print_log "random_log"
+    sleep 1
+    done
+}
 
-#while : ; 
-#do 
-#  sleep 1 
-#  text=$(tail --lines 1 ./progress)
-#  echo $text > display
-#done
-
-
-#while true
-#do
-#text=$(tail --lines 1 ./progress)
-#qdbus $dbusRef setLabelText "$text"
-#sleep 1
-#done
-#mkfifo mypipe
 show_progress
 run_tasks() {
     if [ ${#chosen_tasks[@]} -eq 0 ]; then
@@ -606,7 +601,8 @@ run_tasks() {
 }
 
 set_menu() {
-    menu='"load_config" "Load Config" off 
+    menu='"test_function" "Test Function" off
+    "load_config" "Load Config" off 
     "create_config" "Create Config" off 
     "add_flathub" "Add Flathub if it does not exist" off 
     "update_flatpaks" "Update Flatpaks" off 
