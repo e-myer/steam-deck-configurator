@@ -266,7 +266,7 @@ interaction_install_refind_bootloader() {
 
 install_refind_bootloader() {
     if [ $install_refind == yes ]; then
-        print_log "Installing rEFInd bootloader, please input the sudo passowrd when prompted"
+        print_log "Installing rEFInd bootloader, please input the sudo password when prompted"
         "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
     else
         print_log "didn't install refind"
