@@ -86,6 +86,7 @@ export_flatpaks() {
 }
 
 interaction_export_flatpaks() {
+    export_flatpaks_menu=()
     mkdir -p "$configurator_dir/flatpaks"
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
@@ -117,21 +118,30 @@ import_flatpaks() {
 }
 
 interaction_import_flatpaks() {
-    local -A flatpaks_array
-    readarray -t lines < "$configurator_dir/flatpaks_exported_list"
+    import_flatpaks_menu=()
+    lines=()
+    unset order
+    local -A flatpaks_import_array
+    if [ -f "$configurator_dir/flatpaks_exported_list" ]; then
+        readarray -t lines < "$configurator_dir/flatpaks_exported_list"
 
-    for line in "${lines[@]}"; do
-        key=${line%%=*}
-        value=${line#*=}
-        flatpaks_array[$key]=$value
-    done
+        for line in "${lines[@]}"; do
+            key=${line%%=*}
+            value=${line#*=}
+            flatpaks_import_array[$key]=$value
+            order+=("$key")
+        done
 
-    for key in "${!flatpaks_array[@]}"
-    do
-        import_flatpaks_menu+=("${flatpaks_array[$key]}" "$key" off)
-    done
+        for key in "${order[@]}"
+        do
+            import_flatpaks_menu+=("${flatpaks_import_array[$key]}" "$key" off)
+        done
 
-    readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
+        readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
+    else
+        print_log "no exported flatpak found"
+        kdialog --error "error: no exported flatpak found"
+    fi
 }
 
 install_deckyloader() {
@@ -546,7 +556,7 @@ run_tasks() {
     dbusRef=$(kdialog --progressbar "Steam Deck Configurator" ${#chosen_tasks[@]})
     qdbus $dbusRef setLabelText "Steam Deck Configurator"
 
-    if [ "$ran_interactive_tasks" != "yes" ]; then
+    if [ "$ran_interactive_tasks" != "yes" ] && [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]] && [[ ! " ${chosen_tasks[*]} " =~ " create_config " ]]; then
         run_interactive_tasks
     fi
 
