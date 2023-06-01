@@ -275,7 +275,7 @@ install_refind_bootloader() {
 }
 
 apply_refind_config() {
-    if [ $apply_refind_config_prompt == yes ]; then
+    if [ $apply_refind_config_run == yes ]; then
         print_log "applying config at: $refind_config, please input the sudo password when prompted"
 
         cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
@@ -297,10 +297,10 @@ interaction_apply_refind_config() {
     print_log "applying rEFInd config"
     if [ ! -d "$configurator_dir/configs" ]; then
         kdialog --msgbox "No rEFInd configs found, please create one first, skipping..."
-        apply_refind_config_prompt=no
+        apply_refind_config_run=no
         return
     else
-        apply_refind_config_prompt=yes
+        apply_refind_config_run=yes
     fi
     local num_of_dirs
     num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
@@ -308,19 +308,21 @@ interaction_apply_refind_config() {
         refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
         if [ $? != 0 ]; then
             print_log "cancelled"
+            apply_refind_config_run=no
             return
         fi
     else
         refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
         if [ $? != 0 ]; then
             print_log "cancelled"
+            apply_refind_config_run=no
             return
         fi    
     fi
 }
 
 save_refind_config() {
-    if [ $save_refind_config_prompt == yes ]; then
+    if [ $save_refind_config_run == yes ]; then
         print_log "saving rEFInd config"
             mkdir -p "$config_save_path"
             cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
@@ -341,7 +343,7 @@ save_refind_config() {
 interaction_save_refind_config() {
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? == 0 ]; then
-        save_refind_config_prompt=yes
+        save_refind_config_run=yes
         if [ ! -d "$configurator_dir/configs" ]; then
             mkdir "$configurator_dir/configs"
         fi
@@ -351,7 +353,7 @@ interaction_save_refind_config() {
             return
         fi
     else
-        save_refind_config_prompt=no
+        save_refind_config_run=no
         print_log "cancelled"
         return
     fi
