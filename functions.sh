@@ -468,6 +468,38 @@ set_menu() {
     "fix_barrier" "Fix Barrier" off'
 }
 
+install_flatpaks() {
+    if [ ${#chosen_install_flatpaks[@]} -eq 0 ]; then
+        echo No flatpaks chosen
+        return
+    else
+        for flatpak in "${chosen_import_flatpaks[@]}"
+        do
+            print_log "installing $flatpak"
+            flatpak install flathub $flatpak -y
+        done
+    fi
+}
+
+interaction_install_flatpaks() {
+    local -A flatpaks_install_array
+    readarray -t lines < "$configurator_dir/flatpaks_list" #change to flatpaks_install_list
+
+    for line in "${lines[@]}"; do
+        key=${line%%=*}
+        value=${line#*=}
+        flatpaks_install_array[$key]=$value
+    done
+
+    for key in "${!flatpaks_install_array[@]}"
+    do
+        install_flatpaks_menu+=("${flatpaks_install_array[$key]}" "$key" off)
+    done
+
+    readarray -t chosen_install_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${install_flatpaks_menu[@]}")
+}
+
+
 load_config() {
     if [ -d "$configurator_dir/configs" ]; then
         set_menu
@@ -529,7 +561,7 @@ create_config() {
 }
 
 set_interactive_tasks() {
-    interactive_tasks=(save_refind_config apply_refind_config import_flatpaks export_flatpaks install_refind_bootloader)
+    interactive_tasks=(save_refind_config apply_refind_config import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks)
 }
 
 run_tasks() {
