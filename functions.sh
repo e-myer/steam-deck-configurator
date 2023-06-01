@@ -514,6 +514,7 @@ install_flatpaks() {
 
 interaction_install_flatpaks() {
     install_flatpaks_menu=()
+    lines=()
     unset order
     local -A flatpaks_install_array
     readarray -t lines < "$configurator_dir/flatpaks_install_list"
