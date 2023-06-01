@@ -546,7 +546,11 @@ run_tasks() {
     dbusRef=$(kdialog --progressbar "Steam Deck Configurator" ${#chosen_tasks[@]})
     qdbus $dbusRef setLabelText "Steam Deck Configurator"
 
-    if [ "$ran_interactive_tasks" != "yes" ]; then
+    if [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
+        create_config
+    elif [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
+        load_config
+    elif [ "$ran_interactive_tasks" != "yes" ]; then
         run_interactive_tasks
     fi
 
