@@ -10,11 +10,6 @@ print_log() {
     echo "$log" >> "$configurator_dir/logs.log"
 }
 
-update_from_pacman() {
-    print_log "Updating apps from Pacman"
-    sudo pacman -Syu
-}
-
 add_flathub() {
     print_log "Adding Flathub, please enter your password in the prompt"
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -571,7 +566,6 @@ run_tasks() {
 set_menu() {
     menu='"load_config" "Load Config" off 
     "create_config" "Create Config" off 
-    "update_from_pacman" "Update from pacman" off 
     "add_flathub" "Add Flathub if it does not exist" off 
     "update_flatpaks" "Update Flatpaks" off 
     "set_up_import_and_export_flatpaks" "Set up import and export Flatpaks" off 
