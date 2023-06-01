@@ -441,11 +441,10 @@ save_flatpaks_install() {
     do
         print_log "saving ${flatpak_names[$flatpak]}"
             if ! grep -Fxq "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" "$configurator_dir/flatpaks_install_list"; then
-                if [[ -s "$configurator_dir/flatpaks_list" ]]; then
-                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" >> "$configurator_dir/flatpaks_install_list"
-                else
-                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" > "$configurator_dir/flatpaks_install_list"
+                if [[ ! -s "$configurator_dir/flatpaks_list" ]]; then
+                    echo Clear List=clear_list > "$flatpak_install_list_file"
                 fi
+                echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" >> "$configurator_dir/flatpaks_install_list"
             fi
     done
 }
@@ -455,7 +454,7 @@ install_flatpaks() {
         echo No flatpaks chosen
         return
     elif [[ " ${chosen_install_flatpaks[*]} " =~ " clear_list " ]]; then
-        echo Clear List=clear_list > "$configurator_dir/flatpaks_install_list"
+        echo Clear List=clear_list > "$flatpak_install_list_file"
         echo List cleared
     else
         for flatpak in "${chosen_install_flatpaks[@]}"
@@ -468,11 +467,17 @@ install_flatpaks() {
 }
 
 interaction_install_flatpaks() {
+    if [ -f "$configurator_dir/flatpaks_install_list" ]; then
+        flatpak_install_list_file=$configurator_dir/flatpaks_install_list
+    else
+        flatpak_install_list_file=$configurator_dir/flatpaks_install_list_default
+    fi
+
     install_flatpaks_menu=()
     lines=()
     unset order
     local -A flatpaks_install_array
-    readarray -t lines < "$configurator_dir/flatpaks_install_list"
+    readarray -t lines < "$flatpak_install_list_file"
 
     for line in "${lines[@]}"; do
         key=${line%%=*}
