@@ -195,15 +195,15 @@ install_deckyloader() {
         deckyloader_installed_version=$(cat "$configurator_dir/deckyloader_installed_version")
         print_log "DeckyLoader Latest Version is $version"
         print_log "DeckyLoader Installed Version is $deckyloader_installed_version"
-            if [ "$version" != "$deckyloader_installed_version" ]; then
-                print_log "Installing Latest Version"
-                curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
-                chmod -v +x "$configurator_dir/deckyloader_install_release.sh"
-                "$configurator_dir/deckyloader_install_release.sh"
-                echo "$version" > "$configurator_dir/deckyloader_installed_version"
-            else
-               print_log "Latest Version of DeckyLoader is already installed"
-            fi
+        if [ "$version" != "$deckyloader_installed_version" ]; then
+            print_log "Installing Latest Version"
+            curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
+            chmod -v +x "$configurator_dir/deckyloader_install_release.sh"
+            "$configurator_dir/deckyloader_install_release.sh"
+            echo "$version" > "$configurator_dir/deckyloader_installed_version"
+        else
+            print_log "Latest Version of DeckyLoader is already installed"
+        fi
     else
         print_log "Installing DeckyLoader"
         curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
@@ -255,22 +255,40 @@ install_refind_GUI() {
     "$configurator_dir/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd" # install the GUI, run the script with the argument "path for SteamDeck_rEFInd folder is $PWD/SteamDeck_rEFInd"
 }
 
+interaction_install_refind_bootloader() {
+    kdialog --msgbox "It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"
+    if [ $? == 0 ]; then
+        install_refind=yes
+    else
+        install_refind=no
+    fi
+}
+
 install_refind_bootloader() {
-    print_log "Installing rEFInd bootloader, please input the sudo passowrd when prompted"
-    "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
+    if [ $install_refind == yes ]; then
+        print_log "Installing rEFInd bootloader, please input the sudo password when prompted"
+        "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
+    else
+        print_log "didn't install refind"
+        return
+    fi
 }
 
 apply_refind_config() {
-    print_log "applying config at: $refind_config, please input the sudo passowrd when prompted"
-
-    cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
-    if [ $? == 0 ]; then
-        "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
-        print_log "config applied"
+    if [ $apply_refind_config_run == yes ]; then
+        print_log "applying config at: $refind_config, please input the sudo password when prompted"
+        cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
+        if [ $? == 0 ]; then
+            "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
+            print_log "config applied"
+        else
+            cp_error=$?
+            print_log "error $cp_error, config not applied"
+            kdialog --error "error: $cp_error, config not saved"
+        fi
     else
-        cp_error=$?
-        print_log "error $cp_error, config not applied"
-        kdialog --error "error: $cp_error, config not saved"
+        print_log "didn't apply refind config"
+        return
     fi
 }
 
@@ -278,51 +296,65 @@ interaction_apply_refind_config() {
     print_log "applying rEFInd config"
     if [ ! -d "$configurator_dir/configs" ]; then
         kdialog --msgbox "No rEFInd configs found, please create one first, skipping..."
+        apply_refind_config_run=no
         return
+    else
+        apply_refind_config_run=yes
     fi
     local num_of_dirs
-    num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+    num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l)
     if [ "$num_of_dirs" -gt 1 ]; then
         refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
         if [ $? != 0 ]; then
             print_log "cancelled"
+            apply_refind_config_run=no
             return
         fi
     else
-        refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
+        refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d)
         if [ $? != 0 ]; then
             print_log "cancelled"
+            apply_refind_config_run=no
             return
         fi    
     fi
-
 }
 
 save_refind_config() {
-    print_log "saving rEFInd config"
-        mkdir -p "$config_save_path"
-        cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
-        if [ $? == 0 ]; then
-            print_log "config saved to $config_save_path"
-            kdialog --msgbox "config saved to $config_save_path"
-        else
-            cp_error=$?
-            print_log "error $cp_error, config not saved"
-            kdialog --error "error: $cp_error, config not saved"
-        fi
+    if [ $save_refind_config_run == yes ]; then
+        print_log "saving rEFInd config"
+            mkdir -p "$config_save_path"
+            cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path"
+            if [ $? == 0 ]; then
+                print_log "config saved to $config_save_path"
+                kdialog --msgbox "config saved to $config_save_path"
+            else
+                cp_error=$?
+                print_log "error $cp_error, config not saved"
+                kdialog --error "error: $cp_error, config not saved"
+            fi
+    else
+        print_log "didn't save refind config"
+        return
+    fi
 }
 
 interaction_save_refind_config() {
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
-    if [ ! -d "$configurator_dir/configs" ]; then
-        mkdir "$configurator_dir/configs"
-    fi
     if [ $? == 0 ]; then
+        save_refind_config_run=yes
+        if [ ! -d "$configurator_dir/configs" ]; then
+            mkdir "$configurator_dir/configs"
+        fi
         config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
         if [ $? != 0 ]; then
             print_log "cancelled"
             return
         fi
+    else
+        save_refind_config_run=no
+        print_log "cancelled"
+        return
     fi
 }
 
@@ -410,16 +442,10 @@ set_menu() {
     "set_up_import_and_export_flatpaks" "Set up import and export Flatpaks" off 
     "import_flatpaks" "Import Flatpaks" off 
     "export_flatpaks" "Export Flatpaks" off 
+    "install_flatpaks" "Install Flatpaks" off
+    "save_flatpaks_install" "Save Flatpaks List" off
     "install_proton_ge_in_steam" "Install Proton GE in Steam" off 
     "install_bauh" "Install Bauh" off 
-    "install_firefox" "Install Firefox" off 
-    "install_corekeyboard" "Install Corekeyboard" off 
-    "install_barrier" "Install Barrier" off 
-    "install_heroic_games" "Install Heroic Games" off 
-    "install_protonUp_qt" "Install ProtonUp_QT" off 
-    "install_boilr" "Install BoilR" off 
-    "install_flatseal" "Install Flatseal" off 
-    "install_steam_rom_manager" "Install Steam Rom Manager" off 
     "install_deckyloader" "Install DeckyLoader" off 
     "uninstall_deckyloader" "Uninstall DeckyLoader" off 
     "refind_uninstall_gui" "Uninstall rEFInd GUI" off 
@@ -435,6 +461,79 @@ set_menu() {
     "save_refind_config" "Save rEFInd config" off 
     "fix_barrier" "Fix Barrier" off'
 }
+
+
+interaction_save_flatpaks_install() {
+    readarray -t flatpak_names < <(flatpak list --app --columns=name)
+    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
+
+    for name in "${flatpak_names[@]}"
+    do
+        if [ -z "$number" ]; then
+            local number=0
+        else
+            ((number ++))
+        fi
+        save_flatpaks_menu+=("$number" "$name" off)
+    done
+    
+    readarray -t chosen_save_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${save_flatpaks_menu[@]}")
+}
+
+save_flatpaks_install() {
+    print_log "saving flatpaks list"
+    for flatpak in "${chosen_save_flatpaks[@]}"
+    do
+        print_log "saving ${flatpak_names[$flatpak]}"
+            if ! grep -Fxq "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" "$configurator_dir/flatpaks_install_list"; then
+                if [[ -s "$configurator_dir/flatpaks_list" ]]; then
+                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" >> "$configurator_dir/flatpaks_install_list"
+                else
+                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" > "$configurator_dir/flatpaks_install_list"
+                fi
+            fi
+    done
+}
+
+install_flatpaks() {
+    if [ ${#chosen_install_flatpaks[@]} -eq 0 ]; then
+        echo No flatpaks chosen
+        return
+    elif [[ " ${chosen_install_flatpaks[*]} " =~ " clear_list " ]]; then
+        echo Clear List=clear_list > "$configurator_dir/flatpaks_install_list"
+        echo List cleared
+    else
+        for flatpak in "${chosen_install_flatpaks[@]}"
+        do
+        echo $flatpak
+            print_log "installing $flatpak"
+            flatpak install flathub $flatpak -y
+        done
+    fi
+}
+
+interaction_install_flatpaks() {
+    install_flatpaks_menu=()
+    lines=()
+    unset order
+    local -A flatpaks_install_array
+    readarray -t lines < "$configurator_dir/flatpaks_install_list"
+
+    for line in "${lines[@]}"; do
+        key=${line%%=*}
+        value=${line#*=}
+        flatpaks_install_array[$key]=$value
+        order+=("$key")
+    done
+
+    for key in "${order[@]}"
+    do
+        install_flatpaks_menu+=("${flatpaks_install_array[$key]}" "$key" off)
+    done
+
+    readarray -t chosen_install_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${install_flatpaks_menu[@]}")
+}
+
 
 load_config() {
     if [ -d "$configurator_dir/configs" ]; then
@@ -497,7 +596,20 @@ create_config() {
 }
 
 set_interactive_tasks() {
-    interactive_tasks=(save_refind_config apply_refind_config import_flatpaks export_flatpaks)
+    interactive_tasks=(save_refind_config apply_refind_config import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install)
+}
+
+run_interactive_tasks() {
+    sorted_chosen_tasks=($(echo "${chosen_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
+    interactive_tasks=($(echo "${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
+    chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
+
+    echo "${chosen_interactive_tasks[@]}"
+    for task in "${chosen_interactive_tasks[@]}"
+    do
+        interaction_$task
+    done
+    ran_interactive_tasks=yes
 }
 
 run_tasks() {
@@ -510,24 +622,19 @@ run_tasks() {
     dbusRef=$(kdialog --progressbar "Steam Deck Configurator" ${#chosen_tasks[@]})
     qdbus $dbusRef setLabelText "Steam Deck Configurator"
 
-    sorted_chosen_tasks=($(echo "${chosen_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
-    interactive_tasks=($(echo "${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
-    chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
-
-    echo "${chosen_interactive_tasks[@]}"
-    for task in "${chosen_interactive_tasks[@]}"
-    do
-    interaction_$task
-    done
+    if [ "$ran_interactive_tasks" != "yes" ]; then
+        run_interactive_tasks
+    fi
 
     for task in "${chosen_tasks[@]}"
     do
         if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ] && [[ " ${chosen_tasks[*]} " =~ " ${task} " ]]; then
             ((task_number ++))
             echo $task
-            $task #run task
+            $task
             qdbus $dbusRef Set "" value $task_number
         fi
     done
+    ran_interactive_tasks=no
     qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
 }

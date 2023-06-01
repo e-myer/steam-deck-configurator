@@ -47,6 +47,9 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
   - Add the name of the function to the "set_menu" function in the "menu" variable. Like this `"function_name" "Function Title" off`, replacing "function title" and "function name" with the function's title and name.
   - If the task is at the very end of the list, then move the single apostrophe to the end.
 
+- To remove a task from the dialog
+ - Remove the line with the task from the "menu" variable in the "set menu" function.
+ - If the removed task was at the very and of the list, add a single apostrophe to the end of the list.
 ## General Steam Deck Notes
 
 - Ensure you have the [latest steam deck recovery image](https://help.steampowered.com/en/faqs/view/1B71-EDF2-EB6D-2BB3).
