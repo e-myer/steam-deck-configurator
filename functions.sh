@@ -312,22 +312,28 @@ interaction_apply_refind_config() {
 }
 
 save_refind_config() {
-    print_log "saving rEFInd config"
-        mkdir -p "$config_save_path"
-        cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
-        if [ $? == 0 ]; then
-            print_log "config saved to $config_save_path"
-            kdialog --msgbox "config saved to $config_save_path"
-        else
-            cp_error=$?
-            print_log "error $cp_error, config not saved"
-            kdialog --error "error: $cp_error, config not saved"
-        fi
+    if [ $save_refind_config_prompt == yes ]; then
+        print_log "saving rEFInd config"
+            mkdir -p "$config_save_path"
+            cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
+            if [ $? == 0 ]; then
+                print_log "config saved to $config_save_path"
+                kdialog --msgbox "config saved to $config_save_path"
+            else
+                cp_error=$?
+                print_log "error $cp_error, config not saved"
+                kdialog --error "error: $cp_error, config not saved"
+            fi
+    else
+        print_log "didn't save refind config"
+        return
+    fi
 }
 
 interaction_save_refind_config() {
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? == 0 ]; then
+        save_refind_config_prompt=yes
         if [ ! -d "$configurator_dir/configs" ]; then
             mkdir "$configurator_dir/configs"
         fi
@@ -337,6 +343,7 @@ interaction_save_refind_config() {
             return
         fi
     else
+        save_refind_config_prompt=no
         print_log "cancelled"
         return
     fi
