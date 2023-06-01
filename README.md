@@ -46,7 +46,13 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
   - Create a function in the functions.sh file
   - Add the name of the function to the "set_menu" function in the "menu" variable. Like this `"function_name" "Function Title" off`, replacing "function title" and "function name" with the function's title and name.
   - If the task is at the very end of the list, then move the single apostrophe to the end.
+  
+  Suggestions:
+  - If the function requires user input, seperate the function into two functions, one that has the prompts for user input, and one that runs the tasks. The function that requires user input should be named "interaction_", then the function name. And add the function that requires user input to the "interactive_tasks" array in the "set_interactive_tasks" function. This is so that any required user input is taken at the beginning of the script, and inputs while the script is running is minimized.
 
+- To remove a task from the dialog
+ - Remove the line with the task from the "menu" variable in the "set menu" function.
+ - If the removed task was at th very and of the list, add a single apostrophe to the end of the list.
 ## General Steam Deck Notes
 
 - Ensure you have the [latest steam deck recovery image](https://help.steampowered.com/en/faqs/view/1B71-EDF2-EB6D-2BB3).
