@@ -551,7 +551,7 @@ dbusRef=$(kdialog --progressbar "Steam Deck Configurator" ${#chosen_tasks[@]})
 touch progress
 while true
 do
-text=$log 
+text="$log "
 text+=$(tail --lines 1 ./progress)
 qdbus $dbusRef setLabelText "$text"
 sleep 1
