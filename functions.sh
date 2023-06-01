@@ -521,7 +521,6 @@ interaction_install_flatpaks() {
         key=${line%%=*}
         value=${line#*=}
         flatpaks_install_array[$key]=$value
-#add the order code thing to keep the array in order
     done
 
     for key in "${!flatpaks_install_array[@]}"
