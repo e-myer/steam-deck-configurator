@@ -30,51 +30,6 @@ set_up_import_and_export_flatpaks() {
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
 }
 
-install_firefox() {
-    print_log "Installing Firefox"
-    flatpak install flathub org.mozilla.firefox -y
-}
-
-install_corekeyboard() {
-    print_log "Installing CoreKeyboard"
-    flatpak install flathub org.cubocore.CoreKeyboard -y
-}
-
-install_barrier() {
-    print_log "Installing Barrier"
-    flatpak install flathub com.github.debauchee.barrier -y
-}
-
-install_heroic_games() {
-    print_log "Installing Heroic Games"
-    flatpak install flathub com.heroicgameslauncher.hgl -y
-}
-
-install_protonUp_qt() {
-    print_log "Installing ProtonUP QT"
-    flatpak install flathub net.davidotek.pupgui2 -y
-}
-
-install_boilr() {
-    print_log "Installing BoilR"
-    flatpak install flathub io.github.philipk.boilr -y
-}
-
-install_flatseal() {
-    print_log "Installing Flatseal"
-    flatpak install flathub com.github.tchx84.Flatseal -y
-}
-
-install_steam_rom_manager() {
-    print_log "Installing Steam ROM Manager"
-    flatpak install flathub com.steamgriddb.steam-rom-manager -y
-}
-
-install_retrodeck() {
-    print_log "Installing RetroDeck"
-    flatpak install flathub net.retrodeck.retrodeck -y
-}
-
 install_bauh() {
     print_log "Installing Bauh"
     if [ -f "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" ]; then
