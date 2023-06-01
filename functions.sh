@@ -121,7 +121,7 @@ interaction_import_flatpaks() {
     local -A flatpaks_array
     if [ -f "$configurator_dir/flatpaks_exported_list" ]; then
         readarray -t lines < "$configurator_dir/flatpaks_exported_list"
-        
+
         for line in "${lines[@]}"; do
             key=${line%%=*}
             value=${line#*=}
@@ -136,7 +136,7 @@ interaction_import_flatpaks() {
         readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
     else
         print_log "no exported flatpak found"
-        dialog --error "error: no exported flatpak found"
+        kdialog --error "error: no exported flatpak found"
     fi
 }
 
