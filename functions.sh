@@ -597,6 +597,19 @@ set_interactive_tasks() {
     interactive_tasks=(save_refind_config apply_refind_config import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install)
 }
 
+run_interactive_tasks() {
+    sorted_chosen_tasks=($(echo "${chosen_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
+    interactive_tasks=($(echo "${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
+    chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
+
+    echo "${chosen_interactive_tasks[@]}"
+    for task in "${chosen_interactive_tasks[@]}"
+    do
+        interaction_$task
+    done
+    ran_interactive_tasks=yes
+}
+
 run_tasks() {
     if [ ${#chosen_tasks[@]} -eq 0 ]; then
         echo No tasks chosen, exiting...
@@ -607,15 +620,9 @@ run_tasks() {
     dbusRef=$(kdialog --progressbar "Steam Deck Configurator" ${#chosen_tasks[@]})
     qdbus $dbusRef setLabelText "Steam Deck Configurator"
 
-    sorted_chosen_tasks=($(echo "${chosen_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
-    interactive_tasks=($(echo "${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
-    chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
-
-    echo "${chosen_interactive_tasks[@]}"
-    for task in "${chosen_interactive_tasks[@]}"
-    do
-        interaction_$task
-    done
+    if [ "$ran_interactive_tasks" != "yes" ]; then
+        run_interactive_tasks
+    fi
 
     for task in "${chosen_tasks[@]}"
     do
@@ -626,5 +633,6 @@ run_tasks() {
             qdbus $dbusRef Set "" value $task_number
         fi
     done
+    ran_interactive_tasks=no
     qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
 }
