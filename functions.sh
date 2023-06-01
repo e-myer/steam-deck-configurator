@@ -256,7 +256,7 @@ install_refind_GUI() {
 }
 
 interaction_install_refind_bootloader() {
-    kdialog --msgbox "It is recommended to install the rEFInd bootloader after installing other operating systems, continue?"
+    kdialog --msgbox "It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"
     if [ $? == 0 ]; then
         install_refind=yes
     else
