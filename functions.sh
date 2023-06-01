@@ -547,13 +547,16 @@ run_interactive_tasks() {
 }
 
 show_progress() {
-    mkfifo display #Creates a named pipe
-    while read line<display; 
-    do 
-    sleep 1
-    echo "$line"
-    qdbus $dbusRef setLabelText "$line" 
-    done & 
+dbusRef=$(kdialog --progressbar "Steam Deck Configurator" ${#chosen_tasks[@]})
+touch progress
+while true
+do
+text=$log 
+text+=$(tail --lines 1 ./progress)
+qdbus $dbusRef setLabelText "$text"
+sleep 1
+done &
+show_progress_pid=$!
 }
 
 
@@ -572,15 +575,15 @@ show_progress() {
 #sleep 1
 #done
 #mkfifo mypipe
+show_progress
 run_tasks() {
     if [ ${#chosen_tasks[@]} -eq 0 ]; then
         echo No tasks chosen, exiting...
         exit 0
     fi
     unset task_number
-    qdbus $dbusRef close
-    dbusRef=$(kdialog --progressbar "Steam Deck Configurator" ${#chosen_tasks[@]})
-    show_progress
+#    qdbus $dbusRef close
+#    dbusRef=$(kdialog --progressbar "Steam Deck Configurator" ${#chosen_tasks[@]})
     qdbus $dbusRef setLabelText "Steam Deck Configurator"
 
     if [ "$ran_interactive_tasks" != "yes" ] && [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]] && [[ ! " ${chosen_tasks[*]} " =~ " create_config " ]]; then
@@ -592,13 +595,13 @@ run_tasks() {
         if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ] && [[ " ${chosen_tasks[*]} " =~ " ${task} " ]]; then
             ((task_number ++))
             echo $task
-            $task > display
+            $task &> progress
             qdbus $dbusRef Set "" value $task_number
         fi
     done
     ran_interactive_tasks=no
     qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
-    rm display
+    kill $show_progress_pid
 }
 
 set_menu() {
