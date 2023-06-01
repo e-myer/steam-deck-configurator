@@ -309,7 +309,6 @@ interaction_apply_refind_config() {
             return
         fi    
     fi
-
 }
 
 save_refind_config() {
