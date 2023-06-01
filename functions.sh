@@ -614,7 +614,7 @@ run_tasks() {
     echo "${chosen_interactive_tasks[@]}"
     for task in "${chosen_interactive_tasks[@]}"
     do
-    interaction_$task
+        interaction_$task
     done
 
     for task in "${chosen_tasks[@]}"
