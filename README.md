@@ -48,7 +48,10 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
   - If the task is at the very end of the list, then move the single apostrophe to the end.
   
   Suggestions:
-  - If the function requires user input, seperate the function into two functions, one that has the prompts for user input, and one that runs the tasks. The function that requires user input should be named "interaction_", then the function name. And add the function which runs the tasks to the "interactive_tasks" array in the "set_interactive_tasks" function. This is so that any required user input is taken at the beginning of the script, and prompts for input while the script is running is minimized.
+  - If the function requires user input
+    - Seperate the function into two functions, one that has the prompts for user input, and one that runs the tasks. The function that requires user input should be named "interaction_", then the function name.
+    - Add the function which runs the tasks to the "interactive_tasks" array in the "set_interactive_tasks" function.
+    - This is so that any required user input is taken at the beginning of the script, and prompts for input while the script is running is minimized.
 
 - To remove a task from the dialog
  - Remove the line with the task from the "menu" variable in the "set menu" function.
