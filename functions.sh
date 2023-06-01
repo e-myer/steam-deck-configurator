@@ -16,7 +16,7 @@ update_from_pacman() {
 }
 
 add_flathub() {
-    print_log "Adding Flathub"
+    print_log "Adding Flathub, please enter your password in the prompt"
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 }
 
@@ -105,8 +105,8 @@ install_bauh() {
 		EOF
         cp -v "$configurator_dir/desktop_icons/bauh.svg" "$HOME/.local/share/icons/"
     else
-    print_log "bauh appimage doesn't exist in this folder, download it first, skipping..."
-    sleep 3
+        print_log "bauh appimage doesn't exist in this folder, download it first, skipping..."
+        sleep 3
     fi
 }
 
@@ -512,10 +512,10 @@ run_tasks() {
 
     sorted_chosen_tasks=($(echo "${chosen_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
     interactive_tasks=($(echo "${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
-    intersection_set=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
+    chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
 
-    echo "${intersection_set[@]}"
-    for task in "${intersection_set[@]}"
+    echo "${chosen_interactive_tasks[@]}"
+    for task in "${chosen_interactive_tasks[@]}"
     do
     interaction_$task
     done
