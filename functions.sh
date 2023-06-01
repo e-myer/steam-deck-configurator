@@ -77,11 +77,11 @@ export_flatpaks() {
         print_log "exporting ${flatpak_names[$flatpak]}"
         flatpak --verbose create-usb "$configurator_dir/flatpaks" "${flatpak_ids[$flatpak]}"
         if [ $? == 0 ]; then
-            if ! grep -Fxq "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" "$configurator_dir/flatpaks_list"; then
-                if [[ -s "$configurator_dir/flatpaks_list" ]]; then
-                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" >> "$configurator_dir/flatpaks_list"
+            if ! grep -Fxq "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" "$configurator_dir/flatpaks_exported_list"; then
+                if [[ -s "$configurator_dir/flatpaks_exported_list" ]]; then
+                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" >> "$configurator_dir/flatpaks_exported_list"
                 else
-                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" > "$configurator_dir/flatpaks_list"
+                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" > "$configurator_dir/flatpaks_exported_list"
                 fi
             fi
         else
@@ -123,7 +123,7 @@ import_flatpaks() {
 
 interaction_import_flatpaks() {
     local -A flatpaks_array
-    readarray -t lines < "$configurator_dir/flatpaks_list"
+    readarray -t lines < "$configurator_dir/flatpaks_exported_list"
 
     for line in "${lines[@]}"; do
         key=${line%%=*}
@@ -412,7 +412,7 @@ save_flatpaks_install() {
         print_log "saving ${flatpak_names[$flatpak]}"
             if ! grep -Fxq "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" "$configurator_dir/flatpaks_install_list"; then
                 if [[ ! -s "$configurator_dir/flatpaks_list" ]]; then
-                    echo Clear List=clear_list > "$flatpak_install_list_file"
+                    echo Clear List=clear_list > "$configurator_dir/flatpak_list"
                 fi
                 echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" >> "$configurator_dir/flatpaks_install_list"
             fi
