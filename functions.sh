@@ -512,10 +512,10 @@ run_tasks() {
 
     sorted_chosen_tasks=($(echo "${chosen_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
     interactive_tasks=($(echo "${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
-    intersection_set=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
+    chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
 
-    echo "${intersection_set[@]}"
-    for task in "${intersection_set[@]}"
+    echo "${chosen_interactive_tasks[@]}"
+    for task in "${chosen_interactive_tasks[@]}"
     do
     interaction_$task
     done
