@@ -602,6 +602,7 @@ run_tasks() {
     ran_interactive_tasks=no
     qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
     kill $show_progress_pid
+    rm progress
 }
 
 set_menu() {
