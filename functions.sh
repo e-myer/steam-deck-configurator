@@ -255,9 +255,23 @@ install_refind_GUI() {
     "$configurator_dir/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd" # install the GUI, run the script with the argument "path for SteamDeck_rEFInd folder is $PWD/SteamDeck_rEFInd"
 }
 
+interaction_install_refind_bootloader() {
+    kdialog --msgbox "It is recommended to install the rEFInd bootloader after installing other operating systems, continue?"
+    if [ $? == 0 ]; then
+        install_refind=yes
+    else
+        install_refind=no
+    fi
+}
+
 install_refind_bootloader() {
-    print_log "Installing rEFInd bootloader, please input the sudo passowrd when prompted"
-    "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
+    if [ $install_refind == yes ]; then
+        print_log "Installing rEFInd bootloader, please input the sudo passowrd when prompted"
+        "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
+    else
+        print_log "didn't install refind"
+        return
+    fi
 }
 
 apply_refind_config() {
@@ -314,15 +328,18 @@ save_refind_config() {
 
 interaction_save_refind_config() {
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
-    if [ ! -d "$configurator_dir/configs" ]; then
-        mkdir "$configurator_dir/configs"
-    fi
     if [ $? == 0 ]; then
+        if [ ! -d "$configurator_dir/configs" ]; then
+            mkdir "$configurator_dir/configs"
+        fi
         config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
         if [ $? != 0 ]; then
             print_log "cancelled"
             return
         fi
+    else
+        print_log "cancelled"
+        return
     fi
 }
 
@@ -497,7 +514,7 @@ create_config() {
 }
 
 set_interactive_tasks() {
-    interactive_tasks=(save_refind_config apply_refind_config import_flatpaks export_flatpaks)
+    interactive_tasks=(save_refind_config apply_refind_config import_flatpaks export_flatpaks install_refind_bootloader)
 }
 
 run_tasks() {
