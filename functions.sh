@@ -118,19 +118,23 @@ import_flatpaks() {
 }
 
 interaction_import_flatpaks() {
-    local -A flatpaks_array
+    import_flatpaks_menu=()
+    lines=()
+    unset order
+    local -A flatpaks_import_array
     if [ -f "$configurator_dir/flatpaks_exported_list" ]; then
         readarray -t lines < "$configurator_dir/flatpaks_exported_list"
 
         for line in "${lines[@]}"; do
             key=${line%%=*}
             value=${line#*=}
-            flatpaks_array[$key]=$value
+            flatpaks_import_array[$key]=$value
+            order+=("$key")
         done
 
-        for key in "${!flatpaks_array[@]}"
+        for key in "${order[@]}"
         do
-            import_flatpaks_menu+=("${flatpaks_array[$key]}" "$key" off)
+            import_flatpaks_menu+=("${flatpaks_import_array[$key]}" "$key" off)
         done
 
         readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
