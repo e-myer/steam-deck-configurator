@@ -275,16 +275,21 @@ install_refind_bootloader() {
 }
 
 apply_refind_config() {
-    print_log "applying config at: $refind_config, please input the sudo password when prompted"
+    if [ $apply_refind_config_prompt == yes ]; then
+        print_log "applying config at: $refind_config, please input the sudo password when prompted"
 
-    cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
-    if [ $? == 0 ]; then
-        "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
-        print_log "config applied"
+        cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
+        if [ $? == 0 ]; then
+            "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
+            print_log "config applied"
+        else
+            cp_error=$?
+            print_log "error $cp_error, config not applied"
+            kdialog --error "error: $cp_error, config not saved"
+        fi
     else
-        cp_error=$?
-        print_log "error $cp_error, config not applied"
-        kdialog --error "error: $cp_error, config not saved"
+        print_log "didn't apply refind config"
+        return
     fi
 }
 
@@ -292,7 +297,10 @@ interaction_apply_refind_config() {
     print_log "applying rEFInd config"
     if [ ! -d "$configurator_dir/configs" ]; then
         kdialog --msgbox "No rEFInd configs found, please create one first, skipping..."
+        apply_refind_config_prompt=no
         return
+    else
+        apply_refind_config_prompt=yes
     fi
     local num_of_dirs
     num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
