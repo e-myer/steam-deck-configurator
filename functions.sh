@@ -277,7 +277,6 @@ install_refind_bootloader() {
 apply_refind_config() {
     if [ $apply_refind_config_run == yes ]; then
         print_log "applying config at: $refind_config, please input the sudo password when prompted"
-
         cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
         if [ $? == 0 ]; then
             "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
