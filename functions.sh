@@ -302,7 +302,7 @@ interaction_apply_refind_config() {
         apply_refind_config_run=yes
     fi
     local num_of_dirs
-    num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l) #get amount of folders (configs) in the .deck_setup/refind_configs folder
+    num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l)
     if [ "$num_of_dirs" -gt 1 ]; then
         refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
         if [ $? != 0 ]; then
@@ -311,7 +311,7 @@ interaction_apply_refind_config() {
             return
         fi
     else
-        refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d) # else, find the one folder and set the refind config dir to that
+        refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d)
         if [ $? != 0 ]; then
             print_log "cancelled"
             apply_refind_config_run=no
@@ -324,7 +324,7 @@ save_refind_config() {
     if [ $save_refind_config_run == yes ]; then
         print_log "saving rEFInd config"
             mkdir -p "$config_save_path"
-            cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path" #copy files saved by rEFInd GUI to a chosen directory
+            cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path"
             if [ $? == 0 ]; then
                 print_log "config saved to $config_save_path"
                 kdialog --msgbox "config saved to $config_save_path"
