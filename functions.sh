@@ -86,6 +86,7 @@ export_flatpaks() {
 }
 
 interaction_export_flatpaks() {
+    export_flatpaks_menu=()
     mkdir -p "$configurator_dir/flatpaks"
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
