@@ -600,3 +600,17 @@ set_menu() {
     "save_refind_config" "Save rEFInd config" off 
     "fix_barrier" "Fix Barrier" off'
 }
+
+main() {
+    kdialog --title "password" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"
+
+    if [ $? == 1 ]; then
+        exit 0
+    fi
+
+    set_interactive_tasks
+    set_menu
+    create_dialog
+}
+
+main
