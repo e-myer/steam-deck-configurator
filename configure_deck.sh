@@ -66,6 +66,9 @@ run_cryo_utilities_recommended() {
 }
 
 export_flatpaks() {
+    if [ $export_flatpaks_run == no ]; then
+        return
+    fi
     print_log "exporting flatpaks"
     for flatpak in "${chosen_export_flatpaks[@]}"
     do
@@ -90,6 +93,13 @@ interaction_export_flatpaks() {
     mkdir -p "$configurator_dir/flatpaks"
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
+
+    if [ ${#flatpak_names[@]} == 0 ]; then
+        print_log "error, no Flatpaks installed"
+        kdialog -error "error, no Flatpaks installed"
+        export_flatpaks_run=no
+        return
+    fi
 
     for name in "${flatpak_names[@]}"
     do
