@@ -96,7 +96,7 @@ interaction_export_flatpaks() {
 
     if [ ${#flatpak_names[@]} == 0 ]; then
         print_log "error, no Flatpaks installed"
-        kdialog -error "error, no Flatpaks installed"
+        kdialog --error "error, no Flatpaks installed"
         export_flatpaks_run=no
         return
     fi
