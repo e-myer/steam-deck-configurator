@@ -327,16 +327,16 @@ interaction_save_refind_config() {
         save_refind_config_run=no
         print_log "cancelled"
         return
-    else
-        save_refind_config_run=yes
-        if [ ! -d "$configurator_dir/configs" ]; then
-            mkdir "$configurator_dir/configs"
-        fi
-        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
-        if [ $? != 0 ]; then
-            print_log "cancelled"
-            return
-        fi
+    fi
+    
+    save_refind_config_run=yes
+    if [ ! -d "$configurator_dir/configs" ]; then
+        mkdir "$configurator_dir/configs"
+    fi
+    config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
+    if [ $? != 0 ]; then
+        print_log "cancelled"
+        return
     fi
 }
 
