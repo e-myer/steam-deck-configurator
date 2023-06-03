@@ -570,6 +570,11 @@ run_tasks() {
         fi
     done
     ran_interactive_tasks=no
+
+    if [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]]; then
+        set_menu
+    fi
+
     qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
 }
 
