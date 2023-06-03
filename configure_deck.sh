@@ -21,7 +21,7 @@ update_flatpaks() {
 }
 
 set_up_import_and_export_flatpaks() {
-    print_log "Seting up import and export flatpaks please enter your password in the prompt"
+    print_log "Seting up import and export flatpaks, please enter your password in the prompt"
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
 }
 
