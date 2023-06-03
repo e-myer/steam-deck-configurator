@@ -11,7 +11,7 @@ print_log() {
 }
 
 add_flathub() {
-    print_log "Adding Flathub, please enter your password in the prompt"
+    print_log "Adding Flathub"
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 }
 
@@ -21,7 +21,7 @@ update_flatpaks() {
 }
 
 set_up_import_and_export_flatpaks() {
-    print_log "Seting up import and export flatpaks"
+    print_log "Seting up import and export flatpaks please enter your password in the prompt"
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
 }
 
