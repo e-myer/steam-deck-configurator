@@ -244,7 +244,7 @@ apply_refind_config() {
         else
             cp_error=$?
             print_log "error $cp_error, config not applied"
-            kdialog --error "error: $cp_error, config not saved"
+            kdialog --error "error: $cp_error, config not applied"
         fi
     else
         print_log "didn't apply refind config"
