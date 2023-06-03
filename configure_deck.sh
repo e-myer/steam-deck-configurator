@@ -27,37 +27,38 @@ set_up_import_and_export_flatpaks() {
 
 install_bauh() {
     print_log "Installing Bauh"
-    if [ -f "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" ]; then
-        cp -v "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" "$HOME/Applications/"
-        chmod -v +x "$HOME/Applications/bauh-0.10.5-x86_64.AppImage"
-		cat <<- EOF > "$HOME/.local/share/applications/bauh.desktop"
-		[Desktop Entry]
-		Type=Application
-		Name=Applications (bauh)
-		Name[pt]=Aplicativos (bauh)
-		Name[es]=Aplicaciones (bauh)
-		Name[ca]=Aplicacions (bauh)
-		Name[it]=Applicazioni (bauh)
-		Name[de]=Anwendungen (bauh)
-		Name[ru]=Приложения (bauh)
-		Name[tr]=Paket Yönetici (bauh)
-		Categories=System;
-		Comment=Install and remove applications (AppImage, Arch, Flatpak, Snap, Web)
-		Comment[pt]=Instale e remova aplicativos (AppImage, Arch, Flatpak, Snap, Web)
-		Comment[es]=Instalar y eliminar aplicaciones (AppImage, Arch, Flatpak, Snap, Web)
-		Comment[it]=Installa e rimuovi applicazioni (AppImage, Arch, Flatpak, Snap, Web)
-		Comment[de]=Anwendungen installieren und entfernen (AppImage, Arch, Flatpak, Snap, Web)
-		Comment[ca]=Instal·lar i eliminar aplicacions (AppImage, Arch, Flatpak, Snap, Web)
-		Comment[ru]=Установка и удаление приложений (AppImage, Arch, Flatpak, Snap, Web)
-		Comment[tr]=Uygulama yükle/kaldır (AppImage, Arch, Flatpak, Snap, Web)
-		Exec=$HOME/Applications/bauh-0.10.5-x86_64.AppImage
-		Icon=bauh
-		EOF
-        cp -v "$configurator_dir/desktop_icons/bauh.svg" "$HOME/.local/share/icons/"
-    else
+    if [ ! -f "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" ]; then
         print_log "bauh appimage doesn't exist in this folder, download it first, skipping..."
         sleep 3
+        return
     fi
+
+    cp -v "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" "$HOME/Applications/"
+    chmod -v +x "$HOME/Applications/bauh-0.10.5-x86_64.AppImage"
+    cat <<- EOF > "$HOME/.local/share/applications/bauh.desktop"
+	[Desktop Entry]
+	Type=Application
+	Name=Applications (bauh)
+	Name[pt]=Aplicativos (bauh)
+	Name[es]=Aplicaciones (bauh)
+	Name[ca]=Aplicacions (bauh)
+	Name[it]=Applicazioni (bauh)
+	Name[de]=Anwendungen (bauh)
+	Name[ru]=Приложения (bauh)
+	Name[tr]=Paket Yönetici (bauh)
+	Categories=System;
+	Comment=Install and remove applications (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[pt]=Instale e remova aplicativos (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[es]=Instalar y eliminar aplicaciones (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[it]=Installa e rimuovi applicazioni (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[de]=Anwendungen installieren und entfernen (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[ca]=Instal·lar i eliminar aplicacions (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[ru]=Установка и удаление приложений (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[tr]=Uygulama yükle/kaldır (AppImage, Arch, Flatpak, Snap, Web)
+	Exec=$HOME/Applications/bauh-0.10.5-x86_64.AppImage
+	Icon=bauh
+	EOF
+    cp -v "$configurator_dir/desktop_icons/bauh.svg" "$HOME/.local/share/icons/"
 }
 
 run_cryo_utilities_recommended() {
@@ -69,6 +70,7 @@ export_flatpaks() {
     if [ $export_flatpaks_run == no ]; then
         return
     fi
+
     print_log "exporting flatpaks"
     for flatpak in "${chosen_export_flatpaks[@]}"
     do
@@ -118,13 +120,13 @@ import_flatpaks() {
     if [ ${#chosen_import_flatpaks[@]} -eq 0 ]; then
         echo No flatpaks chosen
         return
-    else
-        for flatpak in "${chosen_import_flatpaks[@]}"
-        do
-            print_log "installing $flatpak"
-            flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $flatpak -y
-        done
     fi
+
+    for flatpak in "${chosen_import_flatpaks[@]}"
+    do
+        print_log "installing $flatpak"
+        flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $flatpak -y
+    done
 }
 
 interaction_import_flatpaks() {
@@ -132,26 +134,27 @@ interaction_import_flatpaks() {
     lines=()
     unset order
     local -A flatpaks_import_array
-    if [ -f "$configurator_dir/flatpaks_exported_list" ]; then
-        readarray -t lines < "$configurator_dir/flatpaks_exported_list"
-
-        for line in "${lines[@]}"; do
-            key=${line%%=*}
-            value=${line#*=}
-            flatpaks_import_array[$key]=$value
-            order+=("$key")
-        done
-
-        for key in "${order[@]}"
-        do
-            import_flatpaks_menu+=("${flatpaks_import_array[$key]}" "$key" off)
-        done
-
-        readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
-    else
+    if [ ! -f "$configurator_dir/flatpaks_exported_list" ]; then
         print_log "no exported flatpak found"
         kdialog --error "error: no exported flatpak found"
+        return
     fi
+
+    readarray -t lines < "$configurator_dir/flatpaks_exported_list"
+
+    for line in "${lines[@]}"; do
+        key=${line%%=*}
+        value=${line#*=}
+        flatpaks_import_array[$key]=$value
+        order+=("$key")
+    done
+
+    for key in "${order[@]}"
+    do
+        import_flatpaks_menu+=("${flatpaks_import_array[$key]}" "$key" off)
+    done
+
+    readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
 }
 
 install_deckyloader() {
@@ -165,15 +168,18 @@ install_deckyloader() {
         deckyloader_installed_version=$(cat "$configurator_dir/deckyloader_installed_version")
         print_log "DeckyLoader Latest Version is $version"
         print_log "DeckyLoader Installed Version is $deckyloader_installed_version"
-        if [ "$version" != "$deckyloader_installed_version" ]; then
+
+        if [ "$version" == "$deckyloader_installed_version" ]; then
+            print_log "Latest Version of DeckyLoader is already installed"
+            return
+        else
             print_log "Installing Latest Version"
             curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
             chmod -v +x "$configurator_dir/deckyloader_install_release.sh"
             "$configurator_dir/deckyloader_install_release.sh"
             echo "$version" > "$configurator_dir/deckyloader_installed_version"
-        else
-            print_log "Latest Version of DeckyLoader is already installed"
         fi
+
     else
         print_log "Installing DeckyLoader"
         curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
@@ -193,26 +199,28 @@ uninstall_deckyloader() {
 
 install_cryoutilities() {
     print_log "checking if cryoutilities is installed"
-    if [ ! -d "$HOME/.cryo_utilities" ]; then
-        print_log "cryoutilities is not installed, installing"
-        curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_dir/cryoutilities_install.sh"
-        chmod -v +x "$configurator_dir/cryoutilities_install.sh"
-        "$configurator_dir/cryoutilities_install.sh"
-    else
+    if [ -d "$HOME/.cryo_utilities" ]; then
         print_log "cryoutilities is already installed"
+        return
     fi
+
+    print_log "cryoutilities is not installed, installing"
+    curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_dir/cryoutilities_install.sh"
+    chmod -v +x "$configurator_dir/cryoutilities_install.sh"
+    "$configurator_dir/cryoutilities_install.sh"
 }
 
 install_emudeck() {
     print_log "checking if emudeck is installed"
-    if [ ! -d "$HOME/emudeck" ]; then
-        print_log "emudeck is not installed, installing"
-        curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh --output "$configurator_dir/emudeck_install.sh"
-        chmod -v +x "$configurator_dir/emudeck_install.sh"
-        "$configurator_dir/emudeck_install.sh"
-    else
+    if [ -d "$HOME/emudeck" ]; then
         print_log "emudeck is already installed"
+        return
     fi
+
+    print_log "emudeck is not installed, installing"
+    curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh --output "$configurator_dir/emudeck_install.sh"
+    chmod -v +x "$configurator_dir/emudeck_install.sh"
+    "$configurator_dir/emudeck_install.sh"
 }
 
 update_submodules() {
@@ -235,30 +243,30 @@ interaction_install_refind_bootloader() {
 }
 
 install_refind_bootloader() {
-    if [ $install_refind == yes ]; then
-        print_log "Installing rEFInd bootloader, please input the sudo password when prompted"
-        "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
-    else
+    if [ $install_refind != yes ]; then
         print_log "didn't install refind"
         return
     fi
+
+    print_log "Installing rEFInd bootloader, please input the sudo password when prompted"
+    "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
 apply_refind_config() {
-    if [ $apply_refind_config_run == yes ]; then
-        print_log "applying config at: $refind_config, please input the sudo password when prompted"
-        cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
-        if [ $? == 0 ]; then
-            "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
-            print_log "config applied"
-        else
-            cp_error=$?
-            print_log "error $cp_error, config not applied"
-            kdialog --error "error: $cp_error, config not applied"
-        fi
-    else
+    if [ $apply_refind_config_run != yes ]; then
         print_log "didn't apply refind config"
         return
+    fi
+
+    print_log "applying config at: $refind_config, please input the sudo password when prompted"
+    cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
+    if [ $? == 0 ]; then
+        "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
+        print_log "config applied"
+    else
+        cp_error=$?
+        print_log "error $cp_error, config not applied"
+        kdialog --error "error: $cp_error, config not applied"
     fi
 }
 
@@ -271,6 +279,7 @@ interaction_apply_refind_config() {
     else
         apply_refind_config_run=yes
     fi
+
     local num_of_dirs
     num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l)
     if [ "$num_of_dirs" -gt 1 ]; then
@@ -291,38 +300,41 @@ interaction_apply_refind_config() {
 }
 
 save_refind_config() {
-    if [ $save_refind_config_run == yes ]; then
-        print_log "saving rEFInd config"
-            mkdir -p "$config_save_path"
-            cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path"
-            if [ $? == 0 ]; then
-                print_log "config saved to $config_save_path"
-                kdialog --msgbox "config saved to $config_save_path"
-            else
-                cp_error=$?
-                print_log "error $cp_error, config not saved"
-                kdialog --error "error: $cp_error, config not saved"
-            fi
-    else
+    if [ $save_refind_config_run != yes ]; then
         print_log "didn't save refind config"
         return
     fi
+
+    print_log "saving rEFInd config"
+    mkdir -p "$config_save_path"
+    cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path"
+    
+    if [ $? == 0 ]; then
+        print_log "config saved to $config_save_path"
+        kdialog --msgbox "config saved to $config_save_path"
+    else
+        cp_error=$?
+        print_log "error $cp_error, config not saved"
+        kdialog --error "error: $cp_error, config not saved"
+    fi
+
+
 }
 
 interaction_save_refind_config() {
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
-    if [ $? == 0 ]; then
-        save_refind_config_run=yes
-        if [ ! -d "$configurator_dir/configs" ]; then
-            mkdir "$configurator_dir/configs"
-        fi
-        config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
-        if [ $? != 0 ]; then
-            print_log "cancelled"
-            return
-        fi
-    else
+    if [ $? != 0 ]; then
         save_refind_config_run=no
+        print_log "cancelled"
+        return
+    fi
+    
+    save_refind_config_run=yes
+    if [ ! -d "$configurator_dir/configs" ]; then
+        mkdir "$configurator_dir/configs"
+    fi
+    config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
+    if [ $? != 0 ]; then
         print_log "cancelled"
         return
     fi
@@ -343,32 +355,34 @@ refind_uninstall_gui() {
 }
 
 check_for_updates_proton_ge() {
-    if compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
-        local version
-        version=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
-        version=$(jq -r '.tag_name' <<< ${release} )
-        local proton_ge_downloaded_version
-        proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
-        if [ ! "$proton_ge_downloaded_version" == "$version.tar.gz" ]; then
-            print_log "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
-        else
-            print_log "ProtonGE is up to date"
-        fi
-    else
+    if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
         sleep 3
+        return
+    fi
+
+    local version
+    version=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+    version=$(jq -r '.tag_name' <<< ${release} )
+    local proton_ge_downloaded_version
+    proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
+    if [ ! "$proton_ge_downloaded_version" == "$version.tar.gz" ]; then
+        print_log "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+    else
+        print_log "ProtonGE is up to date"
     fi
 }
 
 install_proton_ge_in_steam() {
-    if compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
-        mkdir -p ~/.steam/root/compatibilitytools.d
-        tar -xf "$configurator_dir/GE-Proton*.tar.gz" -C ~/.steam/root/compatibilitytools.d/
-        print_log "Proton GE installed, please restart Steam"
-    else
+    if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
         sleep 3
+        return
     fi
+
+    mkdir -p ~/.steam/root/compatibilitytools.d
+    tar -xf "$configurator_dir/GE-Proton*.tar.gz" -C ~/.steam/root/compatibilitytools.d/
+    print_log "Proton GE installed, please restart Steam"
 }
 
 fix_barrier() {
@@ -487,6 +501,7 @@ load_config() {
             print_log "cancelled"
             return
         fi
+
         for file in "${config_files[@]}"
         do
             readarray -t config_line < $file
@@ -516,6 +531,7 @@ create_config() {
     if [ ! -d "$configurator_dir/configs" ]; then
         mkdir "$configurator_dir/configs"
     fi
+    
     local config
     config=$(zenity --file-selection --save --title="select a file" --filename="$configurator_dir/configs/")
     if [ $? != 0 ]; then
