@@ -94,10 +94,14 @@ export_flatpaks() {
     done
 }
 
-interaction_export_flatpaks() {
-    export_flatpaks_menu=()
+list_flatpaks() {
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
+}
+
+interaction_export_flatpaks() {
+    export_flatpaks_menu=()
+    list_flatpaks
 
     if [ ${#flatpak_names[@]} == 0 ]; then
         print_log "error, no Flatpaks installed"
@@ -239,7 +243,7 @@ install_refind_GUI() {
 }
 
 interaction_install_refind_bootloader() {
-    kdialog --msgbox "It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"
+    kdialog --title "install_refind_bootloader" --yesno "It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"
     if [ $? == 0 ]; then
         install_refind=yes
     else
@@ -435,8 +439,7 @@ fix_barrier() {
 }
 
 interaction_save_flatpaks_install() {
-    readarray -t flatpak_names < <(flatpak list --app --columns=name)
-    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
+    list_flatpaks
 
     if [ ${#flatpak_names[@]} == 0 ]; then
         print_log "error, no Flatpaks installed"
