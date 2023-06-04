@@ -135,7 +135,6 @@ import_flatpaks() {
 
 interaction_import_flatpaks() {
     import_flatpaks_menu=()
-    lines=()
     unset order
     local -A flatpaks_import_array
     if [ ! -f "$configurator_dir/flatpaks_exported_list" ]; then
@@ -496,7 +495,6 @@ interaction_install_flatpaks() {
     fi
 
     install_flatpaks_menu=()
-    lines=()
     unset order
     local -A flatpaks_install_array
     readarray -t lines < "$flatpak_install_list_file"
