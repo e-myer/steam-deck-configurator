@@ -87,8 +87,9 @@ export_flatpaks() {
                 fi
             fi
         else
-            kdialog --title "steam-deck-configurator" --passive-popup "export flatpaks error: $?"
-            print_log "error $?"
+            kdialog --title "steam-deck-configurator" --passivepopup "export flatpaks error: $?"
+            print_log "export_flatpaks error $?"
+            print_log "export_flatpaks error $?" >> "$configurator_dir/errors"
         fi
     done
 }
@@ -100,7 +101,7 @@ interaction_export_flatpaks() {
 
     if [ ${#flatpak_names[@]} == 0 ]; then
         print_log "error, no Flatpaks installed"
-        print_log "error, no Flatpaks installed" > errors
+        print_log "error, no Flatpaks installed" >> "$configurator_dir/errors"
         export_flatpaks_run=no
         return
     fi
@@ -139,7 +140,7 @@ interaction_import_flatpaks() {
     local -A flatpaks_import_array
     if [ ! -f "$configurator_dir/flatpaks_exported_list" ]; then
         print_log "no exported flatpak found"
-        print_log "no exported flatpak found" > errors
+        print_log "no exported flatpak found" >> "$configurator_dir/errors"
         return
     fi
 
@@ -208,7 +209,7 @@ install_cryoutilities() {
     fi
 
     print_log "cryoutilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
-    kdialog --title "steam-deck-configurator" --passive-popup "cryoutilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
+    kdialog --title "steam-deck-configurator" --passivepopup "cryoutilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
     curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_dir/cryoutilities_install.sh"
     chmod -v +x "$configurator_dir/cryoutilities_install.sh"
     "$configurator_dir/cryoutilities_install.sh"
@@ -253,7 +254,7 @@ install_refind_bootloader() {
     fi
 
     print_log "Installing rEFInd bootloader, please input the sudo password when prompted"
-    kdialog --title "steam-deck-configurator" --passive-popup "Installing rEFInd bootloader, please input the sudo password when prompted"
+    kdialog --title "steam-deck-configurator" --passivepopup "Installing rEFInd bootloader, please input the sudo password when prompted"
     "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
@@ -264,7 +265,7 @@ apply_refind_config() {
     fi
 
     print_log "applying config at: $refind_config, please input the sudo password when prompted"
-    kdialog --title "steam-deck-configurator" --passive-popup "applying config at: $refind_config, please input the sudo password when prompted"
+    kdialog --title "steam-deck-configurator" --passivepopup "applying config at: $refind_config, please input the sudo password when prompted"
     cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
     if [ $? == 0 ]; then
         "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
@@ -272,7 +273,7 @@ apply_refind_config() {
     else
         cp_error=$?
         print_log "error $cp_error, config not applied"
-        print_log "error $cp_error, config not applied" > errors
+        print_log "error $cp_error, config not applied" >> "$configurator_dir/errors"
     fi
 }
 
@@ -280,7 +281,8 @@ interaction_apply_refind_config() {
     print_log "applying rEFInd config"
     if [ ! -d "$configurator_dir/rEFInd_configs" ]; then
         print_log "No rEFInd configs found, please create one first, skipping..."
-        kdialog --title "steam-deck-configurator" --passive-popup "No rEFInd configs found, please create one first, skipping..."
+        print_log "No rEFInd configs found, please create one first, skipping..." >> "$configurator_dir/errors"
+        kdialog --title "steam-deck-configurator" --passivepopup "No rEFInd configs found, please create one first, skipping..."
         sleep 3
         apply_refind_config_run=no
         return
@@ -323,7 +325,7 @@ save_refind_config() {
     else
         cp_error=$?
         print_log "error $cp_error, config not saved"
-        print_log "error $cp_error, config not saved" > errors
+        print_log "error $cp_error, config not saved" >> "$configurator_dir/errors"
     fi
 
 
@@ -365,7 +367,8 @@ refind_uninstall_gui() {
 check_for_updates_proton_ge() {
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
-        kdialog --title "steam-deck-configurator" --passive-popup "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
+        print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..." >> "$configurator_dir/errors"
+        kdialog --title "steam-deck-configurator" --passivepopup "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
         sleep 3
         return
     fi
@@ -387,7 +390,8 @@ check_for_updates_proton_ge() {
 install_proton_ge_in_steam() {
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
-        kdialog --title "steam-deck-configurator" --passive-popup "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
+        print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..." >> "$configurator_dir/errors"
+        kdialog --title "steam-deck-configurator" --passivepopup "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
         sleep 3
         return
     fi
@@ -395,7 +399,7 @@ install_proton_ge_in_steam() {
     mkdir -p ~/.steam/root/compatibilitytools.d
     tar -xf "$configurator_dir/GE-Proton*.tar.gz" -C ~/.steam/root/compatibilitytools.d/
     print_log "Proton GE installed, please restart Steam"
-    kdialog --title "steam-deck-configurator" --passive-popup " "Proton GE installed, please restart Steam"
+    kdialog --title "steam-deck-configurator" --passivepopup "Proton GE installed, please restart Steam"
 }
 
 fix_barrier() {
@@ -436,7 +440,7 @@ interaction_save_flatpaks_install() {
 
     if [ ${#flatpak_names[@]} == 0 ]; then
         print_log "error, no Flatpaks installed"
-        kdialog --error "error, no Flatpaks installed"
+        print_log "error, no Flatpaks installed" >> "$configurator_dir/errors"
         save_flatpaks_install_run=no
         return
     fi
@@ -534,7 +538,7 @@ load_config() {
             done
         done
     else
-        kdialog --msgbox "No configs found, please create one first"
+        print_log "No configs found, please create one first" >> "$configurator_dir/errors"
     fi
 }
 
@@ -624,6 +628,9 @@ run_tasks() {
     if [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]]; then
         set_menu
     fi
+
+    kdialog --textbox "$configurator_dir/errors"
+    echo > "$configurator_dir/errors"
 
     qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
 }
