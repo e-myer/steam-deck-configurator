@@ -85,7 +85,8 @@ export_flatpaks() {
                 fi
             fi
         else
-            print_log "error"
+            kdialog --error "$?"
+            print_log "error $?"
         fi
     done
 }
@@ -368,14 +369,17 @@ check_for_updates_proton_ge() {
     proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
     if [ ! "$proton_ge_downloaded_version" == "$version.tar.gz" ]; then
         print_log "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+        kdialog --msgbox "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
     else
         print_log "ProtonGE is up to date"
+        kdialog --msgbox "ProtonGE is up to date"
     fi
 }
 
 install_proton_ge_in_steam() {
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
+        kdialog --error "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
         sleep 3
         return
     fi
@@ -383,6 +387,7 @@ install_proton_ge_in_steam() {
     mkdir -p ~/.steam/root/compatibilitytools.d
     tar -xf "$configurator_dir/GE-Proton*.tar.gz" -C ~/.steam/root/compatibilitytools.d/
     print_log "Proton GE installed, please restart Steam"
+    kdialog --msgbox "Proton GE installed, please restart Steam"
 }
 
 fix_barrier() {
@@ -553,6 +558,7 @@ create_config() {
     done
     chosen_tasks=()
     print_log "created config"
+    kdialog --msgbox "created config"
 }
 
 set_interactive_tasks() {
