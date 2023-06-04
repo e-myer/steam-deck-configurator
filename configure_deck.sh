@@ -70,7 +70,7 @@ run_cryo_utilities_recommended() {
 
 if_no() {
     if [ $1 == no ]; then
-        print_log $2
+        print_log "$2"
         return
     fi
 }
@@ -249,7 +249,7 @@ install_refind_GUI() {
 }
 
 interaction_install_refind_bootloader() {
-    kdialog --msgbox "It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"
+    kdialog --title "install_refind_bootloader" --yesno "It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"
     if [ $? == 0 ]; then
         install_refind=yes
     else
@@ -258,7 +258,7 @@ interaction_install_refind_bootloader() {
 }
 
 install_refind_bootloader() {
-    if_no "$install_refind" "didn't install refind"
+    if_no "$install_refind" "did not install the refind bootloader"
 
     print_log "Installing rEFInd bootloader, please input the sudo password when prompted"
     kdialog --title "steam-deck-configurator" --passivepopup "Installing rEFInd bootloader, please input the sudo password when prompted"
