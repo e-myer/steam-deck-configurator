@@ -100,7 +100,7 @@ interaction_export_flatpaks() {
 
     if [ ${#flatpak_names[@]} == 0 ]; then
         print_log "error, no Flatpaks installed"
-        kdialog --error "error, no Flatpaks installed"
+        print_log "error, no Flatpaks installed" > errors
         export_flatpaks_run=no
         return
     fi
@@ -139,7 +139,7 @@ interaction_import_flatpaks() {
     local -A flatpaks_import_array
     if [ ! -f "$configurator_dir/flatpaks_exported_list" ]; then
         print_log "no exported flatpak found"
-        kdialog --error "error: no exported flatpak found"
+        print_log "no exported flatpak found" > errors
         return
     fi
 
@@ -272,7 +272,7 @@ apply_refind_config() {
     else
         cp_error=$?
         print_log "error $cp_error, config not applied"
-        kdialog --error "error: $cp_error, config not applied"
+        print_log "error $cp_error, config not applied" > errors
     fi
 }
 
@@ -323,7 +323,7 @@ save_refind_config() {
     else
         cp_error=$?
         print_log "error $cp_error, config not saved"
-        kdialog --error "error: $cp_error, config not saved"
+        print_log "error $cp_error, config not saved" > errors
     fi
 
 
@@ -395,7 +395,7 @@ install_proton_ge_in_steam() {
     mkdir -p ~/.steam/root/compatibilitytools.d
     tar -xf "$configurator_dir/GE-Proton*.tar.gz" -C ~/.steam/root/compatibilitytools.d/
     print_log "Proton GE installed, please restart Steam"
-    kdialog kdialog --title "steam-deck-configurator" --passive-popup " "Proton GE installed, please restart Steam"
+    kdialog --title "steam-deck-configurator" --passive-popup " "Proton GE installed, please restart Steam"
 }
 
 fix_barrier() {
