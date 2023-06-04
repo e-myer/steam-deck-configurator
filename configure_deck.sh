@@ -68,10 +68,15 @@ run_cryo_utilities_recommended() {
     sudo "$HOME/.cryo_utilities/cryo_utilities" recommended
 }
 
-export_flatpaks() {
-    if [ $export_flatpaks_run == no ]; then
+if_no() {
+    if [ $1 == no ]; then
+        print_log $2
         return
     fi
+}
+
+export_flatpaks() {
+    if_no "$export_flatpaks_run"
 
     print_log "exporting flatpaks"
     for flatpak in "${chosen_export_flatpaks[@]}"
@@ -94,10 +99,15 @@ export_flatpaks() {
     done
 }
 
-interaction_export_flatpaks() {
-    export_flatpaks_menu=()
+list_flatpaks() {
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
+}
+
+interaction_export_flatpaks() {
+    export_flatpaks_menu=()
+
+    list_flatpaks
 
     if [ ${#flatpak_names[@]} == 0 ]; then
         print_log "error, no Flatpaks installed"
@@ -248,10 +258,7 @@ interaction_install_refind_bootloader() {
 }
 
 install_refind_bootloader() {
-    if [ $install_refind != yes ]; then
-        print_log "didn't install refind"
-        return
-    fi
+    if_no "$install_refind" "didn't install refind"
 
     print_log "Installing rEFInd bootloader, please input the sudo password when prompted"
     kdialog --title "steam-deck-configurator" --passivepopup "Installing rEFInd bootloader, please input the sudo password when prompted"
@@ -259,10 +266,7 @@ install_refind_bootloader() {
 }
 
 apply_refind_config() {
-    if [ $apply_refind_config_run != yes ]; then
-        print_log "didn't apply refind config"
-        return
-    fi
+    if_no "$apply_refind_config_run" "didn't apply refind config"
 
     print_log "applying config at: $refind_config, please input the sudo password when prompted"
     kdialog --title "steam-deck-configurator" --passivepopup "applying config at: $refind_config, please input the sudo password when prompted"
@@ -310,10 +314,7 @@ interaction_apply_refind_config() {
 }
 
 save_refind_config() {
-    if [ $save_refind_config_run != yes ]; then
-        print_log "didn't save refind config"
-        return
-    fi
+    if_no "$save_refind_config" "didn't save refind config"
 
     print_log "saving rEFInd config"
     mkdir -p "$config_save_path"
@@ -459,9 +460,7 @@ interaction_save_flatpaks_install() {
 }
 
 save_flatpaks_install() {
-    if [ $save_flatpaks_install_run == no ]; then
-        return
-    fi
+    if_no "$save_flatpaks_install_run"
 
     print_log "saving flatpaks list"
     for flatpak in "${chosen_save_flatpaks[@]}"
