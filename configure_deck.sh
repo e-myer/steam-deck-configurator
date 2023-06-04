@@ -87,7 +87,7 @@ export_flatpaks() {
                 fi
             fi
         else
-            kdialog --error "$?"
+            kdialog --title "steam-deck-configurator" --passive-popup "export flatpaks error: $?"
             print_log "error $?"
         fi
     done
