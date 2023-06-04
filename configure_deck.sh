@@ -629,8 +629,10 @@ run_tasks() {
         set_menu
     fi
 
-    kdialog --textbox "$configurator_dir/errors"
-    echo > "$configurator_dir/errors"
+    if [ -s "$configurator_dir/errors" ]; then
+        kdialog --textbox "$configurator_dir/errors"
+        echo > "$configurator_dir/errors"
+    fi
 
     qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
 }
