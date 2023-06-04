@@ -22,6 +22,7 @@ update_flatpaks() {
 
 set_up_import_and_export_flatpaks() {
     print_log "Seting up import and export flatpaks, please enter your password in the prompt"
+    kdialog --msgbox "Seting up import and export flatpaks, please enter your password in the prompt"
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
 }
 
@@ -63,6 +64,7 @@ install_bauh() {
 
 run_cryo_utilities_recommended() {
     print_log "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
+    kdialog --msgbox "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
     sudo "$HOME/.cryo_utilities/cryo_utilities" recommended
 }
 
@@ -206,7 +208,8 @@ install_cryoutilities() {
         return
     fi
 
-    print_log "cryoutilities is not installed, installing"
+    print_log "cryoutilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
+    kdialog --msgbox "cryoutilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
     curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_dir/cryoutilities_install.sh"
     chmod -v +x "$configurator_dir/cryoutilities_install.sh"
     "$configurator_dir/cryoutilities_install.sh"
@@ -251,6 +254,7 @@ install_refind_bootloader() {
     fi
 
     print_log "Installing rEFInd bootloader, please input the sudo password when prompted"
+    kdialog --msgbox "Installing rEFInd bootloader, please input the sudo password when prompted"
     "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
@@ -261,6 +265,7 @@ apply_refind_config() {
     fi
 
     print_log "applying config at: $refind_config, please input the sudo password when prompted"
+    kdialog --msgbox "applying config at: $refind_config, please input the sudo password when prompted"
     cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
     if [ $? == 0 ]; then
         "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
@@ -359,6 +364,7 @@ refind_uninstall_gui() {
 check_for_updates_proton_ge() {
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
+        kdialog --msgbox "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
         sleep 3
         return
     fi
