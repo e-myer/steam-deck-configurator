@@ -93,7 +93,6 @@ export_flatpaks() {
 
 interaction_export_flatpaks() {
     export_flatpaks_menu=()
-    mkdir -p "$configurator_dir/flatpaks"
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
 
@@ -103,6 +102,8 @@ interaction_export_flatpaks() {
         export_flatpaks_run=no
         return
     fi
+
+    mkdir -p "$configurator_dir/flatpaks"
 
     for name in "${flatpak_names[@]}"
     do
@@ -426,6 +427,13 @@ interaction_save_flatpaks_install() {
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
 
+    if [ ${#flatpak_names[@]} == 0 ]; then
+        print_log "error, no Flatpaks installed"
+        kdialog --error "error, no Flatpaks installed"
+        save_flatpaks_install_run=no
+        return
+    fi
+
     for name in "${flatpak_names[@]}"
     do
         if [ -z "$number" ]; then
@@ -440,6 +448,10 @@ interaction_save_flatpaks_install() {
 }
 
 save_flatpaks_install() {
+    if [ $save_flatpaks_install_run == no ]; then
+        return
+    fi
+
     print_log "saving flatpaks list"
     for flatpak in "${chosen_save_flatpaks[@]}"
     do
