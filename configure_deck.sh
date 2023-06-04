@@ -22,6 +22,7 @@ update_flatpaks() {
 
 set_up_import_and_export_flatpaks() {
     print_log "Seting up import and export flatpaks, please enter your password in the prompt"
+    kdialog --msgbox "Seting up import and export flatpaks, please enter your password in the prompt"
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
 }
 
@@ -63,6 +64,7 @@ install_bauh() {
 
 run_cryo_utilities_recommended() {
     print_log "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
+    kdialog --msgbox "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
     sudo "$HOME/.cryo_utilities/cryo_utilities" recommended
 }
 
@@ -85,14 +87,14 @@ export_flatpaks() {
                 fi
             fi
         else
-            print_log "error"
+            kdialog --title "steam-deck-configurator" --passive-popup "export flatpaks error: $?"
+            print_log "error $?"
         fi
     done
 }
 
 interaction_export_flatpaks() {
     export_flatpaks_menu=()
-    mkdir -p "$configurator_dir/flatpaks"
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
 
@@ -102,6 +104,8 @@ interaction_export_flatpaks() {
         export_flatpaks_run=no
         return
     fi
+
+    mkdir -p "$configurator_dir/flatpaks"
 
     for name in "${flatpak_names[@]}"
     do
@@ -131,7 +135,6 @@ import_flatpaks() {
 
 interaction_import_flatpaks() {
     import_flatpaks_menu=()
-    lines=()
     unset order
     local -A flatpaks_import_array
     if [ ! -f "$configurator_dir/flatpaks_exported_list" ]; then
@@ -204,7 +207,8 @@ install_cryoutilities() {
         return
     fi
 
-    print_log "cryoutilities is not installed, installing"
+    print_log "cryoutilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
+    kdialog --title "steam-deck-configurator" --passive-popup "cryoutilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
     curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_dir/cryoutilities_install.sh"
     chmod -v +x "$configurator_dir/cryoutilities_install.sh"
     "$configurator_dir/cryoutilities_install.sh"
@@ -249,6 +253,7 @@ install_refind_bootloader() {
     fi
 
     print_log "Installing rEFInd bootloader, please input the sudo password when prompted"
+    kdialog --title "steam-deck-configurator" --passive-popup "Installing rEFInd bootloader, please input the sudo password when prompted"
     "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
@@ -259,6 +264,7 @@ apply_refind_config() {
     fi
 
     print_log "applying config at: $refind_config, please input the sudo password when prompted"
+    kdialog --title "steam-deck-configurator" --passive-popup "applying config at: $refind_config, please input the sudo password when prompted"
     cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
     if [ $? == 0 ]; then
         "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
@@ -273,7 +279,8 @@ apply_refind_config() {
 interaction_apply_refind_config() {
     print_log "applying rEFInd config"
     if [ ! -d "$configurator_dir/rEFInd_configs" ]; then
-        kdialog --msgbox "No rEFInd configs found, please create one first, skipping..."
+        print_log "No rEFInd configs found, please create one first, skipping..."
+        kdialog --title "steam-deck-configurator" --passive-popup "No rEFInd configs found, please create one first, skipping..."
         apply_refind_config_run=no
         return
     else
@@ -357,6 +364,7 @@ refind_uninstall_gui() {
 check_for_updates_proton_ge() {
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
+        kdialog --title "steam-deck-configurator" --passive-popup "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
         sleep 3
         return
     fi
@@ -368,14 +376,17 @@ check_for_updates_proton_ge() {
     proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
     if [ ! "$proton_ge_downloaded_version" == "$version.tar.gz" ]; then
         print_log "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+        kdialog --msgbox "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
     else
         print_log "ProtonGE is up to date"
+        kdialog --msgbox "ProtonGE is up to date"
     fi
 }
 
 install_proton_ge_in_steam() {
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
+        kdialog --title "steam-deck-configurator" --passive-popup "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
         sleep 3
         return
     fi
@@ -383,6 +394,7 @@ install_proton_ge_in_steam() {
     mkdir -p ~/.steam/root/compatibilitytools.d
     tar -xf "$configurator_dir/GE-Proton*.tar.gz" -C ~/.steam/root/compatibilitytools.d/
     print_log "Proton GE installed, please restart Steam"
+    kdialog kdialog --title "steam-deck-configurator" --passive-popup " "Proton GE installed, please restart Steam"
 }
 
 fix_barrier() {
@@ -421,6 +433,13 @@ interaction_save_flatpaks_install() {
     readarray -t flatpak_names < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids < <(flatpak list --app --columns=application)
 
+    if [ ${#flatpak_names[@]} == 0 ]; then
+        print_log "error, no Flatpaks installed"
+        kdialog --error "error, no Flatpaks installed"
+        save_flatpaks_install_run=no
+        return
+    fi
+
     for name in "${flatpak_names[@]}"
     do
         if [ -z "$number" ]; then
@@ -435,6 +454,10 @@ interaction_save_flatpaks_install() {
 }
 
 save_flatpaks_install() {
+    if [ $save_flatpaks_install_run == no ]; then
+        return
+    fi
+
     print_log "saving flatpaks list"
     for flatpak in "${chosen_save_flatpaks[@]}"
     do
@@ -472,7 +495,6 @@ interaction_install_flatpaks() {
     fi
 
     install_flatpaks_menu=()
-    lines=()
     unset order
     local -A flatpaks_install_array
     readarray -t lines < "$flatpak_install_list_file"
@@ -553,6 +575,7 @@ create_config() {
     done
     chosen_tasks=()
     print_log "created config"
+    kdialog --msgbox "created config"
 }
 
 set_interactive_tasks() {
