@@ -281,6 +281,7 @@ interaction_apply_refind_config() {
     if [ ! -d "$configurator_dir/rEFInd_configs" ]; then
         print_log "No rEFInd configs found, please create one first, skipping..."
         kdialog --title "steam-deck-configurator" --passive-popup "No rEFInd configs found, please create one first, skipping..."
+        sleep 3
         apply_refind_config_run=no
         return
     else
