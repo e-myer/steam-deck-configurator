@@ -280,7 +280,7 @@ apply_refind_config() {
 interaction_apply_refind_config() {
     print_log "applying rEFInd config"
     if [ ! -d "$configurator_dir/rEFInd_configs" ]; then
-        kdialog --msgbox "No rEFInd configs found, please create one first, skipping..."
+        kdialog --title "steam-deck-configurator" --passive-popup "No rEFInd configs found, please create one first, skipping..."
         apply_refind_config_run=no
         return
     else
@@ -364,7 +364,7 @@ refind_uninstall_gui() {
 check_for_updates_proton_ge() {
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
-        kdialog --msgbox "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
+        kdialog --title "steam-deck-configurator" --passive-popup "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
         sleep 3
         return
     fi
@@ -386,7 +386,7 @@ check_for_updates_proton_ge() {
 install_proton_ge_in_steam() {
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
-        kdialog --error "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
+        kdialog --title "steam-deck-configurator" --passive-popup "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
         sleep 3
         return
     fi
