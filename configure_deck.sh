@@ -209,7 +209,7 @@ install_cryoutilities() {
     fi
 
     print_log "cryoutilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
-    kdialog --msgbox "cryoutilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
+    kdialog --title "steam-deck-configurator" --passive-popup "cryoutilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
     curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_dir/cryoutilities_install.sh"
     chmod -v +x "$configurator_dir/cryoutilities_install.sh"
     "$configurator_dir/cryoutilities_install.sh"
@@ -254,7 +254,7 @@ install_refind_bootloader() {
     fi
 
     print_log "Installing rEFInd bootloader, please input the sudo password when prompted"
-    kdialog --msgbox "Installing rEFInd bootloader, please input the sudo password when prompted"
+    kdialog --title "steam-deck-configurator" --passive-popup "Installing rEFInd bootloader, please input the sudo password when prompted"
     "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
@@ -265,7 +265,7 @@ apply_refind_config() {
     fi
 
     print_log "applying config at: $refind_config, please input the sudo password when prompted"
-    kdialog --msgbox "applying config at: $refind_config, please input the sudo password when prompted"
+    kdialog --title "steam-deck-configurator" --passive-popup "applying config at: $refind_config, please input the sudo password when prompted"
     cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
     if [ $? == 0 ]; then
         "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
@@ -280,6 +280,7 @@ apply_refind_config() {
 interaction_apply_refind_config() {
     print_log "applying rEFInd config"
     if [ ! -d "$configurator_dir/rEFInd_configs" ]; then
+        print_log "No rEFInd configs found, please create one first, skipping..."
         kdialog --title "steam-deck-configurator" --passive-popup "No rEFInd configs found, please create one first, skipping..."
         apply_refind_config_run=no
         return
