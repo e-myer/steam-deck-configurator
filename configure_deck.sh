@@ -141,7 +141,7 @@ interaction_export_flatpaks() {
 
 import_flatpaks() {
     if [ ${#chosen_import_flatpaks[@]} -eq 0 ]; then
-        echo No flatpaks chosen
+        print_log "No flatpaks chosen"
         return
     fi
 
@@ -518,14 +518,13 @@ save_flatpaks_install() {
 
 install_flatpaks() {
     if [ ${#chosen_install_flatpaks[@]} -eq 0 ]; then
-        echo No flatpaks chosen
+        print_log "No flatpaks chosen"
         return
     elif [[ " ${chosen_install_flatpaks[*]} " =~ " clear_list " ]]; then
         rm "$configurator_dir/flatpaks_install_list"
     else
         for flatpak in "${chosen_install_flatpaks[@]}"
         do
-        echo $flatpak
             print_log "installing $flatpak"
             flatpak install flathub $flatpak -y
         done
