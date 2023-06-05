@@ -635,7 +635,12 @@ run_interactive_tasks() {
     echo "${chosen_interactive_tasks[@]}"
     for task in "${chosen_interactive_tasks[@]}"
     do
-        interaction_$task
+        if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ]; then
+            ((task_number ++))
+            echo interaction_$task
+            interaction_$task
+            qdbus $dbusRef Set "" value $task_number
+        fi
     done
     ran_interactive_tasks=yes
 }
