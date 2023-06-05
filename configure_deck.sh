@@ -8,7 +8,7 @@ print_log() {
     echo -e "$log"
     qdbus $dbusRef setLabelText "$log"
     echo "$log" >> "$configurator_dir/logs.log"
-    if [ $2 == "error" ]; then
+    if [ "$2" == "error" ]; then
         echo "$log" >> "$configurator_dir/errors"
     fi
 }
@@ -85,7 +85,7 @@ run_cryo_utilities_recommended() {
 }
 
 export_flatpaks() {
-    if [ $export_flatpaks_run == no ]; then
+    if [ "$export_flatpaks_run" == "no" ]; then
         return
     fi
 
@@ -265,7 +265,7 @@ interaction_install_refind_bootloader() {
 }
 
 install_refind_bootloader() {
-    if [ $install_refind != yes ]; then
+    if [ "$install_refind" != "yes" ]; then
         print_log "didn't install refind" "error"
         return
     fi
@@ -281,7 +281,7 @@ install_refind_bootloader() {
 }
 
 apply_refind_config() {
-    if [ $apply_refind_config_run != yes ]; then
+    if [ "$apply_refind_config_run" != "yes" ]; then
         print_log "didn't apply refind config"
         return
     fi
@@ -304,7 +304,7 @@ apply_refind_config() {
 }
 
 interaction_apply_refind_config() {
-    if [ $install_refind != yes ]; then
+    if [ "$install_refind" != "yes" ]; then
         print_log "didn't apply refing config" "error"
         return
     fi
@@ -345,7 +345,7 @@ interaction_apply_refind_config() {
 }
 
 save_refind_config() {
-    if [ $save_refind_config_run != yes ]; then
+    if [ "$save_refind_config_run" != "yes" ]; then
         print_log "didn't save refind config"
         return
     fi
@@ -499,7 +499,7 @@ interaction_save_flatpaks_install() {
 }
 
 save_flatpaks_install() {
-    if [ $save_flatpaks_install_run == no ]; then
+    if [ "$save_flatpaks_install_run" == "no" ]; then
         return
     fi
 
@@ -635,7 +635,12 @@ run_interactive_tasks() {
     echo "${chosen_interactive_tasks[@]}"
     for task in "${chosen_interactive_tasks[@]}"
     do
-        interaction_$task
+        if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ]; then
+            ((task_number ++))
+            echo interaction_$task
+            interaction_$task
+            qdbus $dbusRef Set "" value $task_number
+        fi
     done
     ran_interactive_tasks=yes
 }
