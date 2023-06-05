@@ -65,7 +65,7 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
 ## Other useful projects for Steam Deck
 - [NonSteamLaunchers-On-Steam-Deck](https://github.com/moraroy/NonSteamLaunchers-On-Steam-Deck) - Automatic installation of the most popular launchers in your Steam Deck
 
-## Post install scripts and tools for Windows on Steam Deck
+## Post install scripts and tools for Windows on the Steam Deck
 - [SteamDeckAutomatedInstall by CelesteHeartsong](https://github.com/CelesteHeartsong/SteamDeckAutomatedInstall)
 - [Chris Titus Tech's Windows Utility](https://github.com/ChrisTitusTech/winutil)
 
