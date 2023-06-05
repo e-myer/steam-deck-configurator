@@ -4,7 +4,7 @@ configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && 
 
 print_log() {
     log_message=$1
-    log="$task_number/${#chosen_tasks[@]}: $task - $log_message"
+    log="$task_number/$number_of_tasks: $task - $log_message"
     echo -e "$log"
     qdbus $dbusRef setLabelText "$log"
     echo "$log" >> "$configurator_dir/logs.log"
@@ -632,13 +632,15 @@ run_interactive_tasks() {
     interactive_tasks=($(echo "${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
     chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
 
+    number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
+
     echo "${chosen_interactive_tasks[@]}"
     for task in "${chosen_interactive_tasks[@]}"
     do
         if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ]; then
             ((task_number ++))
             echo interaction_$task
-            interaction_$task
+            #interaction_$task
             qdbus $dbusRef Set "" value $task_number
         fi
     done
@@ -657,6 +659,8 @@ run_tasks() {
 
     if [ "$ran_interactive_tasks" != "yes" ] && [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]] && [[ ! " ${chosen_tasks[*]} " =~ " create_config " ]]; then
         run_interactive_tasks
+    else
+        number_of_tasks=${#chosen_tasks[@]}
     fi
 
     for task in "${chosen_tasks[@]}"
@@ -664,7 +668,7 @@ run_tasks() {
         if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ] && [[ " ${chosen_tasks[*]} " =~ " ${task} " ]]; then
             ((task_number ++))
             echo $task
-            $task
+            #$task
             qdbus $dbusRef Set "" value $task_number
         fi
     done
