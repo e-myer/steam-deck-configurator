@@ -225,7 +225,7 @@ install_cryoutilities() {
         return
     fi
 
-    print_log "CryoUtilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
+    print_log "CryoUtilities is not installed, installing... Please click on the \"ok\" button after it installs to continue"
     kdialog --title "steam-deck-configurator" --passivepopup "CryoUtilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
     curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_dir/cryoutilities_install.sh"
     chmod -v +x "$configurator_dir/cryoutilities_install.sh"
