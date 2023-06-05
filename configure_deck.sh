@@ -4,7 +4,7 @@ configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && 
 
 print_log() {
     log_message=$1
-    log="$task_number/${#chosen_tasks[@]}: $task - $log_message"
+    log="$task_number/$number_of_tasks: $task - $log_message"
     echo -e "$log"
     qdbus $dbusRef setLabelText "$log"
     echo "$log" >> "$configurator_dir/logs.log"
@@ -141,7 +141,7 @@ interaction_export_flatpaks() {
 
 import_flatpaks() {
     if [ ${#chosen_import_flatpaks[@]} -eq 0 ]; then
-        echo No flatpaks chosen
+        print_log "No flatpaks chosen"
         return
     fi
 
@@ -518,14 +518,13 @@ save_flatpaks_install() {
 
 install_flatpaks() {
     if [ ${#chosen_install_flatpaks[@]} -eq 0 ]; then
-        echo No flatpaks chosen
+        print_log "No flatpaks chosen"
         return
     elif [[ " ${chosen_install_flatpaks[*]} " =~ " clear_list " ]]; then
         rm "$configurator_dir/flatpaks_install_list"
     else
         for flatpak in "${chosen_install_flatpaks[@]}"
         do
-        echo $flatpak
             print_log "installing $flatpak"
             flatpak install flathub $flatpak -y
         done
@@ -632,6 +631,8 @@ run_interactive_tasks() {
     interactive_tasks=($(echo "${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
     chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
 
+    number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
+
     echo "${chosen_interactive_tasks[@]}"
     for task in "${chosen_interactive_tasks[@]}"
     do
@@ -657,6 +658,8 @@ run_tasks() {
 
     if [ "$ran_interactive_tasks" != "yes" ] && [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]] && [[ ! " ${chosen_tasks[*]} " =~ " create_config " ]]; then
         run_interactive_tasks
+    else
+        number_of_tasks=${#chosen_tasks[@]}
     fi
 
     for task in "${chosen_tasks[@]}"
