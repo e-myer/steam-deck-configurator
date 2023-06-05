@@ -8,6 +8,9 @@ print_log() {
     echo -e "$log"
     qdbus $dbusRef setLabelText "$log"
     echo "$log" >> "$configurator_dir/logs.log"
+    if [ $2 == "error" ]; then
+        echo "$log" >> "$configurator_dir/errors"
+    fi
 }
 
 add_flathub() {
@@ -20,8 +23,7 @@ update_flatpaks() {
     list_flatpaks
 
     if [ ${#flatpak_names[@]} == 0 ]; then
-        print_log "error, no Flatpaks installed"
-        print_log "error, no Flatpaks installed" >> "$configurator_dir/errors"
+        print_log "error, no Flatpaks installed" "error"
         return
     fi
 
@@ -37,8 +39,7 @@ set_up_import_and_export_flatpaks() {
 install_bauh() {
     print_log "Installing Bauh"
     if [ ! -f "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" ]; then
-        print_log "bauh appimage doesn't exist in this folder, download it first, skipping..." >> "$configurator_dir/errors"
-        print_log "bauh appimage doesn't exist in this folder, download it first, skipping..."
+        print_log "bauh appimage doesn't exist in this folder, download it first, skipping..." "error"
         kdialog --title "steam-deck-configurator" --passivepopup "bauh appimage doesn't exist in this folder, download it first, skipping..."
         sleep 3
         return
@@ -98,8 +99,7 @@ export_flatpaks() {
             fi
         else
             kdialog --title "steam-deck-configurator" --passivepopup "export flatpaks error: $?"
-            print_log "export_flatpaks error $?"
-            print_log "export_flatpaks error $?" >> "$configurator_dir/errors"
+            print_log "export_flatpaks error $?" "error"
         fi
     done
 }
@@ -114,8 +114,7 @@ interaction_export_flatpaks() {
     list_flatpaks
 
     if [ ${#flatpak_names[@]} == 0 ]; then
-        print_log "error, no Flatpaks installed"
-        print_log "error, no Flatpaks installed" >> "$configurator_dir/errors"
+        print_log "error, no Flatpaks installed" "error"
         export_flatpaks_run=no
         return
     fi
@@ -153,8 +152,7 @@ interaction_import_flatpaks() {
     unset order
     local -A flatpaks_import_array
     if [ ! -f "$configurator_dir/flatpaks_exported_list" ]; then
-        print_log "no exported flatpak found"
-        print_log "no exported flatpak found" >> "$configurator_dir/errors"
+        print_log "no exported flatpak found" "error"
         return
     fi
 
@@ -263,14 +261,12 @@ interaction_install_refind_bootloader() {
 
 install_refind_bootloader() {
     if [ $install_refind != yes ]; then
-        print_log "didn't install refind"
-        print_log "didn't install refind" >> "$configurator_dir/errors"
+        print_log "didn't install refind" "error"
         return
     fi
 
     if [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
-        print_log "rEFInd isn't installed, install the GUI first"
-        print_log "rEFInd isn't installed, install the GUI first" >> "$configurator_dir/errors"
+        print_log "rEFInd isn't installed, install the GUI first" "error"
         return
     fi
 
@@ -286,8 +282,7 @@ apply_refind_config() {
     fi
 
     if [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
-        print_log "rEFInd isn't installed, install the GUI first"
-        print_log "rEFInd isn't installed, install the GUI first" >> "$configurator_dir/errors"
+        print_log "rEFInd isn't installed, install the GUI first" "error"
         return
     fi
 
@@ -299,28 +294,24 @@ apply_refind_config() {
         print_log "config applied"
     else
         cp_error=$?
-        print_log "error $cp_error, config not applied"
-        print_log "error $cp_error, config not applied" >> "$configurator_dir/errors"
+        print_log "error $cp_error, config not applied" "error"
     fi
 }
 
 interaction_apply_refind_config() {
     if [ $install_refind != yes ]; then
-        print_log "didn't apply refing config"
-        print_log "didn't apply refing config" >> "$configurator_dir/errors"
+        print_log "didn't apply refing config" "error"
         return
     fi
 
     if [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
-        print_log "rEFInd isn't installed, install the GUI first"
-        print_log "rEFInd isn't installed, install the GUI first" >> "$configurator_dir/errors"
+        print_log "rEFInd isn't installed, install the GUI first" "error"
         return
     fi
 
     print_log "applying rEFInd config"
     if [ ! -d "$configurator_dir/rEFInd_configs" ]; then
-        print_log "No rEFInd configs found, please create one first, skipping..."
-        print_log "No rEFInd configs found, please create one first, skipping..." >> "$configurator_dir/errors"
+        print_log "No rEFInd configs found, please create one first, skipping..." "error"
         kdialog --title "steam-deck-configurator" --passivepopup "No rEFInd configs found, please create one first, skipping..."
         sleep 3
         apply_refind_config_run=no
@@ -355,8 +346,7 @@ save_refind_config() {
     fi
 
     if [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
-        print_log "rEFInd isn't installed, install the GUI first"
-        print_log "rEFInd isn't installed, install the GUI first" >> "$configurator_dir/errors"
+        print_log "rEFInd isn't installed, install the GUI first" "error"
         return
     fi
 
@@ -369,8 +359,7 @@ save_refind_config() {
         kdialog --msgbox "config saved to $config_save_path"
     else
         cp_error=$?
-        print_log "error $cp_error, config not saved"
-        print_log "error $cp_error, config not saved" >> "$configurator_dir/errors"
+        print_log "error $cp_error, config not saved" "error"
     fi
 
 
@@ -378,8 +367,7 @@ save_refind_config() {
 
 interaction_save_refind_config() {
     if [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
-        print_log "rEFInd isn't installed, install the GUI first"
-        print_log "rEFInd isn't installed, install the GUI first" >> "$configurator_dir/errors"
+        print_log "rEFInd isn't installed, install the GUI first" "error"
         return
     fi
 
@@ -417,8 +405,7 @@ refind_uninstall_gui() {
 
 check_for_updates_proton_ge() {
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
-        print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
-        print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..." >> "$configurator_dir/errors"
+        print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..." "error"
         kdialog --title "steam-deck-configurator" --passivepopup "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
         sleep 3
         return
@@ -440,8 +427,7 @@ check_for_updates_proton_ge() {
 
 install_proton_ge_in_steam() {
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
-        print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
-        print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..." >> "$configurator_dir/errors"
+        print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..." "error"
         kdialog --title "steam-deck-configurator" --passivepopup "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
         sleep 3
         return
@@ -489,8 +475,7 @@ interaction_save_flatpaks_install() {
     list_flatpaks
 
     if [ ${#flatpak_names[@]} == 0 ]; then
-        print_log "error, no Flatpaks installed"
-        print_log "error, no Flatpaks installed" >> "$configurator_dir/errors"
+        print_log "error, no Flatpaks installed" "error"
         save_flatpaks_install_run=no
         return
     fi
@@ -588,7 +573,7 @@ load_config() {
             done
         done
     else
-        print_log "No configs found, please create one first" >> "$configurator_dir/errors"
+        print_log "No configs found, please create one first" "error"
     fi
 }
 
