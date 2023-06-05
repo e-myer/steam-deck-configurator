@@ -676,7 +676,6 @@ set_menu() {
     "install_cryoutilities" "Install Cryoutilities" off 
     "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings" off 
     "install_emudeck" "Install Emudeck" off 
-    "install_retrodeck" "Install RetroDeck" off 
     "update_submodules" "Update Submodules" off 
     "install_refind_GUI" "Install rEFInd GUI" off 
     "install_refind_bootloader" "Install rEFInd bootloader" off 
