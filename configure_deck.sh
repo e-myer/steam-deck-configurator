@@ -32,7 +32,7 @@ update_flatpaks() {
 
 set_up_import_and_export_flatpaks() {
     print_log "Seting up import and export flatpaks, please enter your password in the prompt"
-    kdialog --msgbox "Seting up import and export flatpaks, please enter your password in the prompt"
+    kdialog --title "set up import and export flatpaks - Steam Deck Configurator" --msgbox "Seting up import and export flatpaks, please enter your password in the prompt"
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
 }
 
@@ -40,7 +40,7 @@ install_bauh() {
     print_log "Installing Bauh"
     if [ ! -f "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" ]; then
         print_log "bauh appimage doesn't exist in this folder, download it first, skipping..." "error"
-        kdialog --title "steam-deck-configurator" --passivepopup "bauh appimage doesn't exist in this folder, download it first, skipping..."
+        kdialog --title "Steam Deck Configurator" --passivepopup "bauh appimage doesn't exist in this folder, download it first, skipping..."
         sleep 3
         return
     fi
@@ -80,7 +80,7 @@ run_cryo_utilities_recommended() {
     fi
 
     print_log "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
-    kdialog --msgbox "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
+    kdialog --title "Run CryoUtilities Recommended - Steam Deck Configurator" --msgbox "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
     sudo "$HOME/.cryo_utilities/cryo_utilities" recommended
 }
 
@@ -103,7 +103,7 @@ export_flatpaks() {
                 fi
             fi
         else
-            kdialog --title "steam-deck-configurator" --passivepopup "export flatpaks error: $?"
+            kdialog --title "Export Flatpaks - Steam Deck Configurator" --passivepopup "export flatpaks error: $?"
             print_log "export_flatpaks error $?" "error"
         fi
     done
@@ -226,7 +226,7 @@ install_cryoutilities() {
     fi
 
     print_log "CryoUtilities is not installed, installing... Please click on the \"ok\" button after it installs to continue"
-    kdialog --title "steam-deck-configurator" --passivepopup "CryoUtilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
+    kdialog --title "Steam Deck Configurator" --passivepopup "CryoUtilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
     curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_dir/cryoutilities_install.sh"
     chmod -v +x "$configurator_dir/cryoutilities_install.sh"
     "$configurator_dir/cryoutilities_install.sh"
@@ -256,7 +256,7 @@ install_refind_GUI() {
 }
 
 interaction_install_refind_bootloader() {
-    kdialog --title "install_refind_bootloader" --yesno "It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"
+    kdialog --title "Install rEFInd Bootloader - Steam Deck Configurator" --yesno "It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"
     if [ $? == 0 ]; then
         install_refind=yes
     else
@@ -276,7 +276,7 @@ install_refind_bootloader() {
     fi
 
     print_log "Installing rEFInd bootloader, please input the sudo password when prompted"
-    kdialog --title "steam-deck-configurator" --passivepopup "Installing rEFInd bootloader, please input the sudo password when prompted"
+    kdialog --title "Steam Deck Configurator" --passivepopup "Installing rEFInd bootloader, please input the sudo password when prompted"
     "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
@@ -292,7 +292,7 @@ apply_refind_config() {
     fi
 
     print_log "applying config at: $refind_config, please input the sudo password when prompted"
-    kdialog --title "steam-deck-configurator" --passivepopup "applying config at: $refind_config, please input the sudo password when prompted"
+    kdialog --title "Steam Deck Configurator" --passivepopup "applying config at: $refind_config, please input the sudo password when prompted"
     cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
     if [ $? == 0 ]; then
         "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
@@ -317,7 +317,7 @@ interaction_apply_refind_config() {
     print_log "applying rEFInd config"
     if [ ! -d "$configurator_dir/rEFInd_configs" ]; then
         print_log "No rEFInd configs found, please create one first, skipping..." "error"
-        kdialog --title "steam-deck-configurator" --passivepopup "No rEFInd configs found, please create one first, skipping..."
+        kdialog --title "Steam Deck Configurator" --passivepopup "No rEFInd configs found, please create one first, skipping..."
         sleep 3
         apply_refind_config_run=no
         return
@@ -361,7 +361,7 @@ save_refind_config() {
     
     if [ $? == 0 ]; then
         print_log "config saved to $config_save_path"
-        kdialog --msgbox "config saved to $config_save_path"
+        kdialog --title "Save rEFInd Config - Steam Deck Configurator" --msgbox "config saved to $config_save_path"
     else
         cp_error=$?
         print_log "error $cp_error, config not saved" "error"
@@ -376,7 +376,7 @@ interaction_save_refind_config() {
         return
     fi
 
-    kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
+    kdialog --title "Save rEFInd Config - Steam Deck Configurator" --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? != 0 ]; then
         save_refind_config_run=no
         print_log "cancelled"
@@ -411,7 +411,7 @@ refind_uninstall_gui() {
 check_for_updates_proton_ge() {
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..." "error"
-        kdialog --title "steam-deck-configurator" --passivepopup "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
+        kdialog --title "Check For ProtonGE Updates - Steam Deck Configurator" --passivepopup "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
         sleep 3
         return
     fi
@@ -423,17 +423,17 @@ check_for_updates_proton_ge() {
     proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
     if [ ! "$proton_ge_downloaded_version" == "$version.tar.gz" ]; then
         print_log "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
-        kdialog --msgbox "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+        kdialog --title "Check For ProtonGE Updates - Steam Deck Configurator" --msgbox "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
     else
         print_log "ProtonGE is up to date"
-        kdialog --msgbox "ProtonGE is up to date"
+        kdialog --title "Check For ProtonGE Updates - Steam Deck Configurator" --msgbox "ProtonGE is up to date"
     fi
 }
 
 install_proton_ge_in_steam() {
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..." "error"
-        kdialog --title "steam-deck-configurator" --passivepopup "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
+        kdialog --title "Install ProtonGE in Steam - Steam Deck Configurator" --passivepopup "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
         sleep 3
         return
     fi
@@ -441,14 +441,14 @@ install_proton_ge_in_steam() {
     mkdir -p ~/.steam/root/compatibilitytools.d
     tar -xf "$configurator_dir/GE-Proton*.tar.gz" -C ~/.steam/root/compatibilitytools.d/
     print_log "Proton GE installed, please restart Steam"
-    kdialog --title "steam-deck-configurator" --passivepopup "Proton GE installed, please restart Steam"
+    kdialog --title "Install ProtonGE in Steam - Steam Deck Configurator" --passivepopup "Proton GE installed, please restart Steam"
 }
 
 fix_barrier() {
     print_log "Fixing Barrier"
     kdialog --title "Barrier Auto Config" --yesno "Are you using auto config for the ip address?"
     if [ $? == 1 ]; then
-        ip_address=$(kdialog --title "Input dialog" --inputbox "input server ip address from the barrier app")
+        ip_address=$(kdialog --title "Fix Barrier - Steam Deck Configurator" --inputbox "input server ip address from the barrier app")
     fi
 
     touch "$HOME/.config/systemd/user/barrier.service"
@@ -495,7 +495,7 @@ interaction_save_flatpaks_install() {
         save_flatpaks_menu+=("$number" "$name" off)
     done
     
-    readarray -t chosen_save_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${save_flatpaks_menu[@]}")
+    readarray -t chosen_save_flatpaks < <(kdialog --title "Choose Flatpaks to Save - Steam Deck Configurator" --separate-output --checklist "Select Flatpaks" "${save_flatpaks_menu[@]}")
 }
 
 save_flatpaks_install() {
@@ -555,14 +555,14 @@ interaction_install_flatpaks() {
         install_flatpaks_menu+=("${flatpaks_install_array[$key]}" "$key" off)
     done
 
-    readarray -t chosen_install_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${install_flatpaks_menu[@]}")
+    readarray -t chosen_install_flatpaks < <(kdialog --title "Choose Flatpaks to Install - Steam Deck Configurator" --separate-output --checklist "Select Flatpaks" "${install_flatpaks_menu[@]}")
 }
 
 
 load_config() {
     if [ -d "$configurator_dir/configs" ]; then
         set_menu
-        readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="select a file" --filename="$configurator_dir/configs/")
+        readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="Select a File - Load Config - Steam Deck Configurator" --filename="$configurator_dir/configs/")
         if [ $? != 0 ]; then
             print_log "cancelled"
             return
@@ -583,14 +583,14 @@ load_config() {
 
 create_dialog() {
     while true; do
-    readarray -t chosen_tasks < <(echo $menu | xargs kdialog --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect")
+    readarray -t chosen_tasks < <(echo $menu | xargs kdialog --title "Steam Deck Configurator" --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect")
     run_tasks
     done
 }
 
 create_config() {
     if [ ${#chosen_tasks[@]} == 1 ]; then
-        kdialog --error "Please choose the tasks to save as a config."
+        kdialog --title "Create Config - Steam Deck Configurator" --error "Please choose the tasks to save as a config."
         return
     fi
 
@@ -599,7 +599,7 @@ create_config() {
     fi
     
     local config
-    config=$(zenity --file-selection --save --title="select a file" --filename="$configurator_dir/configs/")
+    config=$(zenity --file-selection --save --title="Select a File - Create Config - Steam Deck Configurator" --filename="$configurator_dir/configs/")
     if [ $? != 0 ]; then
         print_log "cancelled"
         chosen_tasks=()
@@ -619,7 +619,7 @@ create_config() {
     done
     chosen_tasks=()
     print_log "created config"
-    kdialog --msgbox "created config"
+    kdialog --title "Create Config - Steam Deck Configurator" --msgbox "created config"
 }
 
 set_interactive_tasks() {
@@ -678,7 +678,7 @@ run_tasks() {
     fi
 
     if [ -s "$configurator_dir/errors" ]; then
-        kdialog --textbox "$configurator_dir/errors"
+        kdialog --title "Run Tasks - Steam Deck Configurator" --textbox "$configurator_dir/errors"
         truncate -s 0 "$configurator_dir/errors"
     fi
 
@@ -713,7 +713,7 @@ set_menu() {
 }
 
 main() {
-    kdialog --title "password" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"
+    kdialog --title "Password - Steam Deck Configurator" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"
 
     if [ $? == 1 ]; then
         exit 0
