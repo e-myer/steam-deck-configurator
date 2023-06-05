@@ -137,7 +137,7 @@ interaction_export_flatpaks() {
         export_flatpaks_menu+=("$number" "$name" off)
     done
     
-    readarray -t chosen_export_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${export_flatpaks_menu[@]}")
+    readarray -t chosen_export_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks to export" "${export_flatpaks_menu[@]}")
 }
 
 import_flatpaks() {
@@ -178,7 +178,7 @@ interaction_import_flatpaks() {
         import_flatpaks_menu+=("${flatpaks_import_array[$key]}" "$key" off)
     done
 
-    readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks" "${import_flatpaks_menu[@]}")
+    readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks to import" "${import_flatpaks_menu[@]}")
 }
 
 install_deckyloader() {
@@ -503,7 +503,7 @@ interaction_save_flatpaks_install() {
         save_flatpaks_menu+=("$number" "$name" off)
     done
     
-    readarray -t chosen_save_flatpaks < <(kdialog --title "Choose Flatpaks to Save - Steam Deck Configurator" --separate-output --checklist "Select Flatpaks" "${save_flatpaks_menu[@]}")
+    readarray -t chosen_save_flatpaks < <(kdialog --title "Choose Flatpaks to Save - Steam Deck Configurator" --separate-output --checklist "Select Flatpaks to save" "${save_flatpaks_menu[@]}")
 }
 
 save_flatpaks_install() {
@@ -566,7 +566,7 @@ interaction_install_flatpaks() {
         install_flatpaks_menu+=("${flatpaks_install_array[$key]}" "$key" off)
     done
 
-    readarray -t chosen_install_flatpaks < <(kdialog --title "Choose Flatpaks to Install - Steam Deck Configurator" --separate-output --checklist "Select Flatpaks" "${install_flatpaks_menu[@]}")
+    readarray -t chosen_install_flatpaks < <(kdialog --title "Choose Flatpaks to Install - Steam Deck Configurator" --separate-output --checklist "Select Flatpaks to install" "${install_flatpaks_menu[@]}")
 }
 
 
