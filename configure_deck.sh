@@ -8,7 +8,7 @@ print_log() {
     echo -e "$log"
     qdbus $dbusRef setLabelText "$log"
     echo "$log" >> "$configurator_dir/logs.log"
-    if [ $2 == "error" ]; then
+    if [ "$2" == "error" ]; then
         echo "$log" >> "$configurator_dir/errors"
     fi
 }
