@@ -115,6 +115,7 @@ list_flatpaks() {
 }
 
 interaction_export_flatpaks() {
+    print_log "Listing Flatpaks for Exporting"
     export_flatpaks_menu=()
     list_flatpaks
 
@@ -140,6 +141,7 @@ interaction_export_flatpaks() {
 }
 
 import_flatpaks() {
+    print_log "importing flatpaks"
     if [ ${#chosen_import_flatpaks[@]} -eq 0 ]; then
         print_log "No flatpaks chosen"
         return
@@ -153,6 +155,7 @@ import_flatpaks() {
 }
 
 interaction_import_flatpaks() {
+    print_log "listing flatpaks for importing"
     import_flatpaks_menu=()
     unset order
     local -A flatpaks_import_array
@@ -256,6 +259,7 @@ install_refind_GUI() {
 }
 
 interaction_install_refind_bootloader() {
+    print_log "install reifnd bootlader confirmation"
     kdialog --title "Install rEFInd Bootloader - Steam Deck Configurator" --yesno "It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"
     if [ $? == 0 ]; then
         install_refind=yes
@@ -371,6 +375,7 @@ save_refind_config() {
 }
 
 interaction_save_refind_config() {
+    print_log "save rEFInd config"
     if [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
         print_log "rEFInd isn't installed, install the GUI first" "error"
         return
@@ -409,6 +414,7 @@ refind_uninstall_gui() {
 }
 
 check_for_updates_proton_ge() {
+    print_log "checking for ProtonGE Updates"
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..." "error"
         kdialog --title "Steam Deck Configurator" --passivepopup "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
@@ -431,6 +437,7 @@ check_for_updates_proton_ge() {
 }
 
 install_proton_ge_in_steam() {
+    print_log "install protonGE in steam"
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..." "error"
         kdialog --title "Steam Deck Configurator" --passivepopup "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
@@ -477,6 +484,7 @@ fix_barrier() {
 }
 
 interaction_save_flatpaks_install() {
+    print_log "save flatpaks list interaction"
     list_flatpaks
 
     if [ ${#flatpak_names[@]} == 0 ]; then
@@ -499,6 +507,7 @@ interaction_save_flatpaks_install() {
 }
 
 save_flatpaks_install() {
+    print_log "saving flatpaks list"
     if [ "$save_flatpaks_install_run" == "no" ]; then
         return
     fi
@@ -517,6 +526,7 @@ save_flatpaks_install() {
 }
 
 install_flatpaks() {
+    print_log "installing flatpaks"
     if [ ${#chosen_install_flatpaks[@]} -eq 0 ]; then
         print_log "No flatpaks chosen"
         return
@@ -532,6 +542,7 @@ install_flatpaks() {
 }
 
 interaction_install_flatpaks() {
+    print_log "choose flatpaks to install"
     if [ -s "$configurator_dir/flatpaks_install_list" ]; then
         flatpak_install_list_file=$configurator_dir/flatpaks_install_list
     else
@@ -560,6 +571,7 @@ interaction_install_flatpaks() {
 
 
 load_config() {
+    print_log "load config"
     if [ -d "$configurator_dir/configs" ]; then
         set_menu
         readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="Select a File - Load Config - Steam Deck Configurator" --filename="$configurator_dir/configs/")
@@ -589,6 +601,7 @@ create_dialog() {
 }
 
 create_config() {
+    print_log "create config"
     if [ ${#chosen_tasks[@]} == 1 ]; then
         kdialog --title "Create Config - Steam Deck Configurator" --error "Please choose the tasks to save as a config."
         return
