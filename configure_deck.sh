@@ -268,6 +268,12 @@ install_refind_bootloader() {
         return
     fi
 
+    if [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
+        print_log "rEFInd isn't installed, install the GUI first"
+        print_log "rEFInd isn't installed, install the GUI first" >> "$configurator_dir/errors"
+        return
+    fi
+
     print_log "Installing rEFInd bootloader, please input the sudo password when prompted"
     kdialog --title "steam-deck-configurator" --passivepopup "Installing rEFInd bootloader, please input the sudo password when prompted"
     "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
@@ -276,6 +282,12 @@ install_refind_bootloader() {
 apply_refind_config() {
     if [ $apply_refind_config_run != yes ]; then
         print_log "didn't apply refind config"
+        return
+    fi
+
+    if [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
+        print_log "rEFInd isn't installed, install the GUI first"
+        print_log "rEFInd isn't installed, install the GUI first" >> "$configurator_dir/errors"
         return
     fi
 
@@ -296,6 +308,12 @@ interaction_apply_refind_config() {
     if [ $install_refind != yes ]; then
         print_log "didn't apply refing config"
         print_log "didn't apply refing config" >> "$configurator_dir/errors"
+        return
+    fi
+
+    if [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
+        print_log "rEFInd isn't installed, install the GUI first"
+        print_log "rEFInd isn't installed, install the GUI first" >> "$configurator_dir/errors"
         return
     fi
 
@@ -336,6 +354,12 @@ save_refind_config() {
         return
     fi
 
+    if [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
+        print_log "rEFInd isn't installed, install the GUI first"
+        print_log "rEFInd isn't installed, install the GUI first" >> "$configurator_dir/errors"
+        return
+    fi
+
     print_log "saving rEFInd config"
     mkdir -p "$config_save_path"
     cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path"
@@ -353,6 +377,12 @@ save_refind_config() {
 }
 
 interaction_save_refind_config() {
+    if [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
+        print_log "rEFInd isn't installed, install the GUI first"
+        print_log "rEFInd isn't installed, install the GUI first" >> "$configurator_dir/errors"
+        return
+    fi
+
     kdialog --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
     if [ $? != 0 ]; then
         save_refind_config_run=no
