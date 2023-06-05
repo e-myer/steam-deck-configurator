@@ -48,8 +48,8 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
   - If the task is at the very end of the list, then move the single apostrophe to the end.
 
 - To remove a task from the dialog
- - Remove the line with the task from the "menu" variable in the "set menu" function.
- - If the removed task was at the very and of the list, add a single apostrophe to the end of the list.
+  - Remove the line with the task from the "menu" variable in the "set menu" function.
+  - If the removed task was at the very and of the list, add a single apostrophe to the end of the list.
  
 ## General Steam Deck Notes
 
