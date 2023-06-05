@@ -73,6 +73,11 @@ install_bauh() {
 }
 
 run_cryo_utilities_recommended() {
+    if [ ! -d "$HOME/.cryo_utilities" ]; then
+        print_log "CryoUtilities is not installed, didn't run cryo_utilites" "error"
+        return
+    fi
+
     print_log "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
     kdialog --msgbox "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
     sudo "$HOME/.cryo_utilities/cryo_utilities" recommended
@@ -216,14 +221,14 @@ uninstall_deckyloader() {
 }
 
 install_cryoutilities() {
-    print_log "checking if cryoutilities is installed"
+    print_log "checking if CryoUtilities is installed"
     if [ -d "$HOME/.cryo_utilities" ]; then
-        print_log "cryoutilities is already installed"
+        print_log "CryoUtilities is already installed"
         return
     fi
 
-    print_log "cryoutilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
-    kdialog --title "steam-deck-configurator" --passivepopup "cryoutilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
+    print_log "CryoUtilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
+    kdialog --title "steam-deck-configurator" --passivepopup "CryoUtilities is not installed, installing... Please select click the \"ok\" button after it installs to continue"
     curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_dir/cryoutilities_install.sh"
     chmod -v +x "$configurator_dir/cryoutilities_install.sh"
     "$configurator_dir/cryoutilities_install.sh"
@@ -703,7 +708,7 @@ set_menu() {
     "uninstall_deckyloader" "Uninstall DeckyLoader" off 
     "refind_uninstall_gui" "Uninstall rEFInd GUI" off 
     "check_for_updates_proton_ge" "Check for Proton GE Updates" off 
-    "install_cryoutilities" "Install Cryoutilities" off 
+    "install_cryoutilities" "Install CryoUtilities" off 
     "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings" off 
     "install_emudeck" "Install Emudeck" off 
     "update_submodules" "Update Submodules" off 
