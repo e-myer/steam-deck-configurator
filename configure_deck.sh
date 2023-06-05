@@ -17,6 +17,14 @@ add_flathub() {
 
 update_flatpaks() {
     print_log "Updating Flatpaks"
+    list_flatpaks
+
+    if [ ${#flatpak_names[@]} == 0 ]; then
+        print_log "error, no Flatpaks installed"
+        print_log "error, no Flatpaks installed" >> "$configurator_dir/errors"
+        return
+    fi
+
     flatpak update -y
 }
 
@@ -29,7 +37,9 @@ set_up_import_and_export_flatpaks() {
 install_bauh() {
     print_log "Installing Bauh"
     if [ ! -f "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" ]; then
+        print_log "bauh appimage doesn't exist in this folder, download it first, skipping..." >> "$configurator_dir/errors"
         print_log "bauh appimage doesn't exist in this folder, download it first, skipping..."
+        kdialog --title "steam-deck-configurator" --passivepopup "bauh appimage doesn't exist in this folder, download it first, skipping..."
         sleep 3
         return
     fi
@@ -254,6 +264,7 @@ interaction_install_refind_bootloader() {
 install_refind_bootloader() {
     if [ $install_refind != yes ]; then
         print_log "didn't install refind"
+        print_log "didn't install refind" >> "$configurator_dir/errors"
         return
     fi
 
@@ -282,6 +293,12 @@ apply_refind_config() {
 }
 
 interaction_apply_refind_config() {
+    if [ $install_refind != yes ]; then
+        print_log "didn't apply refing config"
+        print_log "didn't apply refing config" >> "$configurator_dir/errors"
+        return
+    fi
+
     print_log "applying rEFInd config"
     if [ ! -d "$configurator_dir/rEFInd_configs" ]; then
         print_log "No rEFInd configs found, please create one first, skipping..."
