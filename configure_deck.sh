@@ -695,7 +695,7 @@ run_tasks() {
         truncate -s 0 "$configurator_dir/errors"
     fi
 
-    qdbus $dbusRef setLabelText "$task_number/${#chosen_tasks[@]}: Tasks completed"
+    qdbus $dbusRef setLabelText "$task_number/$number_of_tasks: Tasks completed"
 }
 
 set_menu() {
