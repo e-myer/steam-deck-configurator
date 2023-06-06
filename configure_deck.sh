@@ -696,7 +696,6 @@ set_menu() {
     "create_config" "Create Config" off 
     "add_flathub" "Add Flathub if it does not exist" off 
     "update_flatpaks" "Update Flatpaks" off 
-    "set_up_import_and_export_flatpaks" "Set up import and export Flatpaks" off 
     "import_flatpaks" "Import Flatpaks" off 
     "export_flatpaks" "Export Flatpaks" off 
     "install_flatpaks" "Install Flatpaks" off
