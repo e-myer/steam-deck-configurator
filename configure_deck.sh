@@ -565,7 +565,7 @@ load_config() {
 
         for file in "${config_files[@]}"
         do
-            readarray -t config_line < $file
+            readarray -t config_line < "$file"
             for option in "${config_line[@]}"
             do
                 menu=$(sed -r "s/(\"$option\" ".+?") off/\1 on/" <<< $menu)
