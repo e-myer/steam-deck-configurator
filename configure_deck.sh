@@ -654,9 +654,7 @@ run_tasks() {
 
     if [ "$ran_interactive_tasks" != "yes" ] && [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]] && [[ ! " ${chosen_tasks[*]} " =~ " create_config " ]]; then
         run_interactive_tasks
-    elif [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
-        number_of_tasks=1
-    elif [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
+    elif [[ " ${chosen_tasks[*]} " =~ " load_config " ]] || [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
         number_of_tasks=1
     else
         number_of_tasks=${#chosen_tasks[@]}
