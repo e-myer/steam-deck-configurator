@@ -13,9 +13,18 @@ print_log() {
     fi
 }
 
+update_submodules() {
+    git submodule update --remote --merge
+}
+
 add_flathub() {
     print_log "Adding Flathub"
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+}
+
+list_flatpaks() {
+    readarray -t flatpak_names < <(flatpak list --app --columns=name)
+    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
 }
 
 update_flatpaks() {
@@ -30,10 +39,188 @@ update_flatpaks() {
     flatpak update -y
 }
 
+interaction_export_flatpaks() {
+    print_log "Listing Flatpaks for Exporting"
+    export_flatpaks_menu=()
+    list_flatpaks
+
+    if [ ${#flatpak_names[@]} == 0 ]; then
+        print_log "error, no Flatpaks installed" "error"
+        export_flatpaks_run=no
+        return
+    fi
+
+    mkdir -p "$configurator_dir/flatpaks"
+
+    for name in "${flatpak_names[@]}"
+    do
+        if [ -z "$number" ]; then
+            local number=0
+        else
+            ((number ++))
+        fi
+        export_flatpaks_menu+=("$number" "$name" off)
+    done
+    
+    readarray -t chosen_export_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks to export" "${export_flatpaks_menu[@]}")
+}
+
+export_flatpaks() {
+    if [ "$export_flatpaks_run" == "no" ]; then
+        return
+    fi
+
+    print_log "exporting flatpaks"
+    for flatpak in "${chosen_export_flatpaks[@]}"
+    do
+        print_log "exporting ${flatpak_names[$flatpak]}"
+        flatpak --verbose create-usb "$configurator_dir/flatpaks" "${flatpak_ids[$flatpak]}"
+        if [ $? == 0 ]; then
+            if ! grep -Fxq "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" "$configurator_dir/flatpaks_exported_list"; then
+                if [[ -s "$configurator_dir/flatpaks_exported_list" ]]; then
+                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" >> "$configurator_dir/flatpaks_exported_list"
+                else
+                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" > "$configurator_dir/flatpaks_exported_list"
+                fi
+            fi
+        else
+            kdialog --title "Export Flatpaks - Steam Deck Configurator" --passivepopup "export flatpaks error: $?"
+            print_log "export_flatpaks error $?" "error"
+        fi
+    done
+}
+
+interaction_import_flatpaks() {
+    print_log "listing flatpaks for importing"
+    import_flatpaks_menu=()
+    unset order
+    local -A flatpaks_import_array
+    if [ ! -f "$configurator_dir/flatpaks_exported_list" ]; then
+        print_log "no exported flatpak found" "error"
+        return
+    fi
+
+    readarray -t lines < "$configurator_dir/flatpaks_exported_list"
+
+    for line in "${lines[@]}"; do
+        key=${line%%=*}
+        value=${line#*=}
+        flatpaks_import_array[$key]=$value
+        order+=("$key")
+    done
+
+    for key in "${order[@]}"
+    do
+        import_flatpaks_menu+=("${flatpaks_import_array[$key]}" "$key" off)
+    done
+
+    readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks to import" "${import_flatpaks_menu[@]}")
+}
+
+import_flatpaks() {
+    print_log "importing flatpaks"
+    if [ ${#chosen_import_flatpaks[@]} -eq 0 ]; then
+        print_log "No flatpaks chosen"
+        return
+    fi
+
+    for flatpak in "${chosen_import_flatpaks[@]}"
+    do
+        print_log "installing $flatpak"
+        flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $flatpak -y
+    done
+}
+
 set_up_import_and_export_flatpaks() {
     print_log "Seting up import and export flatpaks, please enter your password in the prompt"
     kdialog --title "Set Up Import and Export Flatpaks - Steam Deck Configurator" --msgbox "Seting up import and export flatpaks, please enter your password in the prompt"
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
+}
+
+interaction_save_flatpaks_install() {
+    print_log "save flatpaks list interaction"
+    list_flatpaks
+
+    if [ ${#flatpak_names[@]} == 0 ]; then
+        print_log "error, no Flatpaks installed" "error"
+        save_flatpaks_install_run=no
+        return
+    fi
+
+    for name in "${flatpak_names[@]}"
+    do
+        if [ -z "$number" ]; then
+            local number=0
+        else
+            ((number ++))
+        fi
+        save_flatpaks_menu+=("$number" "$name" off)
+    done
+    
+    readarray -t chosen_save_flatpaks < <(kdialog --title "Choose Flatpaks to Save - Steam Deck Configurator" --separate-output --checklist "Select Flatpaks to save" "${save_flatpaks_menu[@]}")
+}
+
+save_flatpaks_install() {
+    print_log "saving flatpaks list"
+    if [ "$save_flatpaks_install_run" == "no" ]; then
+        return
+    fi
+
+    print_log "saving flatpaks list"
+    for flatpak in "${chosen_save_flatpaks[@]}"
+    do
+        print_log "saving ${flatpak_names[$flatpak]}"
+            if ! grep -Fxq "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" "$configurator_dir/flatpaks_install_list"; then
+                if [[ ! -s "$configurator_dir/flatpaks_install_list" ]]; then
+                    echo Clear List=clear_list > "$configurator_dir/flatpaks_install_list"
+                fi
+                echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" >> "$configurator_dir/flatpaks_install_list"
+            fi
+    done
+}
+
+interaction_install_flatpaks() {
+    print_log "choose flatpaks to install"
+    if [ -s "$configurator_dir/flatpaks_install_list" ]; then
+        flatpak_install_list_file=$configurator_dir/flatpaks_install_list
+    else
+        flatpak_install_list_file=$configurator_dir/flatpaks_install_list_default
+    fi
+
+    install_flatpaks_menu=()
+    unset order
+    local -A flatpaks_install_array
+    readarray -t lines < "$flatpak_install_list_file"
+
+    for line in "${lines[@]}"; do
+        key=${line%%=*}
+        value=${line#*=}
+        flatpaks_install_array[$key]=$value
+        order+=("$key")
+    done
+
+    for key in "${order[@]}"
+    do
+        install_flatpaks_menu+=("${flatpaks_install_array[$key]}" "$key" off)
+    done
+
+    readarray -t chosen_install_flatpaks < <(kdialog --title "Choose Flatpaks to Install - Steam Deck Configurator" --separate-output --checklist "Select Flatpaks to install" "${install_flatpaks_menu[@]}")
+}
+
+install_flatpaks() {
+    print_log "installing flatpaks"
+    if [ ${#chosen_install_flatpaks[@]} -eq 0 ]; then
+        print_log "No flatpaks chosen"
+        return
+    elif [[ " ${chosen_install_flatpaks[*]} " =~ " clear_list " ]]; then
+        rm "$configurator_dir/flatpaks_install_list"
+    else
+        for flatpak in "${chosen_install_flatpaks[@]}"
+        do
+            print_log "installing $flatpak"
+            flatpak install flathub $flatpak -y
+        done
+    fi
 }
 
 install_bauh() {
@@ -71,114 +258,6 @@ install_bauh() {
 	Icon=bauh
 	EOF
     cp -v "$configurator_dir/desktop_icons/bauh.svg" "$HOME/.local/share/icons/"
-}
-
-run_cryo_utilities_recommended() {
-    if [ ! -d "$HOME/.cryo_utilities" ]; then
-        print_log "CryoUtilities is not installed, didn't run cryo_utilites" "error"
-        return
-    fi
-
-    print_log "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
-    kdialog --title "Run CryoUtilities Recommended - Steam Deck Configurator" --msgbox "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
-    sudo "$HOME/.cryo_utilities/cryo_utilities" recommended
-}
-
-export_flatpaks() {
-    if [ "$export_flatpaks_run" == "no" ]; then
-        return
-    fi
-
-    print_log "exporting flatpaks"
-    for flatpak in "${chosen_export_flatpaks[@]}"
-    do
-        print_log "exporting ${flatpak_names[$flatpak]}"
-        flatpak --verbose create-usb "$configurator_dir/flatpaks" "${flatpak_ids[$flatpak]}"
-        if [ $? == 0 ]; then
-            if ! grep -Fxq "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" "$configurator_dir/flatpaks_exported_list"; then
-                if [[ -s "$configurator_dir/flatpaks_exported_list" ]]; then
-                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" >> "$configurator_dir/flatpaks_exported_list"
-                else
-                    echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" > "$configurator_dir/flatpaks_exported_list"
-                fi
-            fi
-        else
-            kdialog --title "Export Flatpaks - Steam Deck Configurator" --passivepopup "export flatpaks error: $?"
-            print_log "export_flatpaks error $?" "error"
-        fi
-    done
-}
-
-list_flatpaks() {
-    readarray -t flatpak_names < <(flatpak list --app --columns=name)
-    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
-}
-
-interaction_export_flatpaks() {
-    print_log "Listing Flatpaks for Exporting"
-    export_flatpaks_menu=()
-    list_flatpaks
-
-    if [ ${#flatpak_names[@]} == 0 ]; then
-        print_log "error, no Flatpaks installed" "error"
-        export_flatpaks_run=no
-        return
-    fi
-
-    mkdir -p "$configurator_dir/flatpaks"
-
-    for name in "${flatpak_names[@]}"
-    do
-        if [ -z "$number" ]; then
-            local number=0
-        else
-            ((number ++))
-        fi
-        export_flatpaks_menu+=("$number" "$name" off)
-    done
-    
-    readarray -t chosen_export_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks to export" "${export_flatpaks_menu[@]}")
-}
-
-import_flatpaks() {
-    print_log "importing flatpaks"
-    if [ ${#chosen_import_flatpaks[@]} -eq 0 ]; then
-        print_log "No flatpaks chosen"
-        return
-    fi
-
-    for flatpak in "${chosen_import_flatpaks[@]}"
-    do
-        print_log "installing $flatpak"
-        flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $flatpak -y
-    done
-}
-
-interaction_import_flatpaks() {
-    print_log "listing flatpaks for importing"
-    import_flatpaks_menu=()
-    unset order
-    local -A flatpaks_import_array
-    if [ ! -f "$configurator_dir/flatpaks_exported_list" ]; then
-        print_log "no exported flatpak found" "error"
-        return
-    fi
-
-    readarray -t lines < "$configurator_dir/flatpaks_exported_list"
-
-    for line in "${lines[@]}"; do
-        key=${line%%=*}
-        value=${line#*=}
-        flatpaks_import_array[$key]=$value
-        order+=("$key")
-    done
-
-    for key in "${order[@]}"
-    do
-        import_flatpaks_menu+=("${flatpaks_import_array[$key]}" "$key" off)
-    done
-
-    readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks to import" "${import_flatpaks_menu[@]}")
 }
 
 install_deckyloader() {
@@ -235,6 +314,17 @@ install_cryoutilities() {
     "$configurator_dir/cryoutilities_install.sh"
 }
 
+run_cryo_utilities_recommended() {
+    if [ ! -d "$HOME/.cryo_utilities" ]; then
+        print_log "CryoUtilities is not installed, didn't run cryo_utilites" "error"
+        return
+    fi
+
+    print_log "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
+    kdialog --title "Run CryoUtilities Recommended - Steam Deck Configurator" --msgbox "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
+    sudo "$HOME/.cryo_utilities/cryo_utilities" recommended
+}
+
 install_emudeck() {
     print_log "checking if emudeck is installed"
     if [ -d "$HOME/emudeck" ]; then
@@ -246,10 +336,6 @@ install_emudeck() {
     curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh --output "$configurator_dir/emudeck_install.sh"
     chmod -v +x "$configurator_dir/emudeck_install.sh"
     "$configurator_dir/emudeck_install.sh"
-}
-
-update_submodules() {
-    git submodule update --remote --merge
 }
 
 install_refind_GUI() {
@@ -284,27 +370,18 @@ install_refind_bootloader() {
     "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
-apply_refind_config() {
-    if [ "$apply_refind_config_run" != "yes" ]; then
-        print_log "didn't apply refind config"
-        return
-    fi
+install_refind_all() {
+    print_log "running all install rEFInd tasks"
+    install_refind_GUI
+    install_refind_bootloader
+    apply_refind_config
+}
 
-    if [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
-        print_log "rEFInd isn't installed, install the GUI first" "error"
-        return
-    fi
-
-    print_log "applying config at: $refind_config, please input the sudo password when prompted"
-    kdialog --title "Steam Deck Configurator" --passivepopup "applying config at: $refind_config, please input the sudo password when prompted"
-    cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
-    if [ $? == 0 ]; then
-        "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
-        print_log "config applied"
-    else
-        cp_error=$?
-        print_log "error $cp_error, config not applied" "error"
-    fi
+refind_uninstall_gui() {
+    print_log "uninstalling rEFInd GUI"
+    rm -vrf ~/SteamDeck_rEFInd
+    rm -vrf ~/.SteamDeck_rEFInd
+    rm -vf ~/Desktop/refind_GUI.desktop
 }
 
 interaction_apply_refind_config() {
@@ -348,9 +425,9 @@ interaction_apply_refind_config() {
     fi
 }
 
-save_refind_config() {
-    if [ "$save_refind_config_run" != "yes" ]; then
-        print_log "didn't save refind config"
+apply_refind_config() {
+    if [ "$apply_refind_config_run" != "yes" ]; then
+        print_log "didn't apply refind config"
         return
     fi
 
@@ -359,19 +436,16 @@ save_refind_config() {
         return
     fi
 
-    print_log "saving rEFInd config"
-    mkdir -p "$config_save_path"
-    cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path"
-    
+    print_log "applying config at: $refind_config, please input the sudo password when prompted"
+    kdialog --title "Steam Deck Configurator" --passivepopup "applying config at: $refind_config, please input the sudo password when prompted"
+    cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
     if [ $? == 0 ]; then
-        print_log "config saved to $config_save_path"
-        kdialog --title "Save rEFInd Config - Steam Deck Configurator" --msgbox "config saved to $config_save_path"
+        "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
+        print_log "config applied"
     else
         cp_error=$?
-        print_log "error $cp_error, config not saved" "error"
+        print_log "error $cp_error, config not applied" "error"
     fi
-
-
 }
 
 interaction_save_refind_config() {
@@ -399,18 +473,30 @@ interaction_save_refind_config() {
     fi
 }
 
-install_refind_all() {
-    print_log "running all install rEFInd tasks"
-    install_refind_GUI
-    install_refind_bootloader
-    apply_refind_config
-}
+save_refind_config() {
+    if [ "$save_refind_config_run" != "yes" ]; then
+        print_log "didn't save refind config"
+        return
+    fi
 
-refind_uninstall_gui() {
-    print_log "uninstalling rEFInd GUI"
-    rm -vrf ~/SteamDeck_rEFInd
-    rm -vrf ~/.SteamDeck_rEFInd
-    rm -vf ~/Desktop/refind_GUI.desktop
+    if [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
+        print_log "rEFInd isn't installed, install the GUI first" "error"
+        return
+    fi
+
+    print_log "saving rEFInd config"
+    mkdir -p "$config_save_path"
+    cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path"
+    
+    if [ $? == 0 ]; then
+        print_log "config saved to $config_save_path"
+        kdialog --title "Save rEFInd Config - Steam Deck Configurator" --msgbox "config saved to $config_save_path"
+    else
+        cp_error=$?
+        print_log "error $cp_error, config not saved" "error"
+    fi
+
+
 }
 
 check_for_updates_proton_ge() {
@@ -483,93 +569,6 @@ fix_barrier() {
     kdialog --msgbox "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
-interaction_save_flatpaks_install() {
-    print_log "save flatpaks list interaction"
-    list_flatpaks
-
-    if [ ${#flatpak_names[@]} == 0 ]; then
-        print_log "error, no Flatpaks installed" "error"
-        save_flatpaks_install_run=no
-        return
-    fi
-
-    for name in "${flatpak_names[@]}"
-    do
-        if [ -z "$number" ]; then
-            local number=0
-        else
-            ((number ++))
-        fi
-        save_flatpaks_menu+=("$number" "$name" off)
-    done
-    
-    readarray -t chosen_save_flatpaks < <(kdialog --title "Choose Flatpaks to Save - Steam Deck Configurator" --separate-output --checklist "Select Flatpaks to save" "${save_flatpaks_menu[@]}")
-}
-
-save_flatpaks_install() {
-    print_log "saving flatpaks list"
-    if [ "$save_flatpaks_install_run" == "no" ]; then
-        return
-    fi
-
-    print_log "saving flatpaks list"
-    for flatpak in "${chosen_save_flatpaks[@]}"
-    do
-        print_log "saving ${flatpak_names[$flatpak]}"
-            if ! grep -Fxq "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" "$configurator_dir/flatpaks_install_list"; then
-                if [[ ! -s "$configurator_dir/flatpaks_install_list" ]]; then
-                    echo Clear List=clear_list > "$configurator_dir/flatpaks_install_list"
-                fi
-                echo "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" >> "$configurator_dir/flatpaks_install_list"
-            fi
-    done
-}
-
-install_flatpaks() {
-    print_log "installing flatpaks"
-    if [ ${#chosen_install_flatpaks[@]} -eq 0 ]; then
-        print_log "No flatpaks chosen"
-        return
-    elif [[ " ${chosen_install_flatpaks[*]} " =~ " clear_list " ]]; then
-        rm "$configurator_dir/flatpaks_install_list"
-    else
-        for flatpak in "${chosen_install_flatpaks[@]}"
-        do
-            print_log "installing $flatpak"
-            flatpak install flathub $flatpak -y
-        done
-    fi
-}
-
-interaction_install_flatpaks() {
-    print_log "choose flatpaks to install"
-    if [ -s "$configurator_dir/flatpaks_install_list" ]; then
-        flatpak_install_list_file=$configurator_dir/flatpaks_install_list
-    else
-        flatpak_install_list_file=$configurator_dir/flatpaks_install_list_default
-    fi
-
-    install_flatpaks_menu=()
-    unset order
-    local -A flatpaks_install_array
-    readarray -t lines < "$flatpak_install_list_file"
-
-    for line in "${lines[@]}"; do
-        key=${line%%=*}
-        value=${line#*=}
-        flatpaks_install_array[$key]=$value
-        order+=("$key")
-    done
-
-    for key in "${order[@]}"
-    do
-        install_flatpaks_menu+=("${flatpaks_install_array[$key]}" "$key" off)
-    done
-
-    readarray -t chosen_install_flatpaks < <(kdialog --title "Choose Flatpaks to Install - Steam Deck Configurator" --separate-output --checklist "Select Flatpaks to install" "${install_flatpaks_menu[@]}")
-}
-
-
 load_config() {
     print_log "load config"
     if [ -d "$configurator_dir/configs" ]; then
@@ -591,13 +590,6 @@ load_config() {
     else
         print_log "No configs found, please create one first" "error"
     fi
-}
-
-create_dialog() {
-    while true; do
-    readarray -t chosen_tasks < <(echo $menu | xargs kdialog --title "Steam Deck Configurator" --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect")
-    run_tasks
-    done
 }
 
 create_config() {
@@ -633,6 +625,13 @@ create_config() {
     chosen_tasks=()
     print_log "created config"
     kdialog --title "Create Config - Steam Deck Configurator" --msgbox "created config"
+}
+
+create_dialog() {
+    while true; do
+    readarray -t chosen_tasks < <(echo $menu | xargs kdialog --title "Steam Deck Configurator" --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect")
+    run_tasks
+    done
 }
 
 set_interactive_tasks() {
