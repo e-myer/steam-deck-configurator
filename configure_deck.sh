@@ -555,6 +555,7 @@ fix_barrier() {
 
 load_config() {
     print_log "load config"
+    chosen_tasks=()
     if [ -d "$configurator_dir/configs" ]; then
         set_menu
         readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="Select a File - Load Config - Steam Deck Configurator" --filename="$configurator_dir/configs/")
@@ -652,15 +653,15 @@ run_tasks() {
     dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" ${#chosen_tasks[@]})
     qdbus $dbusRef setLabelText "Steam Deck Configurator"
 
-#    if [ "$ran_interactive_tasks" != "yes" ] && [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]] && [[ ! " ${chosen_tasks[*]} " =~ " create_config " ]]; then
-#        run_interactive_tasks
-#    elif [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
-#        number_of_tasks=1
-#    elif [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
-#        number_of_tasks=1
-#    else
-#        number_of_tasks=${#chosen_tasks[@]}
-#    fi
+    if [ "$ran_interactive_tasks" != "yes" ] && [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]] && [[ ! " ${chosen_tasks[*]} " =~ " create_config " ]]; then
+        run_interactive_tasks
+    elif [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
+        number_of_tasks=1
+    elif [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
+        number_of_tasks=1
+    else
+        number_of_tasks=${#chosen_tasks[@]}
+    fi
 
     for task in "${chosen_tasks[@]}"
     do
