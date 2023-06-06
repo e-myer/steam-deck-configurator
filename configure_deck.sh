@@ -642,6 +642,10 @@ run_interactive_tasks() {
     ran_interactive_tasks=yes
 }
 
+set_user_input_tasks() {
+    user_input_tasks=(install_cryoutilities install_emudeck)
+}
+
 run_tasks() {
     if [ ${#chosen_tasks[@]} -eq 0 ]; then
         echo No tasks chosen, exiting...
@@ -660,13 +664,24 @@ run_tasks() {
 
     for task in "${chosen_tasks[@]}"
     do
-        if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ] && [[ " ${chosen_tasks[*]} " =~ " ${task} " ]]; then
+        if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ] && [[ " ${chosen_tasks[*]} " =~ " ${task} " ]] && [[ " ${user_input_tasks[*]} " =~ " ${task} " ]]; then
             ((task_number ++))
             echo $task
             $task
             qdbus $dbusRef Set "" value $task_number
         fi
     done
+
+    for task in "${chosen_tasks[@]}"
+    do
+        if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ] && [[ " ${chosen_tasks[*]} " =~ " ${task} " ]] && [[ ! " ${user_input_tasks[*]} " =~ " ${task} " ]]; then
+            ((task_number ++))
+            echo $task
+            $task
+            qdbus $dbusRef Set "" value $task_number
+        fi
+    done
+
     ran_interactive_tasks=no
 
     if [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]]; then
