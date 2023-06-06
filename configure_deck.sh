@@ -289,7 +289,7 @@ install_deckyloader() {
         chmod -v +x "$configurator_dir/deckyloader_install_release.sh"
         "$configurator_dir/deckyloader_install_release.sh"
         echo "$version" > "$configurator_dir/deckyloader_installed_version"
-   fi
+    fi
 }
 
 uninstall_deckyloader() {
