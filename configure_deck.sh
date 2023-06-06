@@ -653,6 +653,7 @@ run_tasks() {
     qdbus $dbusRef setLabelText "Steam Deck Configurator"
 
     if [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
+        number_of_tasks=1
         chosen_tasks=(load_config)
     elif [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
         number_of_tasks=1
