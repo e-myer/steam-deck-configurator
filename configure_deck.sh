@@ -406,22 +406,11 @@ interaction_apply_refind_config() {
         apply_refind_config_run=yes
     fi
 
-    local num_of_dirs
-    num_of_dirs=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d | wc -l)
-    if [ "$num_of_dirs" -gt 1 ]; then
-        refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
-        if [ $? != 0 ]; then
-            print_log "cancelled"
-            apply_refind_config_run=no
-            return
-        fi
-    else
-        refind_config=$(find "$configurator_dir/rEFInd_configs" -mindepth 1 -maxdepth 1 -type d)
-        if [ $? != 0 ]; then
-            print_log "cancelled"
-            apply_refind_config_run=no
-            return
-        fi    
+    refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
+    if [ $? != 0 ]; then
+        print_log "cancelled"
+        apply_refind_config_run=no
+        return
     fi
 }
 
