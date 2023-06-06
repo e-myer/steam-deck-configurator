@@ -138,7 +138,7 @@ set_up_import_and_export_flatpaks() {
 }
 
 interaction_save_flatpaks_install() {
-    print_log "save flatpaks list interaction"
+    print_log "choose flatpaks to save"
     list_flatpaks
 
     if [ ${#flatpak_names[@]} == 0 ]; then
