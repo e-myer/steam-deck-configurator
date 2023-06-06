@@ -648,9 +648,6 @@ run_tasks() {
         exit 0
     fi
     unset task_number
-    qdbus $dbusRef close
-    dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" ${#chosen_tasks[@]})
-    qdbus $dbusRef setLabelText "Steam Deck Configurator"
 
     if [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
         number_of_tasks=1
@@ -662,6 +659,10 @@ run_tasks() {
     else
         number_of_tasks=${#chosen_tasks[@]}
     fi
+
+    qdbus $dbusRef close
+    dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
+    qdbus $dbusRef setLabelText "Steam Deck Configurator"
 
     for task in "${chosen_tasks[@]}"
     do
