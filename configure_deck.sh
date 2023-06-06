@@ -396,10 +396,7 @@ interaction_apply_refind_config() {
         print_log "No rEFInd configs found, please create one first, skipping..." "error"
         kdialog --title "Steam Deck Configurator" --passivepopup "No rEFInd configs found, please create one first, skipping..."
         sleep 3
-        apply_refind_config_run=no
         return
-    else
-        apply_refind_config_run=yes
     fi
 
     refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
@@ -408,6 +405,8 @@ interaction_apply_refind_config() {
         apply_refind_config_run=no
         return
     fi
+    
+    apply_refind_config_run=yes
 }
 
 apply_refind_config() {
