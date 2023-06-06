@@ -555,7 +555,6 @@ fix_barrier() {
 
 load_config() {
     print_log "load config"
-    chosen_tasks=()
     if [ -d "$configurator_dir/configs" ]; then
         set_menu
         readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="Select a File - Load Config - Steam Deck Configurator" --filename="$configurator_dir/configs/")
