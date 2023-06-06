@@ -70,6 +70,11 @@ export_flatpaks() {
         return
     fi
 
+    flatpak remotes --columns=collection | grep -q org.flathub.Stable
+    if [ $? == 1 ]; then
+    flatpak remote-modify --collection-id=org.flathub.Stable flathub
+    fi
+
     print_log "exporting flatpaks"
     for flatpak in "${chosen_export_flatpaks[@]}"
     do
@@ -118,6 +123,11 @@ interaction_import_flatpaks() {
 }
 
 import_flatpaks() {
+    flatpak remotes --columns=collection | grep -q org.flathub.Stable
+    if [ $? == 1 ]; then
+    flatpak remote-modify --collection-id=org.flathub.Stable flathub
+    fi
+
     print_log "importing flatpaks"
     if [ ${#chosen_import_flatpaks[@]} -eq 0 ]; then
         print_log "No flatpaks chosen"
@@ -129,12 +139,6 @@ import_flatpaks() {
         print_log "installing $flatpak"
         flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $flatpak -y
     done
-}
-
-set_up_import_and_export_flatpaks() {
-    print_log "Seting up import and export flatpaks, please enter your password in the prompt"
-    kdialog --title "Set Up Import and Export Flatpaks - Steam Deck Configurator" --msgbox "Seting up import and export flatpaks, please enter your password in the prompt"
-    flatpak remote-modify --collection-id=org.flathub.Stable flathub
 }
 
 interaction_save_flatpaks_install() {
@@ -692,7 +696,6 @@ set_menu() {
     "create_config" "Create Config" off 
     "add_flathub" "Add Flathub if it does not exist" off 
     "update_flatpaks" "Update Flatpaks" off 
-    "set_up_import_and_export_flatpaks" "Set up import and export Flatpaks" off 
     "import_flatpaks" "Import Flatpaks" off 
     "export_flatpaks" "Export Flatpaks" off 
     "install_flatpaks" "Install Flatpaks" off
