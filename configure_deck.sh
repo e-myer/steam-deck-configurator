@@ -666,9 +666,9 @@ run_tasks() {
     fi
     unset task_number
 
-   # if [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]] || [[ ! " ${chosen_tasks[*]} " =~ " create_config " ]]; then
-   #     set_menu
-   # fi
+    if [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]] || [[ ! " ${chosen_tasks[*]} " =~ " create_config " ]]; then
+        set_menu
+    fi
 
     if [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
         number_of_tasks=1
