@@ -312,7 +312,7 @@ install_cryoutilities() {
     fi
 
     print_log "Installing CryoUtilities... Please click on the \"ok\" button after it installs to continue"
-    kdialog --title "Steam Deck Configurator" --passivepopup "Installing CryoUtilities... Please select click the \"ok\" button after it installs to continue"
+    kdialog --title "Steam Deck Configurator" --passivepopup "Installing CryoUtilities. Please select click the \"ok\" button after it installs to continue"
     curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_dir/cryoutilities_install.sh"
     chmod -v +x "$configurator_dir/cryoutilities_install.sh"
     "$configurator_dir/cryoutilities_install.sh"
