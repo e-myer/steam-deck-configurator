@@ -666,6 +666,10 @@ run_tasks() {
     fi
     unset task_number
 
+   # if [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]] || [[ ! " ${chosen_tasks[*]} " =~ " create_config " ]]; then
+   #     set_menu
+   # fi
+
     if [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
         number_of_tasks=1
         chosen_tasks=(load_config)
@@ -691,14 +695,6 @@ run_tasks() {
         fi
     done
     ran_interactive_tasks=no
-
-    #if [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]] || [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
-    #    set_menu
-    #fi
-
-    #if [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
-    #    set_menu
-    #fi
 
     if [ -s "$configurator_dir/errors" ]; then
         kdialog --title "Run Tasks - Steam Deck Configurator" --textbox "$configurator_dir/errors"
