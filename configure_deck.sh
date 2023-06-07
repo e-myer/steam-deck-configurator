@@ -595,6 +595,12 @@ create_config() {
     config=$(zenity --file-selection --save --title="Select a File - Create Config - Steam Deck Configurator" --filename="$configurator_dir/configs/")
     if [ $? != 0 ]; then
         print_log "cancelled"
+        for task in "${chosen_tasks[@]}"
+        do
+            if [ "$task" != "create_config" ]; then
+                menu=$(sed -r "s/(\"$task\" ".+?") off/\1 on/" <<< $menu)
+            fi
+        done
         chosen_tasks=()
         return
     fi
@@ -610,9 +616,16 @@ create_config() {
             fi
         fi
     done
-    chosen_tasks=()
     print_log "created config"
     kdialog --title "Create Config - Steam Deck Configurator" --msgbox "created config"
+    
+    for task in "${chosen_tasks[@]}"
+    do
+        if [ "$task" != "create_config" ]; then
+            menu=$(sed -r "s/(\"$task\" ".+?") off/\1 on/" <<< $menu)
+        fi
+    done
+    chosen_tasks=()
 }
 
 create_dialog() {
@@ -653,6 +666,10 @@ run_tasks() {
     fi
     unset task_number
 
+    if [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]] || [[ ! " ${chosen_tasks[*]} " =~ " create_config " ]]; then
+        set_menu
+    fi
+
     if [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
         number_of_tasks=1
         chosen_tasks=(load_config)
@@ -678,10 +695,6 @@ run_tasks() {
         fi
     done
     ran_interactive_tasks=no
-
-    if [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]]; then
-        set_menu
-    fi
 
     if [ -s "$configurator_dir/errors" ]; then
         kdialog --title "Run Tasks - Steam Deck Configurator" --textbox "$configurator_dir/errors"
