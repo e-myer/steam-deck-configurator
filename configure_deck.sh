@@ -389,12 +389,6 @@ refind_uninstall_gui() {
 }
 
 interaction_apply_refind_config() {
-    efibootmgr | grep -q rEFInd
-    if [ $? == 1 ] || [ ! -d "$HOME/.SteamDeck_rEFInd" ] ; then
-        print_log "Install the rEFInd GUI and rEFInd bootloader first" "error"
-        return
-    fi
-
     print_log "applying rEFInd config"
     if [ ! -d "$configurator_dir/rEFInd_configs" ]; then
         print_log "No rEFInd configs found, please create one first, skipping..." "error"
@@ -414,13 +408,15 @@ interaction_apply_refind_config() {
 }
 
 apply_refind_config() {
-    if [ "$apply_refind_config_run" != "yes" ]; then
-        print_log "didn't apply refind config"
+    efibootmgr | grep -q rEFInd
+    if [ $? == 1 ]; then
+        print_log "rEFInd bootloader isn't installed" "error"
         return
-    fi
-
-    if [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
-        print_log "rEFInd isn't installed, install the GUI first" "error"
+    elif [ ! -d "$HOME/.SteamDeck_rEFInd" ]; then
+        print_log "rEFInd GUI isn't installed" "error"
+        return
+    elif [ "$apply_refind_config_run" != "yes" ]; then
+        print_log "didn't apply refind config"
         return
     fi
 
