@@ -632,6 +632,7 @@ run_interactive_tasks() {
     chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
 
     number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
+    dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
 
     echo "${chosen_interactive_tasks[@]}"
     for task in "${chosen_interactive_tasks[@]}"
