@@ -1,5 +1,7 @@
 #! /usr/bin/bash
 
+trap "{ echo 'Terminated with ctrl c'; }" SIGINT
+
 configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 print_log() {
