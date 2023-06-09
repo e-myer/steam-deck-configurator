@@ -703,29 +703,29 @@ run_tasks() {
 }
 
 set_menu() {
-    menu='"load_config" "Load Config" off 
-    "create_config" "Create Config" off 
-    "add_flathub" "Add Flathub if it does not exist" off 
-    "update_flatpaks" "Update Flatpaks" off 
-    "import_flatpaks" "Import Flatpaks" off 
-    "export_flatpaks" "Export Flatpaks" off 
+    menu='"load_config" "Load Config" off
+    "create_config" "Create Config" off
+    "add_flathub" "Add Flathub if it does not exist" off
+    "update_flatpaks" "Update Flatpaks" off
+    "import_flatpaks" "Import Flatpaks" off
+    "export_flatpaks" "Export Flatpaks" off
     "install_flatpaks" "Install Flatpaks" off
     "save_flatpaks_install" "Save Flatpaks List" off
-    "install_proton_ge_in_steam" "Install Proton GE in Steam" off 
-    "install_bauh" "Install Bauh" off 
-    "install_deckyloader" "Install DeckyLoader" off 
-    "uninstall_deckyloader" "Uninstall DeckyLoader" off 
-    "refind_uninstall_gui" "Uninstall rEFInd GUI" off 
-    "check_for_updates_proton_ge" "Check for Proton GE Updates" off 
-    "install_cryoutilities" "Install CryoUtilities" off 
-    "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings" off 
-    "install_emudeck" "Install Emudeck" off 
-    "update_submodules" "Update Submodules" off 
-    "install_refind_GUI" "Install rEFInd GUI" off 
-    "install_refind_bootloader" "Install rEFInd bootloader" off 
-    "apply_refind_config" "Apply rEFInd config" off 
-    "save_refind_config" "Save rEFInd config" off 
-    "fix_barrier" "Fix Barrier" off'
+    "install_proton_ge_in_steam" "Install Proton GE in Steam" off
+    "install_bauh" "Install Bauh" off
+    "install_deckyloader" "Install DeckyLoader" off
+    "check_for_updates_proton_ge" "Check for Proton GE Updates" off
+    "install_cryoutilities" "Install CryoUtilities" off
+    "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings" off
+    "install_emudeck" "Install Emudeck" off
+    "update_submodules" "Update Submodules" off
+    "install_refind_GUI" "Install rEFInd GUI" off
+    "install_refind_bootloader" "Install rEFInd bootloader" off
+    "apply_refind_config" "Apply rEFInd config" off
+    "save_refind_config" "Save rEFInd config" off
+    "fix_barrier" "Fix Barrier" off
+    "uninstall_deckyloader" "Uninstall DeckyLoader" off
+    "refind_uninstall_gui" "Uninstall rEFInd GUI" off'
 }
 
 main() {
