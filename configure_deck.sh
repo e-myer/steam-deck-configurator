@@ -714,8 +714,6 @@ set_menu() {
     "install_proton_ge_in_steam" "Install Proton GE in Steam" off 
     "install_bauh" "Install Bauh" off 
     "install_deckyloader" "Install DeckyLoader" off 
-    "uninstall_deckyloader" "Uninstall DeckyLoader" off 
-    "refind_uninstall_gui" "Uninstall rEFInd GUI" off 
     "check_for_updates_proton_ge" "Check for Proton GE Updates" off 
     "install_cryoutilities" "Install CryoUtilities" off 
     "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings" off 
@@ -725,7 +723,9 @@ set_menu() {
     "install_refind_bootloader" "Install rEFInd bootloader" off 
     "apply_refind_config" "Apply rEFInd config" off 
     "save_refind_config" "Save rEFInd config" off 
-    "fix_barrier" "Fix Barrier" off'
+    "fix_barrier" "Fix Barrier" off 
+    "uninstall_deckyloader" "Uninstall DeckyLoader" off 
+    "refind_uninstall_gui" "Uninstall rEFInd GUI" off'
 }
 
 main() {
