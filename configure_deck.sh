@@ -1,6 +1,6 @@
 #! /usr/bin/bash
 
-cleanup() { echo 'Terminated with ctrl c'; qdbus "$dbusRef" close; }
+cleanup() { qdbus $dbusRef close; }
 trap cleanup SIGINT
 
 configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
