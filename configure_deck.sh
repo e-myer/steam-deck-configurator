@@ -626,8 +626,8 @@ run_interactive_tasks() {
     chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
 
     number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
-    
-    if ! qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled > /dev/null; then
+
+    if ! qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled &> /dev/null; then
         dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
     else
         qdbus $dbusRef org.kde.kdialog.ProgressDialog.maximum "$number_of_tasks"
@@ -668,7 +668,7 @@ run_tasks() {
         number_of_tasks=${#chosen_tasks[@]}
     fi
 
-    if ! qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled > /dev/null; then
+    if ! qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled &> /dev/null; then
         dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
     else
         qdbus $dbusRef org.kde.kdialog.ProgressDialog.maximum "$number_of_tasks"
