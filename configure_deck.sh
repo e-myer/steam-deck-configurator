@@ -10,8 +10,8 @@ print_log() {
     qdbus $dbusRef setLabelText "$log"
     echo "$log" >> "$configurator_dir/logs.log"
     if [[ "$2" == "error" ]]; then
-        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
-        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >> "$configurator_dir/errors"
+        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >&2
+        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >> "$configurator_dir/errors"
     else
         echo -e "$log"
     fi
