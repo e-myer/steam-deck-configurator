@@ -126,7 +126,7 @@ import_flatpaks() {
     fi
 
     if ! flatpak remotes --columns=collection | grep -q org.flathub.Stable; then
-    flatpak remote-modify --collection-id=org.flathub.Stable flathub
+        flatpak remote-modify --collection-id=org.flathub.Stable flathub
     fi
 
     print_log "importing flatpaks"
@@ -172,12 +172,12 @@ save_flatpaks_install() {
     print_log "saving flatpaks list"
     for chosen_save_flatpak in "${chosen_save_flatpaks[@]}"; do
         print_log "saving ${flatpak_names[$chosen_save_flatpak]}"
-            if ! grep -Fxq "${flatpak_names[$chosen_save_flatpak]}=${flatpak_ids[$chosen_save_flatpak]}" "$configurator_dir/flatpaks_install_list"; then
-                if [[ ! -s "$configurator_dir/flatpaks_install_list" ]]; then
-                    echo Clear List=clear_list > "$configurator_dir/flatpaks_install_list"
-                fi
-                echo "${flatpak_names[$chosen_save_flatpak]}=${flatpak_ids[$chosen_save_flatpak]}" >> "$configurator_dir/flatpaks_install_list"
+        if ! grep -Fxq "${flatpak_names[$chosen_save_flatpak]}=${flatpak_ids[$chosen_save_flatpak]}" "$configurator_dir/flatpaks_install_list"; then
+            if [[ ! -s "$configurator_dir/flatpaks_install_list" ]]; then
+                echo Clear List=clear_list > "$configurator_dir/flatpaks_install_list"
             fi
+            echo "${flatpak_names[$chosen_save_flatpak]}=${flatpak_ids[$chosen_save_flatpak]}" >> "$configurator_dir/flatpaks_install_list"
+        fi
     done
 }
 
@@ -611,8 +611,8 @@ create_config() {
 
 create_dialog() {
     while true; do
-    readarray -t chosen_tasks < <(echo $menu | xargs kdialog --title "Steam Deck Configurator" --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect")
-    run_tasks
+        readarray -t chosen_tasks < <(echo $menu | xargs kdialog --title "Steam Deck Configurator" --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect")
+        run_tasks
     done
 }
 
