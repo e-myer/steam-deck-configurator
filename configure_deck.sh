@@ -625,7 +625,7 @@ run_interactive_tasks() {
         if [[ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ]]; then
             ((task_number ++))
             echo interaction_$chosen_interactive_task
-            interaction_chosen_interactive_task
+            interaction_$chosen_interactive_task
             qdbus $dbusRef Set "" value $task_number
         fi
     done
