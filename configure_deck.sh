@@ -81,8 +81,8 @@ export_flatpaks() {
     for chosen_export_flatpak in "${chosen_export_flatpaks[@]}"; do
         print_log "exporting ${flatpak_names[$chosen_export_flatpak]}"
         if flatpak --verbose create-usb "$configurator_dir/flatpaks" "${flatpak_ids[$chosen_export_flatpak]}"; then
-            if ! grep -Fxq "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" "$configurator_dir/flatpaks_exported_list"; then
-                if [[ -s "$configurator_dir/flatpaks_exported_list" ]]; then
+            if [[ -s "$configurator_dir/flatpaks_exported_list" ]]; then
+                if ! grep -Fxq "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" "$configurator_dir/flatpaks_exported_list"; then
                     echo "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" >> "$configurator_dir/flatpaks_exported_list"
                 else
                     echo "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" > "$configurator_dir/flatpaks_exported_list"
