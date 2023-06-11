@@ -557,8 +557,12 @@ load_config() {
     print_log "load config"
     if [ -d "$configurator_dir/configs" ]; then
         set_menu
-        readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="Select a File - Load Config - Steam Deck Configurator" --filename="$configurator_dir/configs/")
-        if [ $? != 0 ]; then
+        if chosen_files_var=$(zenity --file-selection --multiple --separator=$'\n' --title="Select a File - Load Config - Steam Deck Configurator" --filename="$configurator_dir/configs/"); then
+            pre_ifs=$IFS
+            IFS=$'\n'
+            readarray -t config_files <<< "$chosen_files_var"
+            IFS=$pre_ifs
+        else
             print_log "cancelled"
             return
         fi
