@@ -26,7 +26,7 @@ This project performs tasks such as
     - CoreKeyboard
     - ProtonUp-QT
 
-\* This requires the appropriate file to be downloaded and places in the appropriate folder first
+\* This requires the appropriate file to be downloaded and placed in the appropriate folder first
 
 ## Installation Instrictions
 
