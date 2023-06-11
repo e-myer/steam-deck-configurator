@@ -7,12 +7,13 @@ configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && 
 print_log() {
     log_message=$1
     log="$task_number/$number_of_tasks: $task - $log_message"
-    echo -e "$log"
     qdbus $dbusRef setLabelText "$log"
     echo "$log" >> "$configurator_dir/logs.log"
     if [[ "$2" == "error" ]]; then
         echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
         echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >> "$configurator_dir/errors"
+    else
+    echo -e "$log"
     fi
 }
 
