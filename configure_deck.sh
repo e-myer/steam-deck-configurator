@@ -55,8 +55,7 @@ interaction_export_flatpaks() {
 
     mkdir -p "$configurator_dir/flatpaks"
 
-    for name in "${flatpak_names[@]}"
-    do
+    for name in "${flatpak_names[@]}"; do
         if [ -z "$number" ]; then
             local number=0
         else
@@ -79,8 +78,7 @@ export_flatpaks() {
     fi
 
     print_log "exporting flatpaks"
-    for flatpak in "${chosen_export_flatpaks[@]}"
-    do
+    for flatpak in "${chosen_export_flatpaks[@]}"; do
         print_log "exporting ${flatpak_names[$flatpak]}"
         flatpak --verbose create-usb "$configurator_dir/flatpaks" "${flatpak_ids[$flatpak]}"
         if [ $? == 0 ]; then
@@ -117,8 +115,7 @@ interaction_import_flatpaks() {
         order+=("$key")
     done
 
-    for key in "${order[@]}"
-    do
+    for key in "${order[@]}"; do
         import_flatpaks_menu+=("${flatpaks_import_array[$key]}" "$key" off)
     done
 
@@ -137,8 +134,7 @@ import_flatpaks() {
         return
     fi
 
-    for flatpak in "${chosen_import_flatpaks[@]}"
-    do
+    for flatpak in "${chosen_import_flatpaks[@]}"; do
         print_log "installing $flatpak"
         flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $flatpak -y
     done
@@ -154,8 +150,7 @@ interaction_save_flatpaks_install() {
         return
     fi
 
-    for name in "${flatpak_names[@]}"
-    do
+    for name in "${flatpak_names[@]}"; do
         if [ -z "$number" ]; then
             local number=0
         else
@@ -174,8 +169,7 @@ save_flatpaks_install() {
     fi
 
     print_log "saving flatpaks list"
-    for flatpak in "${chosen_save_flatpaks[@]}"
-    do
+    for flatpak in "${chosen_save_flatpaks[@]}"; do
         print_log "saving ${flatpak_names[$flatpak]}"
             if ! grep -Fxq "${flatpak_names[$flatpak]}=${flatpak_ids[$flatpak]}" "$configurator_dir/flatpaks_install_list"; then
                 if [[ ! -s "$configurator_dir/flatpaks_install_list" ]]; then
@@ -206,8 +200,7 @@ interaction_install_flatpaks() {
         order+=("$key")
     done
 
-    for key in "${order[@]}"
-    do
+    for key in "${order[@]}"; do
         install_flatpaks_menu+=("${flatpaks_install_array[$key]}" "$key" off)
     done
 
@@ -222,8 +215,7 @@ install_flatpaks() {
     elif [[ " ${chosen_install_flatpaks[*]} " =~ " clear_list " ]]; then
         rm "$configurator_dir/flatpaks_install_list"
     else
-        for flatpak in "${chosen_install_flatpaks[@]}"
-        do
+        for flatpak in "${chosen_install_flatpaks[@]}"; do
             print_log "installing $flatpak"
             flatpak install flathub $flatpak -y
         done
@@ -566,11 +558,9 @@ load_config() {
             return
         fi
 
-        for file in "${config_files[@]}"
-        do
+        for file in "${config_files[@]}"; do
             readarray -t config_line < "$file"
-            for option in "${config_line[@]}"
-            do
+            for option in "${config_line[@]}"; do
                 menu=$(sed -r "s/(\"$option\" ".+?") off/\1 on/" <<< $menu)
             done
         done
@@ -594,8 +584,7 @@ create_config() {
     config=$(zenity --file-selection --save --title="Select a File - Create Config - Steam Deck Configurator" --filename="$configurator_dir/configs/")
     if [ $? != 0 ]; then
         print_log "cancelled"
-        for task in "${chosen_tasks[@]}"
-        do
+        for task in "${chosen_tasks[@]}"; do
             if [ "$task" != "create_config" ]; then
                 menu=$(sed -r "s/(\"$task\" ".+?") off/\1 on/" <<< $menu)
             fi
@@ -604,8 +593,7 @@ create_config() {
         return
     fi
 
-    for selection in "${chosen_tasks[@]}"
-    do
+    for selection in "${chosen_tasks[@]}"; do
         if [ ! "$selection" == "create_config" ]; then
             if [ ! "$create_config_ran" == 1 ]; then
                 create_config_ran=1
@@ -618,8 +606,7 @@ create_config() {
     print_log "created config"
     kdialog --title "Create Config - Steam Deck Configurator" --msgbox "created config"
     
-    for task in "${chosen_tasks[@]}"
-    do
+    for task in "${chosen_tasks[@]}"; do
         if [ "$task" != "create_config" ]; then
             menu=$(sed -r "s/(\"$task\" ".+?") off/\1 on/" <<< $menu)
         fi
@@ -648,8 +635,7 @@ run_interactive_tasks() {
     dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
 
     echo "${chosen_interactive_tasks[@]}"
-    for task in "${chosen_interactive_tasks[@]}"
-    do
+    for task in "${chosen_interactive_tasks[@]}"; do
         if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ]; then
             ((task_number ++))
             echo interaction_$task
@@ -686,8 +672,7 @@ run_tasks() {
     dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
     qdbus $dbusRef setLabelText "Steam Deck Configurator"
 
-    for task in "${chosen_tasks[@]}"
-    do
+    for task in "${chosen_tasks[@]}"; do
         if [ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ] && [[ " ${chosen_tasks[*]} " =~ " ${task} " ]]; then
             ((task_number ++))
             echo $task
