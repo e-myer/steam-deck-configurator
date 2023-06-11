@@ -373,7 +373,7 @@ install_refind_all() {
     apply_refind_config
 }
 
-refind_uninstall_gui() {
+uninstall_refind_gui() {
     print_log "uninstalling rEFInd GUI"
     rm -vrf ~/SteamDeck_rEFInd
     rm -vrf ~/.SteamDeck_rEFInd
@@ -705,7 +705,7 @@ set_menu() {
     "save_refind_config" "Save rEFInd config" off
     "fix_barrier" "Fix Barrier" off
     "uninstall_deckyloader" "Uninstall DeckyLoader" off
-    "refind_uninstall_gui" "Uninstall rEFInd GUI" off'
+    "uninstall_refind_gui" "Uninstall rEFInd GUI" off'
 }
 
 main() {
