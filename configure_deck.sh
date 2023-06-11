@@ -1,5 +1,7 @@
 #! /usr/bin/bash
 
+# Configures various functions in a steam deck
+
 configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 print_log() {
@@ -9,7 +11,8 @@ print_log() {
     qdbus $dbusRef setLabelText "$log"
     echo "$log" >> "$configurator_dir/logs.log"
     if [ "$2" == "error" ]; then
-        echo "$log" >> "$configurator_dir/errors"
+        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >> "$configurator_dir/errors"
     fi
 }
 
