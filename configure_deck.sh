@@ -13,7 +13,7 @@ print_log() {
         echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
         echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >> "$configurator_dir/errors"
     else
-    echo -e "$log"
+        echo -e "$log"
     fi
 }
 
