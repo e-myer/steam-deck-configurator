@@ -102,6 +102,7 @@ interaction_import_flatpaks() {
     local -A flatpaks_import_array
     if [[ ! -f "$configurator_dir/flatpaks_exported_list" ]]; then
         print_log "no exported flatpak found" "error"
+        import_flatpaks_run=no
         return
     fi
 
@@ -122,6 +123,10 @@ interaction_import_flatpaks() {
 }
 
 import_flatpaks() {
+    if [[ import_flatpaks_run == "no" ]]; then
+        return
+    fi
+
     if ! flatpak remotes --columns=collection | grep -q org.flathub.Stable; then
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
     fi
