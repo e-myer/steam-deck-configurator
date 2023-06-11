@@ -72,16 +72,14 @@ export_flatpaks() {
         return
     fi
 
-    flatpak remotes --columns=collection | grep -q org.flathub.Stable
-    if [[ $? == 1 ]]; then
+    if ! flatpak remotes --columns=collection | grep -q org.flathub.Stable; then
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
     fi
 
     print_log "exporting flatpaks"
     for chosen_export_flatpak in "${chosen_export_flatpaks[@]}"; do
         print_log "exporting ${flatpak_names[$chosen_export_flatpak]}"
-        flatpak --verbose create-usb "$configurator_dir/flatpaks" "${flatpak_ids[$chosen_export_flatpak]}"
-        if [[ $? == 0 ]]; then 
+        if flatpak --verbose create-usb "$configurator_dir/flatpaks" "${flatpak_ids[$chosen_export_flatpak]}"; then
             if ! grep -Fxq "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" "$configurator_dir/flatpaks_exported_list"; then
                 if [[ -s "$configurator_dir/flatpaks_exported_list" ]]; then
                     echo "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" >> "$configurator_dir/flatpaks_exported_list"
@@ -123,8 +121,7 @@ interaction_import_flatpaks() {
 }
 
 import_flatpaks() {
-    flatpak remotes --columns=collection | grep -q org.flathub.Stable
-    if [[ $? == 1 ]]; then
+    if ! flatpak remotes --columns=collection | grep -q org.flathub.Stable; then
     flatpak remote-modify --collection-id=org.flathub.Stable flathub
     fi
 
@@ -345,8 +342,7 @@ install_refind_GUI() {
 
 interaction_install_refind_bootloader() {
     print_log "install reifnd bootlader confirmation"
-    kdialog --title "Install rEFInd Bootloader - Steam Deck Configurator" --yesno "It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"
-    if [[ $? == 0 ]]; then
+    if kdialog --title "Install rEFInd Bootloader - Steam Deck Configurator" --yesno "It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"; then
         install_refind=yes
     else
         install_refind=no
@@ -392,8 +388,7 @@ interaction_apply_refind_config() {
         return
     fi
 
-    refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory)
-    if [[ $? != 0 ]]; then
+    if ! refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory); then
         print_log "cancelled"
         apply_refind_config_run=no
         return
@@ -403,8 +398,7 @@ interaction_apply_refind_config() {
 }
 
 apply_refind_config() {
-    efibootmgr | grep -q rEFInd
-    if [[ $? == 1 ]]; then
+    if ! efibootmgr | grep -q rEFInd; then
         print_log "rEFInd bootloader isn't installed" "error"
         return
     elif [[ ! -d "$HOME/.SteamDeck_rEFInd" ]]; then
@@ -417,8 +411,7 @@ apply_refind_config() {
 
     print_log "applying config at: $refind_config, please input the sudo password when prompted"
     kdialog --title "Steam Deck Configurator" --passivepopup "applying config at: $refind_config, please input the sudo password when prompted"
-    cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI" #copy the refind files from the user directory to where rEFInd expects it to install the config
-    if [[ $? == 0 ]]; then
+    if cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI"; then #copy the refind files from the user directory to where rEFInd expects it to install the config
         "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
         print_log "config applied"
     else
@@ -434,8 +427,7 @@ interaction_save_refind_config() {
         return
     fi
 
-    kdialog --title "Save rEFInd Config - Steam Deck Configurator" --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"
-    if [[ $? != 0 ]]; then
+    if ! kdialog --title "Save rEFInd Config - Steam Deck Configurator" --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"; then
         save_refind_config_run=no
         print_log "cancelled"
         return
@@ -445,8 +437,7 @@ interaction_save_refind_config() {
     if [[ ! -d "$configurator_dir/configs" ]]; then
         mkdir "$configurator_dir/configs"
     fi
-    config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/")
-    if [[ $? != 0 ]]; then
+    if ! config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/"); then
         print_log "cancelled"
         return
     fi
@@ -465,9 +456,7 @@ save_refind_config() {
 
     print_log "saving rEFInd config"
     mkdir -p "$config_save_path"
-    cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path"
-    
-    if [[ $? == 0 ]]; then
+    if cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path"; then
         print_log "config saved to $config_save_path"
         kdialog --title "Save rEFInd Config - Steam Deck Configurator" --msgbox "config saved to $config_save_path"
     else
@@ -518,8 +507,7 @@ install_proton_ge_in_steam() {
 
 fix_barrier() {
     print_log "Fixing Barrier"
-    kdialog --title "Barrier Auto Config" --yesno "Are you using auto config for the ip address?"
-    if [[ $? == 1 ]]; then
+    if ! kdialog --title "Barrier Auto Config" --yesno "Are you using auto config for the ip address?"; then
         ip_address=$(kdialog --title "Fix Barrier - Steam Deck Configurator" --inputbox "input server ip address from the barrier app")
     fi
 
@@ -552,8 +540,7 @@ load_config() {
     print_log "load config"
     if [[ -d "$configurator_dir/configs" ]]; then
         set_menu
-        readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="Select a File - Load Config - Steam Deck Configurator" --filename="$configurator_dir/configs/")
-        if [[ $? != 0 ]]; then
+        if ! readarray -t config_files < <(zenity --file-selection --multiple --separator=$'\n' --title="Select a File - Load Config - Steam Deck Configurator" --filename="$configurator_dir/configs/"); then
             print_log "cancelled"
             return
         fi
@@ -581,8 +568,7 @@ create_config() {
     fi
     
     local config
-    config=$(zenity --file-selection --save --title="Select a File - Create Config - Steam Deck Configurator" --filename="$configurator_dir/configs/")
-    if [[ $? != 0 ]]; then
+    if ! config=$(zenity --file-selection --save --title="Select a File - Create Config - Steam Deck Configurator" --filename="$configurator_dir/configs/"); then
         print_log "cancelled"
         for chosen_task in "${chosen_tasks[@]}"; do
             if [[ "$chosen_task" != "create_config" ]]; then
@@ -717,9 +703,7 @@ set_menu() {
 }
 
 main() {
-    kdialog --title "Password - Steam Deck Configurator" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"
-
-    if [[ $? == 1 ]]; then
+    if ! kdialog --title "Password - Steam Deck Configurator" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"; then
         exit 0
     fi
 
