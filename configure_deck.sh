@@ -74,7 +74,7 @@ export_flatpaks() {
     fi
 
     if ! flatpak remotes --columns=collection | grep -q org.flathub.Stable; then
-    flatpak remote-modify --collection-id=org.flathub.Stable flathub
+        flatpak remote-modify --collection-id=org.flathub.Stable flathub
     fi
 
     print_log "exporting flatpaks"
