@@ -1,6 +1,6 @@
 #! /usr/bin/bash
 
-# Configures various functions in a steam deck
+# Configures various functions in a steam deck.
 
 configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
