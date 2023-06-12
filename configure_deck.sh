@@ -54,7 +54,11 @@ interaction_export_flatpaks() {
         return
     fi
 
-    mkdir -p "$configurator_dir/flatpaks"
+    if ! flatpaks_export_dir=$(zenity --file-selection --title="select a folder to export flatpaks to" --filename="$configurator_dir/" --directory); then
+        print_log "cancelled"
+        export_flatpaks_run=no
+        return
+    fi
 
     for flatpak_name in "${flatpak_names[@]}"; do
         if [[ -z "$number" ]]; then
@@ -80,11 +84,11 @@ export_flatpaks() {
     print_log "exporting flatpaks"
     for chosen_export_flatpak in "${chosen_export_flatpaks[@]}"; do
         print_log "exporting ${flatpak_names[$chosen_export_flatpak]}"
-        if flatpak --verbose create-usb "$configurator_dir/flatpaks" "${flatpak_ids[$chosen_export_flatpak]}"; then
-            if [[ -s "$configurator_dir/flatpaks_exported_list" ]] && ! grep -Fxq "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" "$configurator_dir/flatpaks_exported_list"; then
-                    echo "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" >> "$configurator_dir/flatpaks_exported_list"
+        if flatpak --verbose create-usb "$flatpaks_export_dir" "${flatpak_ids[$chosen_export_flatpak]}"; then
+            if [[ -s "$flatpaks_export_dir/flatpaks_exported_list" ]] && ! grep -Fxq "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" "$flatpaks_export_dir/flatpaks_exported_list"; then
+                    echo "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" >> "$flatpaks_export_dir/flatpaks_exported_list"
             else
-                    echo "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" > "$configurator_dir/flatpaks_exported_list"
+                    echo "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" > "$flatpaks_export_dir/flatpaks_exported_list"
             fi
         else
             kdialog --title "Export Flatpaks - Steam Deck Configurator" --passivepopup "export flatpaks error: $?"
@@ -95,16 +99,23 @@ export_flatpaks() {
 
 interaction_import_flatpaks() {
     print_log "listing flatpaks for importing"
+
+    if ! flatpaks_import_dir=$(zenity --file-selection --title="select a folder to import flatpaks from" --filename="$configurator_dir/" --directory); then
+        print_log "cancelled"
+        import_flatpaks_run=no
+        return
+    fi
+
     import_flatpaks_menu=()
     unset order
     local -A flatpaks_import_array
-    if [[ ! -f "$configurator_dir/flatpaks_exported_list" ]]; then
+    if [[ ! -f "$flatpaks_import_dir/flatpaks_exported_list" ]]; then
         print_log "no exported flatpak found" "error"
         import_flatpaks_run=no
         return
     fi
 
-    readarray -t lines < "$configurator_dir/flatpaks_exported_list"
+    readarray -t lines < "$flatpaks_import_dir/flatpaks_exported_list"
 
     for line in "${lines[@]}"; do
         key=${line%%=*}
@@ -136,8 +147,8 @@ import_flatpaks() {
     fi
 
     for chosen_import_flatpak in "${chosen_import_flatpaks[@]}"; do
-        print_log "installing $flatpak"
-        flatpak install --sideload-repo="$configurator_dir/flatpaks" flathub $chosen_import_flatpak -y
+        print_log "installing $chosen_import_flatpak"
+        flatpak install --sideload-repo="$flatpaks_import_dir" flathub $chosen_import_flatpak -y
     done
 }
 
