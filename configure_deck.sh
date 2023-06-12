@@ -132,7 +132,7 @@ interaction_import_flatpaks() {
 }
 
 import_flatpaks() {
-    if [[ import_flatpaks_run == "no" ]]; then
+    if [[ $import_flatpaks_run == "no" ]]; then
         return
     fi
 
