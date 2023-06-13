@@ -291,6 +291,7 @@ install_deckyloader() {
             curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
             chmod -v +x "$configurator_dir/deckyloader_install_release.sh"
             "$configurator_dir/deckyloader_install_release.sh"
+            mkdir -p "$HOME/.steam_deck_configurator"
             echo "$version" > "$HOME/.steam_deck_configurator/deckyloader_installed_version"
         fi
 
@@ -299,6 +300,7 @@ install_deckyloader() {
         curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
         chmod -v +x "$configurator_dir/deckyloader_install_release.sh"
         "$configurator_dir/deckyloader_install_release.sh"
+        mkdir -p "$HOME/.steam_deck_configurator"
         echo "$version" > "$HOME/.steam_deck_configurator/deckyloader_installed_version"
     fi
 }
