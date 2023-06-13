@@ -272,12 +272,12 @@ install_bauh() {
 }
 
 install_deckyloader() {
+    local release
+    release=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+    local version
+    version=$(jq -r '.tag_name' <<< ${release} )
     if [[ -f "$configurator_dir/deckyloader_installed_version" ]]; then
         print_log "Checking if latest version of DeckyLoader is installed"
-        local release
-        release=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
-        local version
-        version=$(jq -r '.tag_name' <<< ${release} )
         local deckyloader_installed_version
         deckyloader_installed_version=$(cat "$configurator_dir/deckyloader_installed_version")
         print_log "DeckyLoader Latest Version is $version"
