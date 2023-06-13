@@ -62,17 +62,17 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
  
 ## General Steam Deck Notes
 
-- Ensure you have the [latest steam deck recovery image](https://help.steampowered.com/en/faqs/view/1B71-EDF2-EB6D-2BB3).
+- Ensure you have the [latest Steam Deck recovery image](https://help.steampowered.com/en/faqs/view/1B71-EDF2-EB6D-2BB3).
 - SHA256 Checksum - steamdeck-recovery-4.img.bz2 = ac9c58fdd319d46120444875172eb56382098634f2075729f51426ba5cb788c6
 - Flash your USB with the file "steamdeck-recovery-4.img.bz2", not the IMG file inside it.
 - If flashing with a usb is slow, try flashing with a high speed micro sd card.
 - It is recommended to install the rEFInd bootloader after installing other operating systems on the Steam Deck - https://github.com/jlobue10/SteamDeck_rEFInd/issues/61#issuecomment-1534707831.
-- Clonezilla can be used to clone a configured steam deck and easily replicate the setup in another steam deck.
+- Clonezilla can be used to clone a configured Steam Deck and easily replicate the setup in another Steam Deck.
 - You can use Steam Link for remote desktop.
 - If you run the reccomended settings on CryoByte33's steam-deck-utilities tool, you might want to increase the UMA Frame Buffer Size. To do so, first shut the Steam Deck down, then hold the power button and the volume up button until you hear a sound, then let it go. In the screen that appears, go to Setup Utility on the lower right. Go to Advanced and change the UMA Frame Buffer size from 1G to 4G. Then press the Steam Deck's select button and then press Yes to save and exit. The Steam Deck will reboot. To configrm the change, you can go to Settings, System and scrolling down to VRAM Size. There is more information on this tweak in [CryoByte33's video](https://www.youtube.com/watch?v=C9EjXYZUqUs) on his tool. Note: Red Dead Redemption 2 doesn't work with the tweak set.
 
-## Other useful projects for Steam Deck
-- [NonSteamLaunchers-On-Steam-Deck](https://github.com/moraroy/NonSteamLaunchers-On-Steam-Deck) - Automatic installation of the most popular launchers in your Steam Deck
+## Other useful projects for the Steam Deck
+- [NonSteamLaunchers-On-Steam-Deck](https://github.com/moraroy/NonSteamLaunchers-On-Steam-Deck) - Automatic installation of the most popular launchers in your Steam Deck.
 
 ## Post install scripts and tools for Windows on the Steam Deck
 - [SteamDeckAutomatedInstall by CelesteHeartsong](https://github.com/CelesteHeartsong/SteamDeckAutomatedInstall)
