@@ -276,10 +276,10 @@ install_deckyloader() {
     release=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
     local version
     version=$(jq -r '.tag_name' <<< ${release} )
-    if [[ -f "$configurator_dir/deckyloader_installed_version" ]]; then
+    if [[ -f "$HOME/.steam_deck_configurator/deckyloader_installed_version" ]]; then
         print_log "Checking if latest version of DeckyLoader is installed"
         local deckyloader_installed_version
-        deckyloader_installed_version=$(cat "$configurator_dir/deckyloader_installed_version")
+        deckyloader_installed_version=$(cat "$HOME/.steam_deck_configurator/deckyloader_installed_version")
         print_log "DeckyLoader Latest Version is $version"
         print_log "DeckyLoader Installed Version is $deckyloader_installed_version"
 
@@ -291,7 +291,7 @@ install_deckyloader() {
             curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
             chmod -v +x "$configurator_dir/deckyloader_install_release.sh"
             "$configurator_dir/deckyloader_install_release.sh"
-            echo "$version" > "$configurator_dir/deckyloader_installed_version"
+            echo "$version" > "$HOME/.steam_deck_configurator/deckyloader_installed_version"
         fi
 
     else
@@ -299,7 +299,7 @@ install_deckyloader() {
         curl -L https://github.com/SteamDeckHomebrew/decky-loader/raw/main/dist/install_release.sh --output "$configurator_dir/deckyloader_install_release.sh"
         chmod -v +x "$configurator_dir/deckyloader_install_release.sh"
         "$configurator_dir/deckyloader_install_release.sh"
-        echo "$version" > "$configurator_dir/deckyloader_installed_version"
+        echo "$version" > "$HOME/.steam_deck_configurator/deckyloader_installed_version"
     fi
 }
 
@@ -308,7 +308,7 @@ uninstall_deckyloader() {
     curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/uninstall.sh  --output "$configurator_dir/deckyloader_uninstaller.sh"
     chmod -v +x "$configurator_dir/deckyloader_uninstaller.sh"
     "$configurator_dir/deckyloader_uninstaller.sh"
-    rm -f "$configurator_dir/deckyloader_installed_version"
+    rm -f "$HOME/.steam_deck_configurator/deckyloader_installed_version"
 }
 
 install_cryoutilities() {
