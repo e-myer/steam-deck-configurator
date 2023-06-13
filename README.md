@@ -2,27 +2,31 @@
 
 This is a project to assist in installing and configuring various programs in the Steam Deck.
 
-This project auto configures
 
-- DeckyLoader
-- CryoUtilities
-- Emudeck
-- rEFInd Bootloader
-- Barrier
-- Flathub
-- Proton GE
+This project performs tasks such as
+- Updating Flatpaks
+- Exporting and importing Flatpaks
+- Adding the Flathub Repo
+- Installing Bauh *
+- Installing and running CryoUtilities
+- Installing DeckyLoader
+- Intalling EmuDeck
+- Installing ProtonGE in Steam *
+- Installing the rEFInd Bootloader
+- Installing Flatpaks from a configurable list, by default, the list includes
+    - Firefox
+    - Steam Rom Manager
+    - Heroic Games Launcher
+    - Lutris
+    - Flatseal
+    - RetroDeck
+    - Steam Rom Manger
+    - Barrier
+    - BoilR
+    - CoreKeyboard
+    - ProtonUp-QT
 
-And installs
-
-- Firefox
-- CoreKeyboard
-- Heroic Games
-- ProtonUp-QT
-- BoilR
-- Flatseal
-- Steam ROM Manager
-- RetroDeck
-- Bauh
+\* This requires the appropriate file to be downloaded and placed in the appropriate folder first
 
 ## Installation Instrictions
 
