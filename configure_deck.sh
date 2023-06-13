@@ -54,7 +54,7 @@ interaction_export_flatpaks() {
         return
     fi
 
-    if ! flatpaks_export_dir=$(zenity --file-selection --title="select a folder to export flatpaks to" --filename="$HOME" --directory); then
+    if ! flatpaks_export_dir=$(zenity --file-selection --title="select a folder to export flatpaks to" --filename="$HOME/" --directory); then
         print_log "cancelled"
         export_flatpaks_run=no
         return
