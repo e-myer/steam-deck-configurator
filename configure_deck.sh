@@ -391,9 +391,9 @@ install_refind_all() {
 
 uninstall_refind_gui() {
     print_log "uninstalling rEFInd GUI"
-    rm -vrf ~/SteamDeck_rEFInd
-    rm -vrf ~/.SteamDeck_rEFInd
-    rm -vf ~/Desktop/refind_GUI.desktop
+    rm -vrf "$HOME/SteamDeck_rEFInd"
+    rm -vrf "$HOME/.SteamDeck_rEFInd"
+    rm -vf "$HOME/Desktop/refind_GUI.desktop"
 }
 
 interaction_apply_refind_config() {
