@@ -54,7 +54,7 @@ interaction_export_flatpaks() {
         return
     fi
 
-    if ! flatpaks_export_dir=$(zenity --file-selection --title="select a folder to export flatpaks to" --filename="$configurator_dir/" --directory); then
+    if ! flatpaks_export_dir=$(zenity --file-selection --title="select a folder to export flatpaks to" --filename="$HOME/" --directory); then
         print_log "cancelled"
         export_flatpaks_run=no
         return
@@ -100,7 +100,7 @@ export_flatpaks() {
 interaction_import_flatpaks() {
     print_log "listing flatpaks for importing"
 
-    if ! flatpaks_import_dir=$(zenity --file-selection --title="select a folder to import flatpaks from" --filename="$configurator_dir/" --directory); then
+    if ! flatpaks_import_dir=$(zenity --file-selection --title="select a folder to import flatpaks from" --filename="$HOME/" --directory); then
         print_log "cancelled"
         import_flatpaks_run=no
         return
