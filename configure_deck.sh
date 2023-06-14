@@ -428,7 +428,7 @@ apply_refind_config() {
 
     print_log "applying config at: $refind_config, please input the sudo password when prompted"
     kdialog --title "Steam Deck Configurator" --passivepopup "applying config at: $refind_config, please input the sudo password when prompted"
-    if cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI"; then #copy the refind files from the user directory to where rEFInd expects it to install the config
+    if cp -v "$refind_config"/{background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI"; then #copy the refind files from the user directory to where rEFInd expects it to install the config
         "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
         print_log "config applied"
     else
