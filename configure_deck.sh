@@ -637,7 +637,8 @@ set_menu() {
     "install_refind_GUI" "Install rEFInd GUI" off
     "install_refind_bootloader" "Install rEFInd bootloader" off
     "fix_barrier" "Fix Barrier" off
-    "uninstall_deckyloader" "Uninstall DeckyLoader" off'
+    "uninstall_deckyloader" "Uninstall DeckyLoader" off
+    "uninstall_refind_gui" "Uninstall rEFInd GUI" off'
 }
 
 main() {
