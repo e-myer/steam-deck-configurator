@@ -386,7 +386,6 @@ install_refind_all() {
     print_log "running all install rEFInd tasks"
     install_refind_GUI
     install_refind_bootloader
-    apply_refind_config
 }
 
 uninstall_refind_gui() {
@@ -394,94 +393,6 @@ uninstall_refind_gui() {
     rm -vrf "$HOME/SteamDeck_rEFInd"
     rm -vrf "$HOME/.SteamDeck_rEFInd"
     rm -vf "$HOME/Desktop/refind_GUI.desktop"
-}
-
-interaction_apply_refind_config() {
-    print_log "applying rEFInd config"
-    if [[ ! -d "$configurator_dir/rEFInd_configs" ]]; then
-        print_log "No rEFInd configs found, please create one first, skipping..." "error"
-        kdialog --title "Steam Deck Configurator" --passivepopup "No rEFInd configs found, please create one first, skipping..."
-        sleep 3
-        return
-    fi
-
-    if ! refind_config=$(zenity --file-selection --title="select a file" --filename="$configurator_dir/rEFInd_configs/" --directory); then
-        print_log "cancelled"
-        apply_refind_config_run=no
-        return
-    fi
-    
-    apply_refind_config_run=yes
-}
-
-apply_refind_config() {
-    if ! efibootmgr | grep -q rEFInd; then
-        print_log "rEFInd bootloader isn't installed" "error"
-        return
-    elif [[ ! -d "$HOME/.SteamDeck_rEFInd" ]]; then
-        print_log "rEFInd GUI isn't installed" "error"
-        return
-    elif [[ "$apply_refind_config_run" != "yes" ]]; then
-        print_log "didn't apply refind config"
-        return
-    fi
-
-    print_log "applying config at: $refind_config, please input the sudo password when prompted"
-    kdialog --title "Steam Deck Configurator" --passivepopup "applying config at: $refind_config, please input the sudo password when prompted"
-    if cp -v "$refind_config"/{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$HOME/.SteamDeck_rEFInd/GUI"; then #copy the refind files from the user directory to where rEFInd expects it to install the config
-        "$HOME/.SteamDeck_rEFInd/install_config_from_GUI.sh"
-        print_log "config applied"
-    else
-        cp_error=$?
-        print_log "error $cp_error, config not applied" "error"
-    fi
-}
-
-interaction_save_refind_config() {
-    print_log "save rEFInd config"
-    if [[ ! -d "$HOME/.SteamDeck_rEFInd" ]]; then
-        print_log "rEFInd isn't installed, install the GUI first" "error"
-        return
-    fi
-
-    if ! kdialog --title "Save rEFInd Config - Steam Deck Configurator" --msgbox "A config must be created using the rEFInd GUI first, by editing the config and clicking on \"Create Config\", continue?"; then
-        save_refind_config_run=no
-        print_log "cancelled"
-        return
-    fi
-    
-    save_refind_config_run=yes
-    if [[ ! -d "$configurator_dir/configs" ]]; then
-        mkdir "$configurator_dir/configs"
-    fi
-    if ! config_save_path=$(zenity --file-selection --save --title="Save config" --filename="$configurator_dir/rEFInd_configs/"); then
-        print_log "cancelled"
-        return
-    fi
-}
-
-save_refind_config() {
-    if [[ "$save_refind_config_run" != "yes" ]]; then
-        print_log "didn't save refind config"
-        return
-    fi
-
-    if [[ ! -d "$HOME/.SteamDeck_rEFInd" ]]; then
-        print_log "rEFInd isn't installed, install the GUI first" "error"
-        return
-    fi
-
-    print_log "saving rEFInd config"
-    mkdir -p "$config_save_path"
-    if cp -v "$HOME/.SteamDeck_rEFInd/GUI/"{refind.conf,background.png,os_icon1.png,os_icon2.png,os_icon3.png,os_icon4.png} "$config_save_path"; then
-        print_log "config saved to $config_save_path"
-        kdialog --title "Save rEFInd Config - Steam Deck Configurator" --msgbox "config saved to $config_save_path"
-    else
-        cp_error=$?
-        print_log "error $cp_error, config not saved" "error"
-    fi
-
-
 }
 
 check_for_updates_proton_ge() {
@@ -630,7 +541,7 @@ create_dialog() {
 }
 
 set_interactive_tasks() {
-    interactive_tasks=(save_refind_config apply_refind_config import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install)
+    interactive_tasks=(import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install)
 }
 
 run_interactive_tasks() {
@@ -725,8 +636,6 @@ set_menu() {
     "update_submodules" "Update Submodules" off
     "install_refind_GUI" "Install rEFInd GUI" off
     "install_refind_bootloader" "Install rEFInd bootloader" off
-    "apply_refind_config" "Apply rEFInd config" off
-    "save_refind_config" "Save rEFInd config" off
     "fix_barrier" "Fix Barrier" off
     "uninstall_deckyloader" "Uninstall DeckyLoader" off
     "uninstall_refind_gui" "Uninstall rEFInd GUI" off'
