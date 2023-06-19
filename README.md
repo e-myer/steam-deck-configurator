@@ -15,9 +15,7 @@ This project performs tasks such as
 - Installing the rEFInd Bootloader
 - Installing Flatpaks from a configurable list, by default, the list includes
     - Firefox
-    - Steam Rom Manager
     - Heroic Games Launcher
-    - Lutris
     - Flatseal
     - RetroDeck
     - Steam Rom Manger
