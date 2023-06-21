@@ -435,7 +435,7 @@ install_proton_ge_in_steam() {
 
 save_corekeyboard_hotkey() {
     print_log "saving corekeyboard hotkey"
-    if flatpak list | grep -q org.cubocore.CoreKeyboard; then
+    if ! flatpak list | grep -q org.cubocore.CoreKeyboard; then
         print_log "error, CoreKeyboard isn't installed" "error"
         return
     fi
@@ -452,7 +452,7 @@ save_corekeyboard_hotkey() {
 
 set_corekeyboard_hotkey() {
     print_log "setting corekeyboard hotkey"
-    if flatpak list | grep -q org.cubocore.CoreKeyboard; then
+    if ! flatpak list | grep -q org.cubocore.CoreKeyboard; then
         print_log "error, CoreKeyboard isn't installed" "error"
         return
     fi
