@@ -447,7 +447,6 @@ save_corekeyboard_hotkey() {
         echo "$corekeyboard_hotkey" > "$configurator_dir/corekeyboard_hotkey"
         print_log "CoreKeyboard hotkey saved as $corekeyboard_hotkey"
     fi
-
 }
 
 set_corekeyboard_hotkey() {
