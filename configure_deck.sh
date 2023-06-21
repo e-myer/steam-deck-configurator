@@ -27,8 +27,22 @@ add_flathub() {
 }
 
 list_flatpaks() {
-    readarray -t flatpak_names < <(flatpak list --app --columns=name)
-    readarray -t flatpak_ids < <(flatpak list --app --columns=application)
+    readarray -t flatpak_names_unsorted < <(flatpak list --app --columns=name)
+    readarray -t flatpak_ids_unsorted < <(flatpak list --app --columns=application)
+
+    for flatpak_index in "${!flatpak_names_unsorted[@]}"; do
+        #echo $flatpak_index
+        flatpaks+=("${flatpak_names_unsorted[$flatpak_index]}=${flatpak_ids_unsorted[$flatpak_index]}")
+    done
+    ifs=$IFS
+    IFS=$'\n'
+    sorted_flatpaks=($(sort <<<"${flatpaks[*]}"))
+    IFS=$ifs
+
+    for flatpaks in "${sorted_flatpaks[@]}"; do
+        flatpak_names+=("${flatpaks%%=*}")
+        flatpak_ids+=("${flatpaks#*=}")
+    done
 }
 
 update_flatpaks() {
