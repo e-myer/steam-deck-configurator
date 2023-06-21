@@ -33,10 +33,10 @@ list_flatpaks() {
     for flatpak_index in "${!flatpak_names_unsorted[@]}"; do
         flatpaks+=("${flatpak_names_unsorted[$flatpak_index]}=${flatpak_ids_unsorted[$flatpak_index]}")
     done
-    ifs=$IFS
+    pre_ifs=$IFS
     IFS=$'\n'
     sorted_flatpaks=($(sort <<<"${flatpaks[*]}"))
-    IFS=$ifs
+    IFS=$pre_ifs
 
     for sorted_flatpak in "${sorted_flatpaks[@]}"; do
         flatpak_names+=("${sorted_flatpak%%=*}")
