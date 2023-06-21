@@ -433,6 +433,32 @@ install_proton_ge_in_steam() {
     kdialog --title "Steam Deck Configurator" --passivepopup "Proton GE installed, please restart Steam"
 }
 
+save_corekeyboard_hotkey() {
+    print_log "saving corekeyboard hotkey"
+    local corekeyboard_hotkey
+    corekeyboard_hotkey=$(kreadconfig5 --file kglobalshortcutsrc --group org.cubocore.CoreKeyboard.desktop --key "_launch")
+    if [[ -z "$corekeyboard_hotkey" ]]; then
+        print_log "CoreKeyboard hotkey isn't set, please set it first" "error"
+    else
+        echo "$corekeyboard_hotkey" > "$configurator_dir/corekeyboard_hotkey"
+        print_log "CoreKeyboard hotkey saved as $corekeyboard_hotkey"
+    fi
+
+}
+
+set_corekeyboard_hotkey() {
+    print_log "setting corekeyboard hotkey"
+    if [ -f "$configurator_dir/corekeyboard_hotkey" ]; then
+        local corekeyboard_hotkey
+        corekeyboard_hotkey=$(<"$configurator_dir/corekeyboard_hotkey")
+        kwriteconfig5 --file kglobalshortcutsrc --group org.cubocore.CoreKeyboard.desktop --key "_k_friendly_name" "CoreKeyboard"
+        kwriteconfig5 --file kglobalshortcutsrc --group org.cubocore.CoreKeyboard.desktop --key "_launch" "$corekeyboard_hotkey"
+        kquitapp5 kglobalaccel && sleep 2s && kglobalaccel5 &
+    else
+        print_log "Couldn't find CoreKeyboard Hotkey, please save it first" "error"
+    fi
+}
+
 fix_barrier() {
     print_log "Fixing Barrier"
     if ! kdialog --title "Barrier Auto Config" --yesno "Are you using auto config for the ip address?"; then
@@ -633,6 +659,8 @@ set_menu() {
     "install_cryoutilities" "Install CryoUtilities" off
     "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings" off
     "install_emudeck" "Install Emudeck" off
+    "save_corekeyboard_hotkey" "Save CoreKeyboard Hotkey" off
+    "set_corekeyboard_hotkey" "Set CoreKeyboard Hotkey" off
     "update_submodules" "Update Submodules" off
     "install_refind_GUI" "Install rEFInd GUI" off
     "install_refind_bootloader" "Install rEFInd bootloader" off
