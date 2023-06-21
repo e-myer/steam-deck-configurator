@@ -31,7 +31,6 @@ list_flatpaks() {
     readarray -t flatpak_ids_unsorted < <(flatpak list --app --columns=application)
 
     for flatpak_index in "${!flatpak_names_unsorted[@]}"; do
-        #echo $flatpak_index
         flatpaks+=("${flatpak_names_unsorted[$flatpak_index]}=${flatpak_ids_unsorted[$flatpak_index]}")
     done
     ifs=$IFS
