@@ -38,7 +38,7 @@ list_flatpaks() {
     sorted_flatpaks=($(sort <<<"${flatpaks[*]}"))
     IFS=$ifs
 
-    for flatpaks in "${sorted_flatpaks[@]}"; do
+    for sorted_flatpak in "${sorted_flatpaks[@]}"; do
         flatpak_names+=("${flatpaks%%=*}")
         flatpak_ids+=("${flatpaks#*=}")
     done
