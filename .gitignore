@@ -1,6 +1,3 @@
-!rEFInd_configs/
-rEFInd_configs/*
-!rEFInd_configs/dualboot
 logs.log
 applications/
 desktop_icons/
