@@ -443,8 +443,14 @@ install_proton_ge_in_steam() {
     fi
 
     proton_ge_file="$(basename $configurator_dir/GE-Proton*.tar.gz)"
-    mkdir -p ~/.steam/root/compatibilitytools.d
-    tar -xf "$proton_ge_file" -C ~/.steam/root/compatibilitytools.d/
+
+    if [[ -f "$HOME/.steam/root/compatibilitytools.d/$proton_ge_file" ]]; then
+        echo "$proton_ge_downloaded_version is already installed"
+        return
+    fi
+    
+    mkdir -p $HOME/.steam/root/compatibilitytools.d
+    tar -xf "$proton_ge_file" -C $HOME/.steam/root/compatibilitytools.d/
     print_log "Proton GE installed, please restart Steam" "notice"
     kdialog --title "Steam Deck Configurator" --passivepopup "Proton GE installed, please restart Steam"
 }
