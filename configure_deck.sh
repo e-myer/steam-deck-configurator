@@ -434,7 +434,7 @@ check_for_updates_proton_ge() {
 }
 
 interaction_install_proton_ge_in_steam() {
-    print_log "install protonGE in steam"
+    print_log "Installing protonGE in steam"
     number_of_proton_ge=$(find "$configurator_dir" -name "GE-Proton*.tar.gz" | wc -l)
     if [[ $number_of_proton_ge == 1 ]]; then
         proton_ge_file=$(basename "$configurator_dir"/GE-Proton*.tar.gz)
@@ -455,7 +455,7 @@ install_proton_ge_in_steam() {
         return
     fi
 
-    print_log "install protonGE in steam"
+    print_log "Installing protonGE in steam"
     proton_ge_filename=$(basename "$proton_ge_file_path" .tar.gz)
 
     if [[ -d "$HOME/.steam/root/compatibilitytools.d/$proton_ge_filename" ]]; then
