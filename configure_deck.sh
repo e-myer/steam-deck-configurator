@@ -107,7 +107,7 @@ export_flatpaks() {
             fi
         else
             kdialog --title "Export Flatpaks - Steam Deck Configurator" --passivepopup "export flatpaks error: $?"
-            print_log "Export_flatpaks error $?" "error"
+            print_log "export_flatpaks error $?" "error"
         fi
     done
 }
