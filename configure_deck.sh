@@ -193,6 +193,7 @@ save_flatpaks_install() {
         if ! grep -Fxq "${flatpak_names[$chosen_save_flatpak]}=${flatpak_ids[$chosen_save_flatpak]}" "$configurator_dir/flatpaks_install_list"; then
             if [[ ! -s "$configurator_dir/flatpaks_install_list" ]]; then
                 echo Clear List=clear_list > "$configurator_dir/flatpaks_install_list"
+                echo Create Custom List=create_custom_list >> "$configurator_dir/flatpaks_install_list"
             fi
             echo "${flatpak_names[$chosen_save_flatpak]}=${flatpak_ids[$chosen_save_flatpak]}" >> "$configurator_dir/flatpaks_install_list"
         fi
@@ -241,7 +242,7 @@ install_flatpaks() {
     if [[ $install_flatpaks_run != "yes" ]]; then
         return
     fi
-    
+
     print_log "installing flatpaks"
     for chosen_install_flatpak in "${chosen_install_flatpaks[@]}"; do
         print_log "installing $chosen_install_flatpak"
