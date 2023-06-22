@@ -238,13 +238,15 @@ interaction_install_flatpaks() {
 }
 
 install_flatpaks() {
-    if [[ $install_flatpaks_run == "yes" ]]; then
-        print_log "installing flatpaks"
-        for chosen_install_flatpak in "${chosen_install_flatpaks[@]}"; do
-            print_log "installing $chosen_install_flatpak"
-            flatpak install flathub $chosen_install_flatpak -y
-        done
+    if [[ $install_flatpaks_run != "yes" ]]; then
+        return
     fi
+    print_log "installing flatpaks"
+    for chosen_install_flatpak in "${chosen_install_flatpaks[@]}"; do
+        print_log "installing $chosen_install_flatpak"
+        flatpak install flathub $chosen_install_flatpak -y
+    done
+
 }
 
 install_bauh() {
