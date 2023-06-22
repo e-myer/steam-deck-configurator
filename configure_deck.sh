@@ -167,13 +167,12 @@ import_flatpaks() {
     done
 }
 
-interaction_save_flatpaks_install() {
+save_flatpaks_install() {
     print_log "choose flatpaks to save"
     list_flatpaks
 
     if [[ ${#flatpak_names[@]} == 0 ]]; then
         print_log "error, no Flatpaks installed" "error"
-        save_flatpaks_install_run=no
         return
     fi
 
@@ -187,13 +186,6 @@ interaction_save_flatpaks_install() {
     done
     
     readarray -t chosen_save_flatpaks < <(kdialog --title "Choose Flatpaks to Save - Steam Deck Configurator" --separate-output --checklist "Select Flatpaks to save" "${save_flatpaks_menu[@]}")
-}
-
-save_flatpaks_install() {
-    print_log "saving flatpaks list"
-    if [[ "$save_flatpaks_install_run" == "no" ]]; then
-        return
-    fi
 
     print_log "saving flatpaks list"
     for chosen_save_flatpak in "${chosen_save_flatpaks[@]}"; do
@@ -232,16 +224,22 @@ interaction_install_flatpaks() {
     done
 
     readarray -t chosen_install_flatpaks < <(kdialog --title "Choose Flatpaks to Install - Steam Deck Configurator" --separate-output --checklist "Select Flatpaks to install" "${install_flatpaks_menu[@]}")
-}
 
-install_flatpaks() {
-    print_log "installing flatpaks"
     if [[ ${#chosen_install_flatpaks[@]} -eq 0 ]]; then
         print_log "No flatpaks chosen"
         return
     elif [[ " ${chosen_install_flatpaks[*]} " =~ " clear_list " ]]; then
         rm "$configurator_dir/flatpaks_install_list"
+    elif [[ " ${chosen_install_flatpaks[*]} " =~ " create_custom_list " ]]; then
+        save_flatpaks_install
     else
+        install_flatpaks_run=yes
+    fi
+}
+
+install_flatpaks() {
+    if [[ $install_flatpaks_run == "yes" ]]; then
+        print_log "installing flatpaks"
         for chosen_install_flatpak in "${chosen_install_flatpaks[@]}"; do
             print_log "installing $chosen_install_flatpak"
             flatpak install flathub $chosen_install_flatpak -y
@@ -576,7 +574,7 @@ create_dialog() {
 }
 
 set_interactive_tasks() {
-    interactive_tasks=(import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install install_proton_ge_in_steam)
+    interactive_tasks=(import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks install_proton_ge_in_steam)
 }
 
 run_interactive_tasks() {
@@ -660,7 +658,6 @@ set_menu() {
     "import_flatpaks" "Import Flatpaks" off
     "export_flatpaks" "Export Flatpaks" off
     "install_flatpaks" "Install Flatpaks" off
-    "save_flatpaks_install" "Save Flatpaks List" off
     "install_proton_ge_in_steam" "Install Proton GE in Steam" off
     "install_bauh" "Install Bauh" off
     "install_deckyloader" "Install DeckyLoader" off
