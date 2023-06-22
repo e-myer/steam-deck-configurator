@@ -433,9 +433,8 @@ check_for_updates_proton_ge() {
     fi
 }
 
-install_proton_ge_in_steam() {
+interaction_install_proton_ge_in_steam() {
     print_log "install protonGE in steam"
-
     number_of_proton_ge=$(find "$configurator_dir" -name "GE-Proton*.tar.gz" | wc -l)
     if [[ $number_of_proton_ge == 1 ]]; then
         proton_ge_file=$(basename "$configurator_dir"/GE-Proton*.tar.gz)
@@ -445,10 +444,18 @@ install_proton_ge_in_steam() {
     elif [[ $number_of_proton_ge == 0 ]]; then
         print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..." "error"
         kdialog --title "Steam Deck Configurator" --passivepopup "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
+        install_proton_ge_in_steam_run=no
         sleep 3
         return
     fi
+}
 
+install_proton_ge_in_steam() {
+    if [[ $install_proton_ge_in_steam_run == "no" ]]; then
+        return
+    fi
+
+    print_log "install protonGE in steam"
     proton_ge_filename=$(basename "$proton_ge_file_path" .tar.gz)
 
     if [[ -d "$HOME/.steam/root/compatibilitytools.d/$proton_ge_filename" ]]; then
@@ -569,7 +576,7 @@ create_dialog() {
 }
 
 set_interactive_tasks() {
-    interactive_tasks=(import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install)
+    interactive_tasks=(import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install install_proton_ge_in_steam)
 }
 
 run_interactive_tasks() {
