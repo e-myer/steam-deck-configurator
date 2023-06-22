@@ -2,6 +2,9 @@
 
 # Configures various functions in a steam deck.
 
+cleanup() { qdbus $dbusRef close; }
+trap cleanup SIGINT
+
 configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 print_log() {
