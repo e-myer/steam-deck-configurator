@@ -1,6 +1,7 @@
 # steam-deck-configurator
 
 ### Note: This code has not been tested on a Steam Deck, as I don't currently have access to one. Exercise caution and conduct your own testing before use. Feedback and contributions are welcome.
+---
 
 This is a project to assist in installing and configuring various programs in the Steam Deck.
 
