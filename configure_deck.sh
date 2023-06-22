@@ -11,7 +11,9 @@ print_log() {
     echo "$log" >> "$configurator_dir/logs.log"
     if [[ "$2" == "error" ]]; then
         echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >&2
-        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >> "$configurator_dir/errors"
+        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >> "$configurator_dir/notices"
+    elif [[ "$2" == "notice" ]]; then
+        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >> "$configurator_dir/notices"
     else
         echo -e "$log"
     fi
@@ -431,20 +433,39 @@ check_for_updates_proton_ge() {
     fi
 }
 
-install_proton_ge_in_steam() {
+interaction_install_proton_ge_in_steam() {
     print_log "install protonGE in steam"
-    if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
+    number_of_proton_ge=$(find "$configurator_dir" -name "GE-Proton*.tar.gz" | wc -l)
+    if [[ $number_of_proton_ge == 1 ]]; then
+        proton_ge_file=$(basename "$configurator_dir"/GE-Proton*.tar.gz)
+    elif [[ $number_of_proton_ge -gt 1 ]]; then
+        proton_ge_file_path=$(zenity --file-selection --title="Select a ProtonGE version - Steam Deck Configurator" --filename="$configurator_dir/")
+        proton_ge_file=$(basename "$proton_ge_file_path")
+    elif [[ $number_of_proton_ge == 0 ]]; then
         print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..." "error"
         kdialog --title "Steam Deck Configurator" --passivepopup "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
+        install_proton_ge_in_steam_run=no
         sleep 3
         return
     fi
+}
 
-    proton_ge_file="$(basename $configurator_dir/GE-Proton*.tar.gz)"
-    mkdir -p ~/.steam/root/compatibilitytools.d
-    tar -xf "$proton_ge_file" -C ~/.steam/root/compatibilitytools.d/
-    print_log "Proton GE installed, please restart Steam"
-    kdialog --title "Steam Deck Configurator" --passivepopup "Proton GE installed, please restart Steam"
+install_proton_ge_in_steam() {
+    if [[ $install_proton_ge_in_steam_run == "no" ]]; then
+        return
+    fi
+
+    print_log "install protonGE in steam"
+    proton_ge_filename=$(basename "$proton_ge_file_path" .tar.gz)
+
+    if [[ -d "$HOME/.steam/root/compatibilitytools.d/$proton_ge_filename" ]]; then
+        print_log "$proton_ge_filename is already installed" "error"
+        return
+    fi
+    
+    mkdir -p $HOME/.steam/root/compatibilitytools.d
+    tar -xf "$configurator_dir/$proton_ge_file" -C $HOME/.steam/root/compatibilitytools.d/
+    print_log "Proton GE installed, please restart Steam" "notice"
 }
 
 fix_barrier() {
@@ -555,7 +576,7 @@ create_dialog() {
 }
 
 set_interactive_tasks() {
-    interactive_tasks=(import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install)
+    interactive_tasks=(import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install install_proton_ge_in_steam)
 }
 
 run_interactive_tasks() {
@@ -623,9 +644,9 @@ run_tasks() {
     done
     ran_interactive_tasks=no
 
-    if [[ -s "$configurator_dir/errors" ]]; then
-        kdialog --title "Run Tasks - Steam Deck Configurator" --textbox "$configurator_dir/errors"
-        truncate -s 0 "$configurator_dir/errors"
+    if [[ -s "$configurator_dir/notices" ]]; then
+        kdialog --title "Notices - Steam Deck Configurator" --textbox "$configurator_dir/notices"
+        truncate -s 0 "$configurator_dir/notices"
     fi
 
     qdbus $dbusRef setLabelText "$task_number/$number_of_tasks: Tasks completed"
