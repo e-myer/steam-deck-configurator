@@ -1,12 +1,7 @@
-!rEFInd_configs/
-rEFInd_configs/*
-!rEFInd_configs/dualboot
 logs.log
 applications/
 desktop_icons/
-flatpaks/
 flatpaks_install_list
-flatpaks_exported_list
 deckyloader_installed_version
 deckyloader_install_release.sh
 deckyloader_uninstaller.sh
@@ -14,4 +9,4 @@ cryoutilities_install.sh
 emudeck_install.sh
 GE-Proton*.tar.gz
 configs/
-errors
+notices
