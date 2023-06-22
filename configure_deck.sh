@@ -11,7 +11,9 @@ print_log() {
     echo "$log" >> "$configurator_dir/logs.log"
     if [[ "$2" == "error" ]]; then
         echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >&2
-        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >> "$configurator_dir/errors"
+        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >> "$configurator_dir/notices"
+    elif [[ "$2" == "notice" ]]; then
+        echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >> "$configurator_dir/notices"
     else
         echo -e "$log"
     fi
@@ -443,7 +445,7 @@ install_proton_ge_in_steam() {
     proton_ge_file="$(basename $configurator_dir/GE-Proton*.tar.gz)"
     mkdir -p ~/.steam/root/compatibilitytools.d
     tar -xf "$proton_ge_file" -C ~/.steam/root/compatibilitytools.d/
-    print_log "Proton GE installed, please restart Steam"
+    print_log "Proton GE installed, please restart Steam" "notice"
     kdialog --title "Steam Deck Configurator" --passivepopup "Proton GE installed, please restart Steam"
 }
 
@@ -623,9 +625,9 @@ run_tasks() {
     done
     ran_interactive_tasks=no
 
-    if [[ -s "$configurator_dir/errors" ]]; then
-        kdialog --title "Run Tasks - Steam Deck Configurator" --textbox "$configurator_dir/errors"
-        truncate -s 0 "$configurator_dir/errors"
+    if [[ -s "$configurator_dir/notices" ]]; then
+        kdialog --title "Notices - Steam Deck Configurator" --textbox "$configurator_dir/notices"
+        truncate -s 0 "$configurator_dir/notices"
     fi
 
     qdbus $dbusRef setLabelText "$task_number/$number_of_tasks: Tasks completed"
