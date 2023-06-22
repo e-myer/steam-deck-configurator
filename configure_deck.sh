@@ -608,7 +608,7 @@ run_interactive_tasks() {
 run_tasks() {
     if [[ ${#chosen_tasks[@]} -eq 0 ]]; then
         echo No tasks chosen, exiting...
-#        exit 0
+        exit 0
     fi
     unset task_number
 
