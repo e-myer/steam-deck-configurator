@@ -459,7 +459,7 @@ install_proton_ge_in_steam() {
     proton_ge_filename=$(basename "$proton_ge_file_path" .tar.gz)
 
     if [[ -d "$HOME/.steam/root/compatibilitytools.d/$proton_ge_filename" ]]; then
-        echo "$proton_ge_filename is already installed"
+        print_log "$proton_ge_filename is already installed" "error"
         return
     fi
     
