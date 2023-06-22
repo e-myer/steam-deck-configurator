@@ -626,7 +626,7 @@ run_tasks() {
     ran_interactive_tasks=no
 
     if [[ -s "$configurator_dir/notices" ]]; then
-        kdialog --title "Run Tasks - Steam Deck Configurator" --textbox "$configurator_dir/notices"
+        kdialog --title "Notices - Steam Deck Configurator" --textbox "$configurator_dir/notices"
         truncate -s 0 "$configurator_dir/notices"
     fi
 
