@@ -435,24 +435,30 @@ check_for_updates_proton_ge() {
 
 install_proton_ge_in_steam() {
     print_log "install protonGE in steam"
-    if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
+
+    number_of_proton_ge=$(find "$configurator_dir" -name "GE-Proton*.tar.gz" | wc -l)
+    if [[ $number_of_proton_ge == 1 ]]; then
+        proton_ge_file=$(basename "$configurator_dir"/GE-Proton*.tar.gz)
+    elif [[ $number_of_proton_ge -gt 1 ]]; then
+        proton_ge_file_path=$(zenity --file-selection --title="Select a ProtonGE version - Steam Deck Configurator" --filename="$configurator_dir/")
+        proton_ge_file=$(basename "$proton_ge_file_path")
+    elif [[ $number_of_proton_ge == 0 ]]; then
         print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..." "error"
         kdialog --title "Steam Deck Configurator" --passivepopup "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
         sleep 3
         return
     fi
 
-    proton_ge_file="$(basename $configurator_dir/GE-Proton*.tar.gz)"
+    proton_ge_filename=$(basename "$proton_ge_file_path" .tar.gz)
 
-    if [[ -f "$HOME/.steam/root/compatibilitytools.d/$proton_ge_file" ]]; then
-        echo "$proton_ge_downloaded_version is already installed"
+    if [[ -d "$HOME/.steam/root/compatibilitytools.d/$proton_ge_filename" ]]; then
+        echo "$proton_ge_filename is already installed"
         return
     fi
     
     mkdir -p $HOME/.steam/root/compatibilitytools.d
-    tar -xf "$proton_ge_file" -C $HOME/.steam/root/compatibilitytools.d/
+    tar -xf "$configurator_dir/$proton_ge_file" -C $HOME/.steam/root/compatibilitytools.d/
     print_log "Proton GE installed, please restart Steam" "notice"
-    kdialog --title "Steam Deck Configurator" --passivepopup "Proton GE installed, please restart Steam"
 }
 
 fix_barrier() {
@@ -595,7 +601,7 @@ run_interactive_tasks() {
 run_tasks() {
     if [[ ${#chosen_tasks[@]} -eq 0 ]]; then
         echo No tasks chosen, exiting...
-        exit 0
+#        exit 0
     fi
     unset task_number
 
