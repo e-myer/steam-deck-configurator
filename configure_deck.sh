@@ -241,6 +241,7 @@ install_flatpaks() {
     if [[ $install_flatpaks_run != "yes" ]]; then
         return
     fi
+    
     print_log "installing flatpaks"
     for chosen_install_flatpak in "${chosen_install_flatpaks[@]}"; do
         print_log "installing $chosen_install_flatpak"
