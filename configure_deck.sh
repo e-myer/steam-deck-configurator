@@ -51,7 +51,7 @@ update_flatpaks() {
     list_flatpaks
 
     if [[ ${#flatpak_names[@]} == 0 ]]; then
-        print_log "error, no Flatpaks installed" "error"
+        print_log "Error, no Flatpaks installed" "error"
         return
     fi
 
@@ -64,13 +64,13 @@ interaction_export_flatpaks() {
     list_flatpaks
 
     if [[ ${#flatpak_names[@]} == 0 ]]; then
-        print_log "error, no Flatpaks installed" "error"
+        print_log "Error, no Flatpaks installed" "error"
         export_flatpaks_run=no
         return
     fi
 
     if ! flatpaks_export_dir=$(zenity --file-selection --title="select a folder to export flatpaks to" --filename="$HOME/" --directory); then
-        print_log "cancelled"
+        print_log "Cancelled"
         export_flatpaks_run=no
         return
     fi
@@ -96,9 +96,9 @@ export_flatpaks() {
         flatpak remote-modify --collection-id=org.flathub.Stable flathub
     fi
 
-    print_log "exporting flatpaks"
+    print_log "Exporting Flatpaks"
     for chosen_export_flatpak in "${chosen_export_flatpaks[@]}"; do
-        print_log "exporting ${flatpak_names[$chosen_export_flatpak]}"
+        print_log "Exporting ${flatpak_names[$chosen_export_flatpak]}"
         if flatpak --verbose create-usb "$flatpaks_export_dir" "${flatpak_ids[$chosen_export_flatpak]}"; then
             if [[ -s "$flatpaks_export_dir/flatpaks_exported_list" ]] && ! grep -Fxq "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" "$flatpaks_export_dir/flatpaks_exported_list"; then
                     echo "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" >> "$flatpaks_export_dir/flatpaks_exported_list"
@@ -113,10 +113,10 @@ export_flatpaks() {
 }
 
 interaction_import_flatpaks() {
-    print_log "listing flatpaks for importing"
+    print_log "Listing Flatpaks for importing"
 
     if ! flatpaks_import_dir=$(zenity --file-selection --title="select a folder to import flatpaks from" --filename="$HOME/" --directory); then
-        print_log "cancelled"
+        print_log "Cancelled"
         import_flatpaks_run=no
         return
     fi
@@ -125,7 +125,7 @@ interaction_import_flatpaks() {
     unset order
     local -A flatpaks_import_array
     if [[ ! -f "$flatpaks_import_dir/flatpaks_exported_list" ]]; then
-        print_log "no exported flatpak found" "error"
+        print_log "No exported Flatpak found" "error"
         import_flatpaks_run=no
         return
     fi
@@ -155,24 +155,24 @@ import_flatpaks() {
         flatpak remote-modify --collection-id=org.flathub.Stable flathub
     fi
 
-    print_log "importing flatpaks"
+    print_log "Importing flatpaks"
     if [[ ${#chosen_import_flatpaks[@]} -eq 0 ]]; then
         print_log "No flatpaks chosen"
         return
     fi
 
     for chosen_import_flatpak in "${chosen_import_flatpaks[@]}"; do
-        print_log "installing $chosen_import_flatpak"
+        print_log "Installing $chosen_import_flatpak"
         flatpak install --sideload-repo="$flatpaks_import_dir" flathub $chosen_import_flatpak -y
     done
 }
 
 interaction_save_flatpaks_install() {
-    print_log "choose flatpaks to save"
+    print_log "Choose flatpaks to save"
     list_flatpaks
 
     if [[ ${#flatpak_names[@]} == 0 ]]; then
-        print_log "error, no Flatpaks installed" "error"
+        print_log "Error, no Flatpaks installed" "error"
         save_flatpaks_install_run=no
         return
     fi
@@ -190,14 +190,14 @@ interaction_save_flatpaks_install() {
 }
 
 save_flatpaks_install() {
-    print_log "saving flatpaks list"
+    print_log "Saving flatpaks list"
     if [[ "$save_flatpaks_install_run" == "no" ]]; then
         return
     fi
 
-    print_log "saving flatpaks list"
+    print_log "Saving Flatpaks list"
     for chosen_save_flatpak in "${chosen_save_flatpaks[@]}"; do
-        print_log "saving ${flatpak_names[$chosen_save_flatpak]}"
+        print_log "Saving ${flatpak_names[$chosen_save_flatpak]}"
         if ! grep -Fxq "${flatpak_names[$chosen_save_flatpak]}=${flatpak_ids[$chosen_save_flatpak]}" "$configurator_dir/flatpaks_install_list"; then
             if [[ ! -s "$configurator_dir/flatpaks_install_list" ]]; then
                 echo Clear List=clear_list > "$configurator_dir/flatpaks_install_list"
@@ -208,7 +208,7 @@ save_flatpaks_install() {
 }
 
 interaction_install_flatpaks() {
-    print_log "choose flatpaks to install"
+    print_log "Choose Flatpaks to install"
     if [[ -s "$configurator_dir/flatpaks_install_list" ]]; then
         flatpak_install_list_file=$configurator_dir/flatpaks_install_list
     else
@@ -235,7 +235,7 @@ interaction_install_flatpaks() {
 }
 
 install_flatpaks() {
-    print_log "installing flatpaks"
+    print_log "Installing flatpaks"
     if [[ ${#chosen_install_flatpaks[@]} -eq 0 ]]; then
         print_log "No flatpaks chosen"
         return
@@ -243,7 +243,7 @@ install_flatpaks() {
         rm "$configurator_dir/flatpaks_install_list"
     else
         for chosen_install_flatpak in "${chosen_install_flatpaks[@]}"; do
-            print_log "installing $chosen_install_flatpak"
+            print_log "Installing $chosen_install_flatpak"
             flatpak install flathub $chosen_install_flatpak -y
         done
     fi
@@ -252,7 +252,7 @@ install_flatpaks() {
 install_bauh() {
     print_log "Installing Bauh"
     if [[ ! -f "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" ]]; then
-        print_log "bauh appimage doesn't exist in this folder, download it first, skipping..." "error"
+        print_log "Bauh appimage doesn't exist in this folder, download it first, skipping..." "error"
         kdialog --title "Steam Deck Configurator" --passivepopup "bauh appimage doesn't exist in this folder, download it first, skipping..."
         sleep 3
         return
@@ -329,7 +329,7 @@ uninstall_deckyloader() {
 }
 
 install_cryoutilities() {
-    print_log "checking if CryoUtilities is installed"
+    print_log "Checking if CryoUtilities is installed"
     if [[ -d "$HOME/.cryo_utilities" ]]; then
         print_log "CryoUtilities is already installed"
         return
@@ -354,26 +354,26 @@ run_cryo_utilities_recommended() {
 }
 
 install_emudeck() {
-    print_log "checking if emudeck is installed"
+    print_log "Checking if emudeck is installed"
     if [[ -d "$HOME/emudeck" ]]; then
-        print_log "emudeck is already installed"
+        print_log "EmuDeck is already installed"
         return
     fi
 
-    print_log "emudeck is not installed, installing"
+    print_log "EmuDeck is not installed, installing"
     curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh --output "$configurator_dir/emudeck_install.sh"
     chmod -v +x "$configurator_dir/emudeck_install.sh"
     "$configurator_dir/emudeck_install.sh"
 }
 
 install_refind_GUI() {
-    print_log "installing rEFInd GUI"
+    print_log "Installing rEFInd GUI"
     chmod -v +x "$configurator_dir/SteamDeck_rEFInd/install-GUI.sh"
     "$configurator_dir/SteamDeck_rEFInd/install-GUI.sh" "$PWD/SteamDeck_rEFInd" # install the GUI, run the script with the argument "path for SteamDeck_rEFInd folder is $PWD/SteamDeck_rEFInd"
 }
 
 interaction_install_refind_bootloader() {
-    print_log "install reifnd bootlader confirmation"
+    print_log "Install reifnd bootlader confirmation"
     if kdialog --title "Install rEFInd Bootloader - Steam Deck Configurator" --yesno "It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"; then
         install_refind=yes
     else
@@ -383,7 +383,7 @@ interaction_install_refind_bootloader() {
 
 install_refind_bootloader() {
     if [[ "$install_refind" != "yes" ]]; then
-        print_log "didn't install refind" "error"
+        print_log "Didn't install refind" "error"
         return
     fi
 
@@ -398,20 +398,20 @@ install_refind_bootloader() {
 }
 
 install_refind_all() {
-    print_log "running all install rEFInd tasks"
+    print_log "Running all install rEFInd tasks"
     install_refind_GUI
     install_refind_bootloader
 }
 
 uninstall_refind_gui() {
-    print_log "uninstalling rEFInd GUI"
+    print_log "Uninstalling rEFInd GUI"
     rm -vrf "$HOME/SteamDeck_rEFInd"
     rm -vrf "$HOME/.SteamDeck_rEFInd"
     rm -vf "$HOME/Desktop/refind_GUI.desktop"
 }
 
 check_for_updates_proton_ge() {
-    print_log "checking for ProtonGE Updates"
+    print_log "Checking for ProtonGE Updates"
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..." "error"
         kdialog --title "Steam Deck Configurator" --passivepopup "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
@@ -434,7 +434,7 @@ check_for_updates_proton_ge() {
 }
 
 interaction_install_proton_ge_in_steam() {
-    print_log "install protonGE in steam"
+    print_log "Installing protonGE in steam"
     number_of_proton_ge=$(find "$configurator_dir" -name "GE-Proton*.tar.gz" | wc -l)
     if [[ $number_of_proton_ge == 1 ]]; then
         proton_ge_file=$(basename "$configurator_dir"/GE-Proton*.tar.gz)
@@ -455,7 +455,7 @@ install_proton_ge_in_steam() {
         return
     fi
 
-    print_log "install protonGE in steam"
+    print_log "Installing protonGE in steam"
     proton_ge_filename=$(basename "$proton_ge_file_path" .tar.gz)
 
     if [[ -d "$HOME/.steam/root/compatibilitytools.d/$proton_ge_filename" ]]; then
@@ -500,7 +500,7 @@ fix_barrier() {
 }
 
 load_config() {
-    print_log "load config"
+    print_log "Load config"
     if [[ -d "$configurator_dir/configs" ]]; then
         set_menu
         if chosen_files_var=$(zenity --file-selection --multiple --separator=$'\n' --title="Select a File - Load Config - Steam Deck Configurator" --filename="$configurator_dir/configs/"); then
@@ -509,7 +509,7 @@ load_config() {
             readarray -t config_files <<< "$chosen_files_var"
             IFS=$pre_ifs
         else
-            print_log "cancelled"
+            print_log "Cancelled"
             return
         fi
 
@@ -525,7 +525,7 @@ load_config() {
 }
 
 create_config() {
-    print_log "create config"
+    print_log "Create config"
     if [[ ${#chosen_tasks[@]} == 1 ]]; then
         kdialog --title "Create Config - Steam Deck Configurator" --error "Please choose the tasks to save as a config."
         return
@@ -537,7 +537,7 @@ create_config() {
     
     local config
     if ! config=$(zenity --file-selection --save --title="Select a File - Create Config - Steam Deck Configurator" --filename="$configurator_dir/configs/"); then
-        print_log "cancelled"
+        print_log "Cancelled"
         for chosen_task in "${chosen_tasks[@]}"; do
             if [[ "$chosen_task" != "create_config" ]]; then
                 menu=$(sed -r "s/(\"$chosen_task\" ".+?") off/\1 on/" <<< $menu)
@@ -557,7 +557,7 @@ create_config() {
             fi
         fi
     done
-    print_log "created config"
+    print_log "Created config"
     kdialog --title "Create Config - Steam Deck Configurator" --msgbox "created config"
     
     for chosen_task in "${chosen_tasks[@]}"; do
