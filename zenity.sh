@@ -1,7 +1,16 @@
 #! /usr/bin/bash
 
-zenity --list --checklist --column="command" --column="task" --column="description" --hide-column=2 --separator=$'\n' \
-FALSE "load_config" "Load Config" \
+
+#column_names=(--column=TargetDir --column=TargetPage_ID --column=TargetTitle)
+#row=("Target Dir 1" 1 "TargetTitle 1")
+
+
+#zenity --list --checklist --title="list" 
+
+#exit 0
+
+
+menu='FALSE "load_config" "Load Config" \
 FALSE "create_config" "Create Config" \
 FALSE "add_flathub" "Add Flathub if it does not exist" \
 FALSE "update_flatpaks" "Update Flatpaks" \
@@ -21,4 +30,7 @@ FALSE "install_refind_GUI" "Install rEFInd GUI" \
 FALSE "install_refind_bootloader" "Install rEFInd bootloader" \
 FALSE "fix_barrier" "Fix Barrier" \
 FALSE "uninstall_deckyloader" "Uninstall DeckyLoader" \
-FALSE "uninstall_refind_gui" "Uninstall rEFInd GUI"
+FALSE "uninstall_refind_gui" "Uninstall rEFInd GUI"'
+
+echo $menu | xargs zenity --list --checklist --column="command" --column="task" --column="description" --hide-column=2 --print-column=2 --separator=$'\n'
+
