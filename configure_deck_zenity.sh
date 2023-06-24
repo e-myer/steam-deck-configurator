@@ -7,7 +7,9 @@ configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && 
 print_log() {
     log_message=$1
     log="$task_number/$number_of_tasks: $task - $log_message"
-    qdbus $dbusRef setLabelText "$log"
+    echo "# $log"
+    echo "$log"
+    #qdbus $dbusRef setLabelText "$log"
     echo "$log" >> "$configurator_dir/logs.log"
     if [[ "$2" == "error" ]]; then
         echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >&2
@@ -571,6 +573,7 @@ create_config() {
 create_dialog() {
     while true; do
         readarray -t chosen_tasks < <(echo $menu | xargs zenity --list --checklist --column="command" --column="task" --column="description" --hide-column=2 --print-column=2 --separator=$'\n')
+        echo "${chosen_tasks[@]}"
         run_tasks
     done
 }
@@ -586,12 +589,12 @@ run_interactive_tasks() {
 
     number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
 
-    if ! qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled &> /dev/null; then
-        dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
-    else
-        qdbus $dbusRef org.kde.kdialog.ProgressDialog.maximum "$number_of_tasks"
-        qdbus $dbusRef /ProgressDialog org.kde.kdialog.ProgressDialog.value 0
-    fi
+#    if ! qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled &> /dev/null; then
+#        dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
+#    else
+#        qdbus $dbusRef org.kde.kdialog.ProgressDialog.maximum "$number_of_tasks"
+#        qdbus $dbusRef /ProgressDialog org.kde.kdialog.ProgressDialog.value 0
+#    fi
 
     echo "${chosen_interactive_tasks[@]}"
     for chosen_interactive_task in "${chosen_interactive_tasks[@]}"; do
@@ -603,6 +606,15 @@ run_interactive_tasks() {
         fi
     done
     ran_interactive_tasks=yes
+}
+
+for_loop() {
+    for chosen_task in "${chosen_tasks[@]}"; do
+        ((task_number ++))
+        echo $chosen_task
+        $chosen_task
+        #echo "$task_number"
+    done
 }
 
 run_tasks() {
@@ -621,27 +633,13 @@ run_tasks() {
         chosen_tasks=(load_config)
     elif [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
         number_of_tasks=1
-    elif [[ "$ran_interactive_tasks" != "yes" ]]; then
-        run_interactive_tasks
+#    elif [[ "$ran_interactive_tasks" != "yes" ]]; then
+#        run_interactive_tasks
     else
         number_of_tasks=${#chosen_tasks[@]}
     fi
 
-    if ! qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled &> /dev/null; then
-        dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
-    else
-        qdbus $dbusRef org.kde.kdialog.ProgressDialog.maximum "$number_of_tasks"
-        qdbus $dbusRef org.kde.kdialog.ProgressDialog.value 0
-    fi
-
-    for chosen_task in "${chosen_tasks[@]}"; do
-        if [[ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ]] && [[ " ${chosen_tasks[*]} " =~ " ${chosen_task} " ]]; then
-            ((task_number ++))
-            echo $chosen_task
-            $chosen_task
-            qdbus $dbusRef Set "" value $task_number
-        fi
-    done
+    for_loop | zenity --progress
     ran_interactive_tasks=no
 
     if [[ -s "$configurator_dir/notices" ]]; then
@@ -687,3 +685,5 @@ main() {
 }
 
 main
+
+#run_tasks | zenity --progress
