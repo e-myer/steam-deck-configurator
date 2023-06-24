@@ -16,8 +16,30 @@ echoes_he() {
     echo he
 }
 
+set_menu() {
 menu='FALSE "echoes_hi" "echo hi" \
 FALSE "echoes_ho" "echo ho" \
 FALSE "echoes_he" "echo he"'
+}
 
-echo "$menu" | xargs zenity --list --checklist --separator=$'\n' --column=status --column=task --column=label
+create_dialog() {
+    while true; do
+        readarray -t chosen_tasks < <(echo "$menu" | xargs zenity --list --checklist --separator=$'\n' --column=status --column=task --column=label)
+        echo "${chosen_tasks[@]}"
+        run_tasks
+    done
+}
+
+run_tasks() {
+    echo "${chosen_tasks[@]}"
+    echo "${#chosen_tasks[@]}"
+
+    for chosen_task in "${chosen_tasks[@]}"; do
+        $chosen_task
+    done
+}
+
+
+set_menu
+create_dialog
+

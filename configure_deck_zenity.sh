@@ -685,5 +685,3 @@ main() {
 }
 
 main
-
-#run_tasks | zenity --progress
