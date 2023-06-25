@@ -124,7 +124,7 @@ print_log() {
         echo -e "$log"
     fi
 }
-
+kdialo
 create_dialog() {
    # while true; do
         readarray -t chosen_tasks < <(echo "$menu" | xargs zenity --list --checklist --separator=$'\n' --column=status --column=task --column=label --print-column=2 --hide-column=2)
@@ -161,7 +161,6 @@ load_config() {
 create_config() {
     print_log "Create config"
     if [[ ${#chosen_tasks[@]} == 1 ]]; then
-        #kdialog --title "Create Config - Steam Deck Configurator" --error "Please choose the tasks to save as a config."
         zenity --error --title="Create Config - Steam Deck Configurator" --text="Please choose the tasks to save as a config."
         return
     fi
