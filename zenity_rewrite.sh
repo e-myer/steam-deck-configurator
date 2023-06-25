@@ -95,6 +95,51 @@ load_config() {
     fi
 }
 
+create_config() {
+    print_log "Create config"
+    if [[ ${#chosen_tasks[@]} == 1 ]]; then
+        #kdialog --title "Create Config - Steam Deck Configurator" --error "Please choose the tasks to save as a config."
+        zenity --title="Create Config - Steam Deck Configurator" --error --text="Please choose the tasks to save as a config."
+        return
+    fi
+
+    if [[ ! -d "$configurator_dir/configs" ]]; then
+        mkdir "$configurator_dir/configs"
+    fi
+    
+    local config
+    if ! config=$(zenity --file-selection --save --title="Select a File - Create Config - Steam Deck Configurator" --filename="$configurator_dir/configs/"); then
+        print_log "Cancelled"
+        for chosen_task in "${chosen_tasks[@]}"; do
+            if [[ "$chosen_task" != "create_config" ]]; then
+                menu=$(sed -r "s/FALSE (\"$chosen_task\" ".+?")/TRUE \1/" <<< $menu)
+            fi
+        done
+        chosen_tasks=()
+        return
+    fi
+
+    for chosen_task in "${chosen_tasks[@]}"; do
+        if [[ ! "$chosen_task" == "create_config" ]]; then
+            if [[ ! "$create_config_ran" == 1 ]]; then
+                create_config_ran=1
+                echo "$chosen_task" > "$config"
+            else
+                echo "$chosen_task" >> "$config"
+            fi
+        fi
+    done
+    print_log "Created config"
+    zenity --info --title "Create Config - Steam Deck Configurator" --text="created config"
+    
+    for chosen_task in "${chosen_tasks[@]}"; do
+        if [[ "$chosen_task" != "create_config" ]]; then
+            menu=$(sed -r "s/FALSE (\"$chosen_task\" ".+?")/TRUE \1/" <<< $menu)
+        fi
+    done
+    chosen_tasks=()
+}
+
 
 
 run_tasks() {
