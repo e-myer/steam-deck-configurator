@@ -4,18 +4,6 @@
 
 configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-echoes_hi() {
-    echo hi
-}
-
-echoes_ho() {
-    echo ho
-}
-
-echoes_he() {
-    echo he
-}
-
 #set_menu() {
 #menu='FALSE "echoes_hi" "echo hi" \
 #FALSE "echoes_ho" "echo ho" \
@@ -231,10 +219,15 @@ run_interactive_tasks() {
 
     number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
 
-   # if [[ ! -p zenity_progress ]]; then
-   #     mkfifo zenity_progress
-   #     (tail -f zenity_progress) | zenity --progress &
-   # fi
+    if [[ ! -p zenity_progress ]]; then
+        mkfifo zenity_progress
+        (tail -f zenity_progress) | zenity --progress &
+    fi
+
+    if [[ $times != 1 ]]; then
+        (tail -f zenity_progress) | zenity --progress &
+        times=1
+    fi
 
     #if ! qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled &> /dev/null; then
     #    dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
@@ -256,9 +249,6 @@ run_interactive_tasks() {
 }
 
 run_tasks() {
-    #echo "${chosen_tasks[@]}"
-    #echo "${#chosen_tasks[@]}"
-echo a
     if [[ ! -p zenity_progress ]]; then
         mkfifo zenity_progress
     fi
@@ -267,13 +257,10 @@ echo a
         (tail -f zenity_progress) | zenity --progress &
         times=1
     fi
-echo b
     number_of_tasks=${#chosen_tasks[@]}
-echo c
     for chosen_task in "${chosen_tasks[@]}"; do
         ((task_number ++))
         echo $chosen_task
-        #set_progress
         $chosen_task
     done
 }
@@ -281,4 +268,5 @@ echo c
 
 set_menu
 create_dialog
+rm zenity_progress
 
