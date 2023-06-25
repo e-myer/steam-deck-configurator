@@ -5,6 +5,7 @@
 configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 set_menu() {
+    echo setting menu...
     menu='FALSE "load_config" "Load Config"
     FALSE "create_config" "Create Config"
     FALSE "add_flathub" "Add Flathub if it does not exist"
@@ -29,11 +30,13 @@ set_menu() {
 }
 
 add_flathub() {
+    echo adding flathub
     print_log "Adding Flathub"
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 }
 
 list_flatpaks() {
+    echo listing flatpaks
     readarray -t flatpak_names_unsorted < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids_unsorted < <(flatpak list --app --columns=application)
 
@@ -52,7 +55,9 @@ list_flatpaks() {
 }
 
 update_flatpaks() {
+    echo updating flatpaks
     print_log "Updating Flatpaks"
+    echo "listing flatpaks"
     list_flatpaks
 
     if [[ ${#flatpak_names[@]} == 0 ]]; then
@@ -60,7 +65,7 @@ update_flatpaks() {
         sleep 3
         return
     fi
-
+    echo "updATING NOW"
     flatpak update -y
 }
 
@@ -128,6 +133,7 @@ install_bauh() {
 print_log() {
     log_message=$1
     log="$task_number/$number_of_tasks: $task - $log_message"
+    echo "log is $log"
     echo "# $log" > zenity_progress
     percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
     progress_amount="$(bc -l <<< "$percent*100")"
@@ -146,7 +152,7 @@ print_log() {
 create_dialog() {
     while true; do
         readarray -t chosen_tasks < <(echo "$menu" | xargs zenity --list --checklist --separator=$'\n' --column=status --column=task --column=label --print-column=2 --hide-column=2)
-        #echo "${chosen_tasks[@]}"
+        echo "${chosen_tasks[@]}"
         run_tasks
     done
 }
@@ -233,10 +239,10 @@ run_interactive_tasks() {
 
     if [[ ! -p zenity_progress ]]; then
         mkfifo zenity_progress
-        (tail -f zenity_progress) | zenity --progress &
+        #(tail -f zenity_progress) | zenity --progress &
     fi
 
-    if [[ $times != 1 ]]; then
+    if [[ $tailing_progress != 1 ]]; then
         (tail -f zenity_progress) | zenity --progress &
         tailing_progress=1
     fi
@@ -261,16 +267,18 @@ run_interactive_tasks() {
 }
 
 run_tasks() {
+    echo "KJSHDFKAJSFHLAKFJH"
     if [[ ${#chosen_tasks[@]} -eq 0 ]]; then
         echo "No tasks chosen, exiting..."
         exit 0
     fi
     unset task_number
-
+    echo chosen_tasks is "${chosen_tasks[@]}"
     if [[ ! -p zenity_progress ]]; then
         mkfifo zenity_progress
+        echo "made zenity progress fifo"
     fi
-
+    echo "abc"
     if [[  " ${chosen_tasks[*]} " =~ " load_config " ]]; then
         number_of_tasks=1
         chosen_tasks=(load_config)
@@ -280,16 +288,20 @@ run_tasks() {
     #    run_interactive_tasks
     fi
 
+    echo "echoing 0 to progress file"
     echo "0" > zenity_progress
     
     if [[ $tailing_progress != 1 ]]; then
+        echo "tailing_progress is not 1"
         (tail -f zenity_progress) | zenity --progress &
         echo "after progress"
         tailing_progress=1
     fi
 
     number_of_tasks=${#chosen_tasks[@]}
+    echo "number_of_tasks is $number_of_tasks"
     for chosen_task in "${chosen_tasks[@]}"; do
+        echo "chosen task is $chosen_task"
         ((task_number ++))
         echo $chosen_task
         $chosen_task
@@ -299,5 +311,6 @@ run_tasks() {
 
 set_menu
 create_dialog
+echo "deleting zenity_progress"
 rm zenity_progress
 
