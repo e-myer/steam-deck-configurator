@@ -33,6 +33,24 @@ add_flathub() {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 }
 
+list_flatpaks() {
+    readarray -t flatpak_names_unsorted < <(flatpak list --app --columns=name)
+    readarray -t flatpak_ids_unsorted < <(flatpak list --app --columns=application)
+
+    for flatpak_index in "${!flatpak_names_unsorted[@]}"; do
+        flatpaks+=("${flatpak_names_unsorted[$flatpak_index]}=${flatpak_ids_unsorted[$flatpak_index]}")
+    done
+    pre_ifs=$IFS
+    IFS=$'\n'
+    sorted_flatpaks=($(sort <<<"${flatpaks[*]}"))
+    IFS=$pre_ifs
+
+    for sorted_flatpak in "${sorted_flatpaks[@]}"; do
+        flatpak_names+=("${sorted_flatpak%%=*}")
+        flatpak_ids+=("${sorted_flatpak#*=}")
+    done
+}
+
 update_flatpaks() {
     print_log "Updating Flatpaks"
     list_flatpaks
@@ -124,13 +142,13 @@ print_log() {
         echo -e "$log"
     fi
 }
-kdialo
+
 create_dialog() {
-   # while true; do
+    while true; do
         readarray -t chosen_tasks < <(echo "$menu" | xargs zenity --list --checklist --separator=$'\n' --column=status --column=task --column=label --print-column=2 --hide-column=2)
         #echo "${chosen_tasks[@]}"
         run_tasks
-    #done
+    done
 }
 
 load_config() {
@@ -220,7 +238,7 @@ run_interactive_tasks() {
 
     if [[ $times != 1 ]]; then
         (tail -f zenity_progress) | zenity --progress &
-        times=1
+        tailing_progress=1
     fi
 
     #if ! qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled &> /dev/null; then
@@ -243,14 +261,33 @@ run_interactive_tasks() {
 }
 
 run_tasks() {
+    if [[ ${#chosen_tasks[@]} -eq 0 ]]; then
+        echo "No tasks chosen, exiting..."
+        exit 0
+    fi
+    unset task_number
+
     if [[ ! -p zenity_progress ]]; then
         mkfifo zenity_progress
     fi
-    
-    if [[ $times != 1 ]]; then
-        (tail -f zenity_progress) | zenity --progress &
-        times=1
+
+    if [[  " ${chosen_tasks[*]} " =~ " load_config " ]]; then
+        number_of_tasks=1
+        chosen_tasks=(load_config)
+    elif [[ " ${chosen_tasks[*]} " =~ " create config " ]]; then
+        number_of_tasks=1
+    #elif [[ "$ran_interactive_tasks" != "yes" ]]; then
+    #    run_interactive_tasks
     fi
+
+    echo "0" > zenity_progress
+    
+    if [[ $tailing_progress != 1 ]]; then
+        (tail -f zenity_progress) | zenity --progress &
+        echo "after progress"
+        tailing_progress=1
+    fi
+
     number_of_tasks=${#chosen_tasks[@]}
     for chosen_task in "${chosen_tasks[@]}"; do
         ((task_number ++))
