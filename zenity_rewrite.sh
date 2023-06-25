@@ -4,13 +4,6 @@
 
 configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-#set_menu() {
-#menu='FALSE "echoes_hi" "echo hi" \
-#FALSE "echoes_ho" "echo ho" \
-#FALSE "echoes_he" "echo he"'
-#}
-
-
 set_menu() {
     menu='FALSE "load_config" "Load Config"
     FALSE "create_config" "Create Config"
@@ -46,6 +39,7 @@ update_flatpaks() {
 
     if [[ ${#flatpak_names[@]} == 0 ]]; then
         print_log "Error, no Flatpaks installed" "error"
+        sleep 3
         return
     fi
 
@@ -68,10 +62,11 @@ check_for_updates_proton_ge() {
     proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
     if [[ ! "$proton_ge_downloaded_version" == "$version.tar.gz" ]]; then
         print_log "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
-        kdialog --title "Check For ProtonGE Updates - Steam Deck Configurator" --msgbox "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+        zenity --error --title="Check For ProtonGE Updates - Steam Deck Configurator" --text="ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
     else
         print_log "ProtonGE is up to date"
-        kdialog --title "Check For ProtonGE Updates - Steam Deck Configurator" --msgbox "ProtonGE is up to date"
+        zenity --error --title="Check For ProtonGE Updates - Steam Deck Configurator" --text="ProtonGE is up to date"
+
     fi
 }
 
@@ -79,7 +74,7 @@ install_bauh() {
     print_log "Installing Bauh"
     if [[ ! -f "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" ]]; then
         print_log "Bauh appimage doesn't exist in this folder, download it first, skipping..." "error"
-        kdialog --title "Steam Deck Configurator" --passivepopup "bauh appimage doesn't exist in this folder, download it first, skipping..."
+        zenity --notification --window-icon="info" --text="bauh appimage doesn't exist in this folder, download it first, skipping..."
         sleep 3
         return
     fi
@@ -167,7 +162,7 @@ create_config() {
     print_log "Create config"
     if [[ ${#chosen_tasks[@]} == 1 ]]; then
         #kdialog --title "Create Config - Steam Deck Configurator" --error "Please choose the tasks to save as a config."
-        zenity --title="Create Config - Steam Deck Configurator" --error --text="Please choose the tasks to save as a config."
+        zenity --error --title="Create Config - Steam Deck Configurator" --text="Please choose the tasks to save as a config."
         return
     fi
 
