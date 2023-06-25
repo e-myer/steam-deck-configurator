@@ -47,9 +47,90 @@ set_menu() {
     FALSE "uninstall_refind_gui" "Uninstall rEFInd GUI"'
 }
 
+add_flathub() {
+    print_log "Adding Flathub"
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+}
+
+update_flatpaks() {
+    print_log "Updating Flatpaks"
+    list_flatpaks
+
+    if [[ ${#flatpak_names[@]} == 0 ]]; then
+        print_log "Error, no Flatpaks installed" "error"
+        return
+    fi
+
+    flatpak update -y
+}
+
+check_for_updates_proton_ge() {
+    print_log "Checking for ProtonGE Updates"
+    if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
+        print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..." "error"
+        kdialog --title "Steam Deck Configurator" --passivepopup "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
+        sleep 3
+        return
+    fi
+
+    local version
+    version=$(curl -s 'https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+    version=$(jq -r '.tag_name' <<< ${release} )
+    local proton_ge_downloaded_version
+    proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
+    if [[ ! "$proton_ge_downloaded_version" == "$version.tar.gz" ]]; then
+        print_log "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+        kdialog --title "Check For ProtonGE Updates - Steam Deck Configurator" --msgbox "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+    else
+        print_log "ProtonGE is up to date"
+        kdialog --title "Check For ProtonGE Updates - Steam Deck Configurator" --msgbox "ProtonGE is up to date"
+    fi
+}
+
+install_bauh() {
+    print_log "Installing Bauh"
+    if [[ ! -f "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" ]]; then
+        print_log "Bauh appimage doesn't exist in this folder, download it first, skipping..." "error"
+        kdialog --title "Steam Deck Configurator" --passivepopup "bauh appimage doesn't exist in this folder, download it first, skipping..."
+        sleep 3
+        return
+    fi
+
+    cp -v "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" "$HOME/Applications/"
+    chmod -v +x "$HOME/Applications/bauh-0.10.5-x86_64.AppImage"
+    cat <<- EOF > "$HOME/.local/share/applications/bauh.desktop"
+	[Desktop Entry]
+	Type=Application
+	Name=Applications (bauh)
+	Name[pt]=Aplicativos (bauh)
+	Name[es]=Aplicaciones (bauh)
+	Name[ca]=Aplicacions (bauh)
+	Name[it]=Applicazioni (bauh)
+	Name[de]=Anwendungen (bauh)
+	Name[ru]=Приложения (bauh)
+	Name[tr]=Paket Yönetici (bauh)
+	Categories=System;
+	Comment=Install and remove applications (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[pt]=Instale e remova aplicativos (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[es]=Instalar y eliminar aplicaciones (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[it]=Installa e rimuovi applicazioni (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[de]=Anwendungen installieren und entfernen (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[ca]=Instal·lar i eliminar aplicacions (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[ru]=Установка и удаление приложений (AppImage, Arch, Flatpak, Snap, Web)
+	Comment[tr]=Uygulama yükle/kaldır (AppImage, Arch, Flatpak, Snap, Web)
+	Exec=$HOME/Applications/bauh-0.10.5-x86_64.AppImage
+	Icon=bauh
+	EOF
+    cp -v "$configurator_dir/desktop_icons/bauh.svg" "$HOME/.local/share/icons/"
+}
+
 print_log() {
     log_message=$1
     log="$task_number/$number_of_tasks: $task - $log_message"
+    echo "# $log" > zenity_progress
+    percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
+    progress_amount="$(bc -l <<< "$percent*100")"
+    echo "$progress_amount" > zenity_progress
     echo "$log" >> "$configurator_dir/logs.log"
     if [[ "$2" == "error" ]]; then
         echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >&2
@@ -61,13 +142,12 @@ print_log() {
     fi
 }
 
-
 create_dialog() {
-    while true; do
+   # while true; do
         readarray -t chosen_tasks < <(echo "$menu" | xargs zenity --list --checklist --separator=$'\n' --column=status --column=task --column=label --print-column=2 --hide-column=2)
         #echo "${chosen_tasks[@]}"
         run_tasks
-    done
+    #done
 }
 
 load_config() {
@@ -140,13 +220,60 @@ create_config() {
     chosen_tasks=()
 }
 
+set_interactive_tasks() {
+    interactive_tasks=(import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install install_proton_ge_in_steam)
+}
 
+run_interactive_tasks() {
+    sorted_chosen_tasks=($(echo "${chosen_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
+    interactive_tasks=($(echo "${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
+    chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
+
+    number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
+
+   # if [[ ! -p zenity_progress ]]; then
+   #     mkfifo zenity_progress
+   #     (tail -f zenity_progress) | zenity --progress &
+   # fi
+
+    #if ! qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled &> /dev/null; then
+    #    dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
+    #else
+    #    qdbus $dbusRef org.kde.kdialog.ProgressDialog.maximum "$number_of_tasks"
+    #    qdbus $dbusRef /ProgressDialog org.kde.kdialog.ProgressDialog.value 0
+    #fi
+
+    echo "${chosen_interactive_tasks[@]}"
+    for chosen_interactive_task in "${chosen_interactive_tasks[@]}"; do
+        if [[ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ]]; then
+            ((task_number ++))
+            echo interaction_$chosen_interactive_task
+            interaction_$chosen_interactive_task
+            #qdbus $dbusRef Set "" value $task_number
+        fi
+    done
+    ran_interactive_tasks=yes
+}
 
 run_tasks() {
     #echo "${chosen_tasks[@]}"
     #echo "${#chosen_tasks[@]}"
-
+echo a
+    if [[ ! -p zenity_progress ]]; then
+        mkfifo zenity_progress
+    fi
+    
+    if [[ $times != 1 ]]; then
+        (tail -f zenity_progress) | zenity --progress &
+        times=1
+    fi
+echo b
+    number_of_tasks=${#chosen_tasks[@]}
+echo c
     for chosen_task in "${chosen_tasks[@]}"; do
+        ((task_number ++))
+        echo $chosen_task
+        #set_progress
         $chosen_task
     done
 }
