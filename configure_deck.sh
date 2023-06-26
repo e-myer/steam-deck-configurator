@@ -52,6 +52,7 @@ update_flatpaks() {
 
     if [[ ${#flatpak_names[@]} == 0 ]]; then
         print_log "Error, no Flatpaks installed" "error"
+        sleep 3
         return
     fi
 
@@ -426,10 +427,10 @@ check_for_updates_proton_ge() {
     proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
     if [[ ! "$proton_ge_downloaded_version" == "$version.tar.gz" ]]; then
         print_log "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
-        kdialog --title "Check For ProtonGE Updates - Steam Deck Configurator" --msgbox "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+        zenity --error --title="Check For ProtonGE Updates - Steam Deck Configurator" --text="ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
     else
         print_log "ProtonGE is up to date"
-        kdialog --title "Check For ProtonGE Updates - Steam Deck Configurator" --msgbox "ProtonGE is up to date"
+        zenity --info --title="Check For ProtonGE Updates - Steam Deck Configurator" --text="ProtonGE is up to date"
     fi
 }
 
@@ -623,7 +624,7 @@ $chosen_task"
 
 run_tasks() {
     if [[ ${#chosen_tasks[@]} -eq 0 ]]; then
-        echo No tasks chosen, exiting...
+        echo "No tasks chosen, exiting..."
         exit 0
     fi
     unset task_number
