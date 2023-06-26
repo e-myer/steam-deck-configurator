@@ -1,3 +1,16 @@
+#! /usr/bin/bash
+source ./configure_deck_create_zenity.sh running
+(
+echo "25.00"
+echo "# interaction_install_proton_ge_in_steam"
+interaction_install_proton_ge_in_steam
+echo "50.00"
+echo "# update_flatpaks"
 update_flatpaks
+echo "75.00"
+echo "# install_proton_ge_in_steam"
 install_proton_ge_in_steam
+echo "100.00"
+echo "# install_bauh"
 install_bauh
+) | zenity --progress
