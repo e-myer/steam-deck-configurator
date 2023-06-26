@@ -661,7 +661,6 @@ run_tasks() {
         set_tasks_to_run
     done
     tasks_to_run+=") | zenity --progress"
-    echo "$tasks_to_run"
     echo "$tasks_to_run" > run_zenity
     source run_zenity
 
@@ -709,6 +708,4 @@ main() {
     create_dialog
 }
 
-if [[ $1 != "running" ]]; then
-    main
-fi
+main
