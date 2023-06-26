@@ -1,6 +1,6 @@
 #! /usr/bin/bash
 
-# Configures various functions in a steam deck.
+# Configures various functions in a Steam Deck.
 
 configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
@@ -253,7 +253,7 @@ install_bauh() {
     print_log "Installing Bauh"
     if [[ ! -f "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" ]]; then
         print_log "Bauh appimage doesn't exist in this folder, download it first, skipping..." "error"
-        kdialog --title "Steam Deck Configurator" --passivepopup "bauh appimage doesn't exist in this folder, download it first, skipping..."
+        zenity --notification --window-icon="info" --text="bauh appimage doesn't exist in this folder, download it first, skipping..."
         sleep 3
         return
     fi
@@ -516,7 +516,7 @@ load_config() {
         for config_file in "${config_files[@]}"; do
             readarray -t config_line < "$config_file"
             for option in "${config_line[@]}"; do
-                menu=$(sed -r "s/(\"$option\" ".+?") off/\1 on/" <<< $menu)
+                menu=$(sed -r "s/FALSE (\"$option\" ".+?")/TRUE \1/" <<< $menu)
             done
         done
     else
@@ -527,7 +527,7 @@ load_config() {
 create_config() {
     print_log "Create config"
     if [[ ${#chosen_tasks[@]} == 1 ]]; then
-        kdialog --title "Create Config - Steam Deck Configurator" --error "Please choose the tasks to save as a config."
+        zenity --error --title="Create Config - Steam Deck Configurator" --text="Please choose the tasks to save as a config."
         return
     fi
 
@@ -558,11 +558,11 @@ create_config() {
         fi
     done
     print_log "Created config"
-    kdialog --title "Create Config - Steam Deck Configurator" --msgbox "created config"
+    zenity --info --title "Create Config - Steam Deck Configurator" --text="created config"
     
     for chosen_task in "${chosen_tasks[@]}"; do
         if [[ "$chosen_task" != "create_config" ]]; then
-            menu=$(sed -r "s/(\"$chosen_task\" ".+?") off/\1 on/" <<< $menu)
+            menu=$(sed -r "s/FALSE (\"$chosen_task\" ".+?")/TRUE \1/" <<< $menu)
         fi
     done
     chosen_tasks=()

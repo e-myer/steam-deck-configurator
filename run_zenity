@@ -1,4 +1,0 @@
-(
-echo "50.00"
-echo "# update_flatpaks"
-flatpak update -y) | zenity --progress
