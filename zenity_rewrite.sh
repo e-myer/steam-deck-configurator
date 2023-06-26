@@ -150,11 +150,11 @@ print_log() {
 }
 
 create_dialog() {
-    #while true; do
+    while true; do
         readarray -t chosen_tasks < <(echo "$menu" | xargs zenity --list --checklist --separator=$'\n' --column=status --column=task --column=label --print-column=2 --hide-column=2)
         echo "${chosen_tasks[@]}"
         run_tasks
-    #done
+    done
 }
 
 load_config() {
@@ -168,7 +168,7 @@ load_config() {
             IFS=$pre_ifs
         else
             print_log "Cancelled"
-            return
+        #    return
         fi
 
         for config_file in "${config_files[@]}"; do
