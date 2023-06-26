@@ -587,8 +587,6 @@ run_interactive_tasks() {
 
     number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
 
-    tasks_to_run="("
-
     echo "${chosen_interactive_tasks[@]}"
     for chosen_interactive_task in "${chosen_interactive_tasks[@]}"; do
         set_tasks_to_run_interactive
@@ -597,7 +595,11 @@ run_interactive_tasks() {
 }
 
 set_tasks_to_run_interactive() {
-    ((task_number ++))
+    if [[ -z "$task_number" ]]; then
+        task_number=0
+    else
+        ((task_number ++))
+    fi
     percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
     progress_amount="$(bc -l <<< "$percent*100")"
     tasks_to_run+="
@@ -609,13 +611,21 @@ interaction_$chosen_interactive_task"
 }
 
 set_tasks_to_run() {
-    ((task_number ++))
+    if [[ -z "$task_number" ]]; then
+        task_number=0
+    else
+        ((task_number ++))
+    fi
+
     percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
     progress_amount="$(bc -l <<< "$percent*100")"
+    
     tasks_to_run+="
 echo \"$progress_amount\""
+    
     tasks_to_run+="
 echo \"# $chosen_task\""
+    
     tasks_to_run+="
 $chosen_task"
 }
@@ -632,7 +642,9 @@ run_tasks() {
     if [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]] || [[ ! " ${chosen_tasks[*]} " =~ " create_config " ]]; then
         set_menu
     fi
-
+    
+    tasks_to_run="("
+    
     if [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
         number_of_tasks=1
         chosen_tasks=(load_config)
