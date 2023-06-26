@@ -683,6 +683,7 @@ run_tasks() {
     #zenity --progress < "$tasks_to_run"
     #zenity --progress <<< "$tasks_to_run"
     #echo ") | zenity --progress" >> tasks_to_run
+    #echo "$tasks_to_run" | xargs zenity --progress
     ran_interactive_tasks=no
 
     if [[ -s "$configurator_dir/notices" ]]; then
