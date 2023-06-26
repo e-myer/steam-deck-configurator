@@ -350,7 +350,7 @@ run_cryo_utilities_recommended() {
     fi
 
     print_log "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
-    kdialog --title "Run CryoUtilities Recommended - Steam Deck Configurator" --msgbox "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
+    zenity --info --title="Run CryoUtilities Recommended - Steam Deck Configurator" --text="Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
     sudo "$HOME/.cryo_utilities/cryo_utilities" recommended
 }
 
@@ -375,7 +375,7 @@ install_refind_GUI() {
 
 interaction_install_refind_bootloader() {
     print_log "Install reifnd bootlader confirmation"
-    if kdialog --title "Install rEFInd Bootloader - Steam Deck Configurator" --yesno "It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"; then
+    if zenity --title "Install rEFInd Bootloader - Steam Deck Configurator" --question --text="It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"; then
         install_refind=yes
     else
         install_refind=no
@@ -471,8 +471,8 @@ install_proton_ge_in_steam() {
 
 fix_barrier() {
     print_log "Fixing Barrier"
-    if ! kdialog --title "Barrier Auto Config" --yesno "Are you using auto config for the ip address?"; then
-        ip_address=$(kdialog --title "Fix Barrier - Steam Deck Configurator" --inputbox "input server ip address from the barrier app")
+    if ! zenity --title "Barrier Auto Config" --question --text="Are you using auto config for the ip address?"; then
+        ip_address=$(zenity --entry --title "Fix Barrier - Steam Deck Configurator" --text="input server ip address from the barrier app")
     fi
 
     touch "$HOME/.config/systemd/user/barrier.service"
@@ -696,7 +696,7 @@ set_menu() {
 }
 
 main() {
-    if ! kdialog --title "Password - Steam Deck Configurator" --yesno "Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"; then
+    if ! zenity --title "Password - Steam Deck Configurator" --question --text="Please make sure a sudo password is set before continuing. If you have not set the sudo password, set it first. Continue?"; then
         exit 0
     fi
 
