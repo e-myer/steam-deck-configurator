@@ -663,14 +663,6 @@ run_tasks() {
         load_config
     fi
 
-
-  #  for chosen_task in "${chosen_tasks[@]}"; do
-  #      set_tasks_to_run
-  ##  done
-   # tasks_to_run+=") | zenity --progress"
-   # echo "$tasks_to_run" > run_zenity
-   # source run_zenity
-
     ran_interactive_tasks=no
 
     if [[ -s "$configurator_dir/notices" ]]; then
