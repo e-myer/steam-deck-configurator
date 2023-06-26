@@ -593,25 +593,53 @@ run_interactive_tasks() {
         qdbus $dbusRef /ProgressDialog org.kde.kdialog.ProgressDialog.value 0
     fi
 
-    echo "#! /usr/bin/bash
-source ./configure_deck_create_zenity.sh
-(" > tasks_to_run
-chmod +x tasks_to_run
+    #echo "#! /usr/bin/bash
+#source ./configure_deck_create_zenity.sh
+#(" > tasks_to_run
+#chmod +x tasks_to_run
+
+#    tasks_to_run="#! /usr/bin/bash
+#("
+
+    tasks_to_run="("
+
     echo "${chosen_interactive_tasks[@]}"
     for chosen_interactive_task in "${chosen_interactive_tasks[@]}"; do
-        if [[ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ]]; then
-            ((task_number ++))
-            percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
-            progress_amount="$(bc -l <<< "$percent*100")"
-            echo "echo \"$progress_amount\"" >> tasks_to_run
-            echo "echo \"# interaction_$chosen_interactive_tasks\"" >> tasks_to_run
-            echo interaction_$chosen_interactive_task >> tasks_to_run
-            #interaction_$chosen_interactive_task
-            qdbus $dbusRef Set "" value $task_number
-        fi
+        set_tasks_to_run_interactive
     done
     ran_interactive_tasks=yes
 }
+
+set_tasks_to_run_interactive() {
+    ((task_number ++))
+    percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
+    progress_amount="$(bc -l <<< "$percent*100")"
+    tasks_to_run+="
+echo \"$progress_amount\""
+    #echo "echo \"$progress_amount\"" >> tasks_to_run
+    tasks_to_run+="
+echo \"# interaction_$chosen_interactive_tasks\""
+    #echo "echo \"# interaction_$chosen_interactive_tasks\"" >> tasks_to_run
+    tasks_to_run+="
+interaction_$chosen_interactive_task"
+    #echo interaction_$chosen_interactive_task >> tasks_to_run
+}
+
+set_tasks_to_run() {
+    ((task_number ++))
+    percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
+    progress_amount="$(bc -l <<< "$percent*100")"
+    tasks_to_run+="
+echo \"$progress_amount\""
+    tasks_to_run+="
+echo \"# $chosen_task\""
+    tasks_to_run+="
+$chosen_task"
+    #echo $chosen_task >> tasks_to_run
+    #$chosen_task
+    #qdbus $dbusRef Set "" value $task_number
+}
+
 
 
 run_tasks() {
@@ -644,19 +672,17 @@ run_tasks() {
     fi
 
     for chosen_task in "${chosen_tasks[@]}"; do
-        if [[ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ]] && [[ " ${chosen_tasks[*]} " =~ " ${chosen_task} " ]]; then
-
-            ((task_number ++))
-            percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
-            progress_amount="$(bc -l <<< "$percent*100")"
-            echo "echo \"$progress_amount\"" >> tasks_to_run
-            echo "echo \"# $chosen_task\"" >> tasks_to_run
-            echo $chosen_task >> tasks_to_run
-            #$chosen_task
-            qdbus $dbusRef Set "" value $task_number
-        fi
+        set_tasks_to_run
     done
-    echo ") | zenity --progress" >> tasks_to_run
+    tasks_to_run+=")" # | zenity --progress"
+    echo "$tasks_to_run"
+    #tasks_to_runction(){
+    #    $tasks_to_run
+    #}
+    #$tasks_to_run | zenity --progress
+    #zenity --progress < "$tasks_to_run"
+    #zenity --progress <<< "$tasks_to_run"
+    #echo ") | zenity --progress" >> tasks_to_run
     ran_interactive_tasks=no
 
     if [[ -s "$configurator_dir/notices" ]]; then
