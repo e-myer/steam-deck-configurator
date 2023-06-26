@@ -643,13 +643,6 @@ run_tasks() {
         number_of_tasks=${#chosen_tasks[@]}
     fi
 
-    if ! qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled &> /dev/null; then
-        dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
-    else
-        qdbus $dbusRef org.kde.kdialog.ProgressDialog.maximum "$number_of_tasks"
-        qdbus $dbusRef org.kde.kdialog.ProgressDialog.value 0
-    fi
-
     for chosen_task in "${chosen_tasks[@]}"; do
         set_tasks_to_run
     done
@@ -663,31 +656,29 @@ run_tasks() {
         kdialog --title "Notices - Steam Deck Configurator" --textbox "$configurator_dir/notices"
         truncate -s 0 "$configurator_dir/notices"
     fi
-
-    qdbus $dbusRef setLabelText "$task_number/$number_of_tasks: Tasks completed"
 }
 
 set_menu() {
-    menu='FALSE "load_config" "Load Config" \
-    FALSE "create_config" "Create Config" \
-    FALSE "add_flathub" "Add Flathub if it does not exist" \
-    FALSE "update_flatpaks" "Update Flatpaks" \
-    FALSE "import_flatpaks" "Import Flatpaks" \
-    FALSE "export_flatpaks" "Export Flatpaks" \
-    FALSE "install_flatpaks" "Install Flatpaks" \
-    FALSE "save_flatpaks_install" "Save Flatpaks List" \
-    FALSE "install_proton_ge_in_steam" "Install Proton GE in Steam" \
-    FALSE "install_bauh" "Install Bauh" \
-    FALSE "install_deckyloader" "Install DeckyLoader" \
-    FALSE "check_for_updates_proton_ge" "Check for Proton GE Updates" \
-    FALSE "install_cryoutilities" "Install CryoUtilities" \
-    FALSE "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings" \
-    FALSE "install_emudeck" "Install Emudeck" \
-    FALSE "update_submodules" "Update Submodules" \
-    FALSE "install_refind_GUI" "Install rEFInd GUI" \
-    FALSE "install_refind_bootloader" "Install rEFInd bootloader" \
-    FALSE "fix_barrier" "Fix Barrier" \
-    FALSE "uninstall_deckyloader" "Uninstall DeckyLoader" \
+    menu='FALSE "load_config" "Load Config"
+    FALSE "create_config" "Create Config"
+    FALSE "add_flathub" "Add Flathub if it does not exist"
+    FALSE "update_flatpaks" "Update Flatpaks"
+    FALSE "import_flatpaks" "Import Flatpaks"
+    FALSE "export_flatpaks" "Export Flatpaks"
+    FALSE "install_flatpaks" "Install Flatpaks"
+    FALSE "save_flatpaks_install" "Save Flatpaks List"
+    FALSE "install_proton_ge_in_steam" "Install Proton GE in Steam"
+    FALSE "install_bauh" "Install Bauh"
+    FALSE "install_deckyloader" "Install DeckyLoader"
+    FALSE "check_for_updates_proton_ge" "Check for Proton GE Updates"
+    FALSE "install_cryoutilities" "Install CryoUtilities"
+    FALSE "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings"
+    FALSE "install_emudeck" "Install Emudeck"
+    FALSE "update_submodules" "Update Submodules"
+    FALSE "install_refind_GUI" "Install rEFInd GUI"
+    FALSE "install_refind_bootloader" "Install rEFInd bootloader"
+    FALSE "fix_barrier" "Fix Barrier"
+    FALSE "uninstall_deckyloader" "Uninstall DeckyLoader"
     FALSE "uninstall_refind_gui" "Uninstall rEFInd GUI"'
 }
 
