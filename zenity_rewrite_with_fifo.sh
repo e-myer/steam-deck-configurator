@@ -237,6 +237,11 @@ run_interactive_tasks() {
 
     number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
 
+    #if [[ ! -p zenity_progress ]]; then
+    #    mkfifo zenity_progress
+    #    #(tail -f zenity_progress) | zenity --progress &
+    #fi
+
     touch zenity_progress_2
 
     if [[ $tailing_progress != 1 ]]; then
@@ -271,6 +276,10 @@ run_tasks() {
     fi
     unset task_number
     echo chosen_tasks is "${chosen_tasks[@]}"
+    #if [[ ! -p zenity_progress ]]; then
+    #    mkfifo zenity_progress
+    #    echo "made zenity progress fifo"
+    #fi
     touch zenity_progress_2
     echo "abc"
     if [[  " ${chosen_tasks[*]} " =~ " load_config " ]]; then
