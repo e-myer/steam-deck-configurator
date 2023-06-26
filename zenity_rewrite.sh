@@ -134,10 +134,10 @@ print_log() {
     log_message=$1
     log="$task_number/$number_of_tasks: $task - $log_message"
     echo "log is $log"
-    echo "# $log" > zenity_progress
+    echo "# $log" >> zenity_progress
     percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
     progress_amount="$(bc -l <<< "$percent*100")"
-    echo "$progress_amount" > zenity_progress
+    echo "$progress_amount" >> zenity_progress
     echo "$log" >> "$configurator_dir/logs.log"
     if [[ "$2" == "error" ]]; then
         echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >&2
@@ -237,10 +237,12 @@ run_interactive_tasks() {
 
     number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
 
-    if [[ ! -p zenity_progress ]]; then
-        mkfifo zenity_progress
-        #(tail -f zenity_progress) | zenity --progress &
-    fi
+    #if [[ ! -p zenity_progress ]]; then
+    #    mkfifo zenity_progress
+    #    #(tail -f zenity_progress) | zenity --progress &
+    #fi
+
+    touch zenity_progress
 
     if [[ $tailing_progress != 1 ]]; then
         (tail -f zenity_progress) | zenity --progress &
@@ -274,10 +276,11 @@ run_tasks() {
     fi
     unset task_number
     echo chosen_tasks is "${chosen_tasks[@]}"
-    if [[ ! -p zenity_progress ]]; then
-        mkfifo zenity_progress
-        echo "made zenity progress fifo"
-    fi
+    #if [[ ! -p zenity_progress ]]; then
+    #    mkfifo zenity_progress
+    #    echo "made zenity progress fifo"
+    #fi
+    touch zenity_progress
     echo "abc"
     if [[  " ${chosen_tasks[*]} " =~ " load_config " ]]; then
         number_of_tasks=1
@@ -289,7 +292,8 @@ run_tasks() {
     fi
 
     echo "echoing 0 to progress file"
-    echo "0" > zenity_progress
+    echo "0" >> zenity_progress
+    echo "echoed 0 to progress file"
     
     if [[ $tailing_progress != 1 ]]; then
         echo "tailing_progress is not 1"
