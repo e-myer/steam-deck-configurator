@@ -1,13 +1,13 @@
 #! /usr/bin/bash
 
-# Configures various functions in a Steam Deck.
+# Configures various functions in a steam deck.
 
 configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 print_log() {
     log_message=$1
     log="$task_number/$number_of_tasks: $task - $log_message"
-    echo "# $log"
+    qdbus $dbusRef setLabelText "$log"
     echo "$log" >> "$configurator_dir/logs.log"
     if [[ "$2" == "error" ]]; then
         echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >&2
@@ -52,7 +52,6 @@ update_flatpaks() {
 
     if [[ ${#flatpak_names[@]} == 0 ]]; then
         print_log "Error, no Flatpaks installed" "error"
-        sleep 3
         return
     fi
 
@@ -254,7 +253,7 @@ install_bauh() {
     print_log "Installing Bauh"
     if [[ ! -f "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" ]]; then
         print_log "Bauh appimage doesn't exist in this folder, download it first, skipping..." "error"
-        zenity --notification --window-icon="info" --text="bauh appimage doesn't exist in this folder, download it first, skipping..."
+        kdialog --title "Steam Deck Configurator" --passivepopup "bauh appimage doesn't exist in this folder, download it first, skipping..."
         sleep 3
         return
     fi
@@ -427,10 +426,10 @@ check_for_updates_proton_ge() {
     proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
     if [[ ! "$proton_ge_downloaded_version" == "$version.tar.gz" ]]; then
         print_log "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
-        zenity --error --title="Check For ProtonGE Updates - Steam Deck Configurator" --text="ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+        kdialog --title "Check For ProtonGE Updates - Steam Deck Configurator" --msgbox "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
     else
         print_log "ProtonGE is up to date"
-        zenity --info --title="Check For ProtonGE Updates - Steam Deck Configurator" --text="ProtonGE is up to date"
+        kdialog --title "Check For ProtonGE Updates - Steam Deck Configurator" --msgbox "ProtonGE is up to date"
     fi
 }
 
@@ -517,19 +516,18 @@ load_config() {
         for config_file in "${config_files[@]}"; do
             readarray -t config_line < "$config_file"
             for option in "${config_line[@]}"; do
-                menu=$(sed -r "s/FALSE (\"$option\" ".+?")/TRUE \1/" <<< $menu)
+                menu=$(sed -r "s/(\"$option\" ".+?") off/\1 on/" <<< $menu)
             done
         done
     else
         print_log "No configs found, please create one first" "error"
-        sleep 3
     fi
 }
 
 create_config() {
     print_log "Create config"
     if [[ ${#chosen_tasks[@]} == 1 ]]; then
-        zenity --error --title="Create Config - Steam Deck Configurator" --text="Please choose the tasks to save as a config."
+        kdialog --title "Create Config - Steam Deck Configurator" --error "Please choose the tasks to save as a config."
         return
     fi
 
@@ -542,7 +540,7 @@ create_config() {
         print_log "Cancelled"
         for chosen_task in "${chosen_tasks[@]}"; do
             if [[ "$chosen_task" != "create_config" ]]; then
-                menu=$(sed -r "s/FALSE (\"$chosen_task\" ".+?")/TRUE \1/" <<< $menu)
+                menu=$(sed -r "s/(\"$chosen_task\" ".+?") off/\1 on/" <<< $menu)
             fi
         done
         chosen_tasks=()
@@ -560,11 +558,11 @@ create_config() {
         fi
     done
     print_log "Created config"
-    zenity --info --title "Create Config - Steam Deck Configurator" --text="created config"
+    kdialog --title "Create Config - Steam Deck Configurator" --msgbox "created config"
     
     for chosen_task in "${chosen_tasks[@]}"; do
         if [[ "$chosen_task" != "create_config" ]]; then
-            menu=$(sed -r "s/FALSE (\"$chosen_task\" ".+?")/TRUE \1/" <<< $menu)
+            menu=$(sed -r "s/(\"$chosen_task\" ".+?") off/\1 on/" <<< $menu)
         fi
     done
     chosen_tasks=()
@@ -572,7 +570,7 @@ create_config() {
 
 create_dialog() {
     while true; do
-        readarray -t chosen_tasks < <(echo $menu | xargs zenity --list --checklist --column="command" --column="task" --column="description" --hide-column=2 --print-column=2 --separator=$'\n')        
+        readarray -t chosen_tasks < <(echo $menu | xargs kdialog --title "Steam Deck Configurator" --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect")
         run_tasks
     done
 }
@@ -588,54 +586,28 @@ run_interactive_tasks() {
 
     number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
 
+    if ! qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled &> /dev/null; then
+        dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
+    else
+        qdbus $dbusRef org.kde.kdialog.ProgressDialog.maximum "$number_of_tasks"
+        qdbus $dbusRef /ProgressDialog org.kde.kdialog.ProgressDialog.value 0
+    fi
+
     echo "${chosen_interactive_tasks[@]}"
     for chosen_interactive_task in "${chosen_interactive_tasks[@]}"; do
-        set_tasks_to_run_interactive
+        if [[ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ]]; then
+            ((task_number ++))
+            echo interaction_$chosen_interactive_task
+            interaction_$chosen_interactive_task
+            qdbus $dbusRef Set "" value $task_number
+        fi
     done
     ran_interactive_tasks=yes
 }
 
-set_tasks_to_run_interactive() {
-    if [[ -z "$task_number" ]]; then
-        task_number=0
-    else
-        ((task_number ++))
-    fi
-    percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
-    progress_amount="$(bc -l <<< "$percent*100")"
-    tasks_to_run+="
-echo \"$progress_amount\""
-    tasks_to_run+="
-echo \"# interaction_$chosen_interactive_task\""
-    tasks_to_run+="
-interaction_$chosen_interactive_task"
-}
-
-set_tasks_to_run() {
-    if [[ -z "$task_number" ]]; then
-        task_number=0
-    else
-        ((task_number ++))
-    fi
-
-    percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
-    progress_amount="$(bc -l <<< "$percent*100")"
-    
-    tasks_to_run+="
-echo \"$progress_amount\""
-    
-    tasks_to_run+="
-echo \"# $chosen_task\""
-    
-    tasks_to_run+="
-$chosen_task"
-}
-
-
-
 run_tasks() {
     if [[ ${#chosen_tasks[@]} -eq 0 ]]; then
-        echo "No tasks chosen, exiting..."
+        echo No tasks chosen, exiting...
         exit 0
     fi
     unset task_number
@@ -643,64 +615,65 @@ run_tasks() {
     if [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]] || [[ ! " ${chosen_tasks[*]} " =~ " create_config " ]]; then
         set_menu
     fi
-    
-    tasks_to_run="("
-    
-    if [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]]; then
-        if [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
-            number_of_tasks=1
-        elif [[ "$ran_interactive_tasks" != "yes" ]]; then
-            run_interactive_tasks
-        fi
-            number_of_tasks=${#chosen_tasks[@]}
-            for chosen_task in "${chosen_tasks[@]}"; do
-                set_tasks_to_run
-            done
-            tasks_to_run+=") | zenity --progress"
-            echo "$tasks_to_run" > run_zenity
-            source run_zenity
+
+    if [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
+        number_of_tasks=1
+        chosen_tasks=(load_config)
+    elif [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
+        number_of_tasks=1
+    elif [[ "$ran_interactive_tasks" != "yes" ]]; then
+        run_interactive_tasks
     else
-        load_config
+        number_of_tasks=${#chosen_tasks[@]}
     fi
 
+    if ! qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled &> /dev/null; then
+        dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
+    else
+        qdbus $dbusRef org.kde.kdialog.ProgressDialog.maximum "$number_of_tasks"
+        qdbus $dbusRef org.kde.kdialog.ProgressDialog.value 0
+    fi
 
-  #  for chosen_task in "${chosen_tasks[@]}"; do
-  #      set_tasks_to_run
-  ##  done
-   # tasks_to_run+=") | zenity --progress"
-   # echo "$tasks_to_run" > run_zenity
-   # source run_zenity
-
+    for chosen_task in "${chosen_tasks[@]}"; do
+        if [[ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ]] && [[ " ${chosen_tasks[*]} " =~ " ${chosen_task} " ]]; then
+            ((task_number ++))
+            echo $chosen_task
+            $chosen_task
+            qdbus $dbusRef Set "" value $task_number
+        fi
+    done
     ran_interactive_tasks=no
 
     if [[ -s "$configurator_dir/notices" ]]; then
         kdialog --title "Notices - Steam Deck Configurator" --textbox "$configurator_dir/notices"
         truncate -s 0 "$configurator_dir/notices"
     fi
+
+    qdbus $dbusRef setLabelText "$task_number/$number_of_tasks: Tasks completed"
 }
 
 set_menu() {
-    menu='FALSE "load_config" "Load Config"
-    FALSE "create_config" "Create Config"
-    FALSE "add_flathub" "Add Flathub if it does not exist"
-    FALSE "update_flatpaks" "Update Flatpaks"
-    FALSE "import_flatpaks" "Import Flatpaks"
-    FALSE "export_flatpaks" "Export Flatpaks"
-    FALSE "install_flatpaks" "Install Flatpaks"
-    FALSE "save_flatpaks_install" "Save Flatpaks List"
-    FALSE "install_proton_ge_in_steam" "Install Proton GE in Steam"
-    FALSE "install_bauh" "Install Bauh"
-    FALSE "install_deckyloader" "Install DeckyLoader"
-    FALSE "check_for_updates_proton_ge" "Check for Proton GE Updates"
-    FALSE "install_cryoutilities" "Install CryoUtilities"
-    FALSE "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings"
-    FALSE "install_emudeck" "Install Emudeck"
-    FALSE "update_submodules" "Update Submodules"
-    FALSE "install_refind_GUI" "Install rEFInd GUI"
-    FALSE "install_refind_bootloader" "Install rEFInd bootloader"
-    FALSE "fix_barrier" "Fix Barrier"
-    FALSE "uninstall_deckyloader" "Uninstall DeckyLoader"
-    FALSE "uninstall_refind_gui" "Uninstall rEFInd GUI"'
+    menu='"load_config" "Load Config" off
+    "create_config" "Create Config" off
+    "add_flathub" "Add Flathub if it does not exist" off
+    "update_flatpaks" "Update Flatpaks" off
+    "import_flatpaks" "Import Flatpaks" off
+    "export_flatpaks" "Export Flatpaks" off
+    "install_flatpaks" "Install Flatpaks" off
+    "save_flatpaks_install" "Save Flatpaks List" off
+    "install_proton_ge_in_steam" "Install Proton GE in Steam" off
+    "install_bauh" "Install Bauh" off
+    "install_deckyloader" "Install DeckyLoader" off
+    "check_for_updates_proton_ge" "Check for Proton GE Updates" off
+    "install_cryoutilities" "Install CryoUtilities" off
+    "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings" off
+    "install_emudeck" "Install Emudeck" off
+    "update_submodules" "Update Submodules" off
+    "install_refind_GUI" "Install rEFInd GUI" off
+    "install_refind_bootloader" "Install rEFInd bootloader" off
+    "fix_barrier" "Fix Barrier" off
+    "uninstall_deckyloader" "Uninstall DeckyLoader" off
+    "uninstall_refind_gui" "Uninstall rEFInd GUI" off'
 }
 
 main() {
