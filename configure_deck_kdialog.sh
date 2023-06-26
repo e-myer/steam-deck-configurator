@@ -9,9 +9,6 @@ print_log() {
     log="$task_number/$number_of_tasks: $task - $log_message"
     qdbus $dbusRef setLabelText "$log"
     echo "$log" >> "$configurator_dir/logs.log"
-    percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
-    progress_amount=$(bc -l <<< "$percent*100")
-    echo "$progress_amount"
     if [[ "$2" == "error" ]]; then
         echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >&2
         echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >> "$configurator_dir/notices"
@@ -689,4 +686,4 @@ main() {
     create_dialog
 }
 
-main | zenity --progress
+main

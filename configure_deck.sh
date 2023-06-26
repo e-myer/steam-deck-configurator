@@ -7,7 +7,7 @@ configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && 
 print_log() {
     log_message=$1
     log="$task_number/$number_of_tasks: $task - $log_message"
-    qdbus $dbusRef setLabelText "$log"
+    echo "# $log"
     echo "$log" >> "$configurator_dir/logs.log"
     if [[ "$2" == "error" ]]; then
         echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $1" >&2
@@ -540,7 +540,7 @@ create_config() {
         print_log "Cancelled"
         for chosen_task in "${chosen_tasks[@]}"; do
             if [[ "$chosen_task" != "create_config" ]]; then
-                menu=$(sed -r "s/(\"$chosen_task\" ".+?") off/\1 on/" <<< $menu)
+                menu=$(sed -r "s/FALSE (\"$chosen_task\" ".+?")/TRUE \1/" <<< $menu)
             fi
         done
         chosen_tasks=()
@@ -570,7 +570,7 @@ create_config() {
 
 create_dialog() {
     while true; do
-        readarray -t chosen_tasks < <(echo $menu | xargs kdialog --title "Steam Deck Configurator" --separate-output --geometry 1280x800 --checklist "Select tasks, click and drag to multiselect")
+        readarray -t chosen_tasks < <(echo $menu | xargs zenity --list --checklist --column="command" --column="task" --column="description" --hide-column=2 --print-column=2 --separator=$'\n')        
         run_tasks
     done
 }
@@ -586,24 +586,40 @@ run_interactive_tasks() {
 
     number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
 
-    if ! qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled &> /dev/null; then
-        dbusRef=$(kdialog --title "Steam Deck Configurator" --progressbar "Steam Deck Configurator" "$number_of_tasks")
-    else
-        qdbus $dbusRef org.kde.kdialog.ProgressDialog.maximum "$number_of_tasks"
-        qdbus $dbusRef /ProgressDialog org.kde.kdialog.ProgressDialog.value 0
-    fi
+    tasks_to_run="("
 
     echo "${chosen_interactive_tasks[@]}"
     for chosen_interactive_task in "${chosen_interactive_tasks[@]}"; do
-        if [[ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ]]; then
-            ((task_number ++))
-            echo interaction_$chosen_interactive_task
-            interaction_$chosen_interactive_task
-            qdbus $dbusRef Set "" value $task_number
-        fi
+        set_tasks_to_run_interactive
     done
     ran_interactive_tasks=yes
 }
+
+set_tasks_to_run_interactive() {
+    ((task_number ++))
+    percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
+    progress_amount="$(bc -l <<< "$percent*100")"
+    tasks_to_run+="
+echo \"$progress_amount\""
+    tasks_to_run+="
+echo \"# interaction_$chosen_interactive_tasks\""
+    tasks_to_run+="
+interaction_$chosen_interactive_task"
+}
+
+set_tasks_to_run() {
+    ((task_number ++))
+    percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
+    progress_amount="$(bc -l <<< "$percent*100")"
+    tasks_to_run+="
+echo \"$progress_amount\""
+    tasks_to_run+="
+echo \"# $chosen_task\""
+    tasks_to_run+="
+$chosen_task"
+}
+
+
 
 run_tasks() {
     if [[ ${#chosen_tasks[@]} -eq 0 ]]; then
@@ -635,13 +651,12 @@ run_tasks() {
     fi
 
     for chosen_task in "${chosen_tasks[@]}"; do
-        if [[ "$(qdbus $dbusRef org.kde.kdialog.ProgressDialog.wasCancelled)" == "false" ]] && [[ " ${chosen_tasks[*]} " =~ " ${chosen_task} " ]]; then
-            ((task_number ++))
-            echo $chosen_task
-            $chosen_task
-            qdbus $dbusRef Set "" value $task_number
-        fi
+        set_tasks_to_run
     done
+    tasks_to_run+=") | zenity --progress"
+    echo "$tasks_to_run" > run_zenity
+    source run_zenity
+
     ran_interactive_tasks=no
 
     if [[ -s "$configurator_dir/notices" ]]; then
@@ -653,27 +668,27 @@ run_tasks() {
 }
 
 set_menu() {
-    menu='"load_config" "Load Config" off
-    "create_config" "Create Config" off
-    "add_flathub" "Add Flathub if it does not exist" off
-    "update_flatpaks" "Update Flatpaks" off
-    "import_flatpaks" "Import Flatpaks" off
-    "export_flatpaks" "Export Flatpaks" off
-    "install_flatpaks" "Install Flatpaks" off
-    "save_flatpaks_install" "Save Flatpaks List" off
-    "install_proton_ge_in_steam" "Install Proton GE in Steam" off
-    "install_bauh" "Install Bauh" off
-    "install_deckyloader" "Install DeckyLoader" off
-    "check_for_updates_proton_ge" "Check for Proton GE Updates" off
-    "install_cryoutilities" "Install CryoUtilities" off
-    "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings" off
-    "install_emudeck" "Install Emudeck" off
-    "update_submodules" "Update Submodules" off
-    "install_refind_GUI" "Install rEFInd GUI" off
-    "install_refind_bootloader" "Install rEFInd bootloader" off
-    "fix_barrier" "Fix Barrier" off
-    "uninstall_deckyloader" "Uninstall DeckyLoader" off
-    "uninstall_refind_gui" "Uninstall rEFInd GUI" off'
+    menu='FALSE "load_config" "Load Config" \
+    FALSE "create_config" "Create Config" \
+    FALSE "add_flathub" "Add Flathub if it does not exist" \
+    FALSE "update_flatpaks" "Update Flatpaks" \
+    FALSE "import_flatpaks" "Import Flatpaks" \
+    FALSE "export_flatpaks" "Export Flatpaks" \
+    FALSE "install_flatpaks" "Install Flatpaks" \
+    FALSE "save_flatpaks_install" "Save Flatpaks List" \
+    FALSE "install_proton_ge_in_steam" "Install Proton GE in Steam" \
+    FALSE "install_bauh" "Install Bauh" \
+    FALSE "install_deckyloader" "Install DeckyLoader" \
+    FALSE "check_for_updates_proton_ge" "Check for Proton GE Updates" \
+    FALSE "install_cryoutilities" "Install CryoUtilities" \
+    FALSE "run_cryo_utilities_recommended" "Run CryoUtilities with recommended settings" \
+    FALSE "install_emudeck" "Install Emudeck" \
+    FALSE "update_submodules" "Update Submodules" \
+    FALSE "install_refind_GUI" "Install rEFInd GUI" \
+    FALSE "install_refind_bootloader" "Install rEFInd bootloader" \
+    FALSE "fix_barrier" "Fix Barrier" \
+    FALSE "uninstall_deckyloader" "Uninstall DeckyLoader" \
+    FALSE "uninstall_refind_gui" "Uninstall rEFInd GUI"'
 }
 
 main() {
