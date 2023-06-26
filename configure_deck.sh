@@ -107,7 +107,7 @@ export_flatpaks() {
                     echo "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" > "$flatpaks_export_dir/flatpaks_exported_list"
             fi
         else
-            kdialog --title "Export Flatpaks - Steam Deck Configurator" --passivepopup "export flatpaks error: $?"
+            zenity --notification --text="export flatpaks error: $?"
             print_log "export_flatpaks error $?" "error"
         fi
     done
@@ -337,7 +337,7 @@ install_cryoutilities() {
     fi
 
     print_log "Installing CryoUtilities... Please click on the \"ok\" button after it installs to continue"
-    kdialog --title "Steam Deck Configurator" --passivepopup "Installing CryoUtilities. Please select click the \"ok\" button after it installs to continue"
+    zenity --notification --text="Installing CryoUtilities. Please click on the \"ok\" button after it installs to continue"
     curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_dir/cryoutilities_install.sh"
     chmod -v +x "$configurator_dir/cryoutilities_install.sh"
     "$configurator_dir/cryoutilities_install.sh"
@@ -394,7 +394,7 @@ install_refind_bootloader() {
     fi
 
     print_log "Installing rEFInd bootloader, please input the sudo password when prompted"
-    kdialog --title "Steam Deck Configurator" --passivepopup "Installing rEFInd bootloader, please input the sudo password when prompted"
+    zenity --notification --text="Installing rEFInd bootloader, please input the sudo password when prompted"
     "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
@@ -415,7 +415,7 @@ check_for_updates_proton_ge() {
     print_log "Checking for ProtonGE Updates"
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..." "error"
-        kdialog --title "Steam Deck Configurator" --passivepopup "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
+        zenity --notification --text="ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
         sleep 3
         return
     fi
@@ -444,7 +444,7 @@ interaction_install_proton_ge_in_steam() {
         proton_ge_file=$(basename "$proton_ge_file_path")
     elif [[ $number_of_proton_ge == 0 ]]; then
         print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..." "error"
-        kdialog --title "Steam Deck Configurator" --passivepopup "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
+        zenity --notification --text="Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..."
         install_proton_ge_in_steam_run=no
         sleep 3
         return
@@ -497,7 +497,7 @@ fix_barrier() {
     systemctl --user start barrier
     systemctl --user status barrier
 
-    kdialog --msgbox "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
+    zenity --info --text="Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
 load_config() {
@@ -666,7 +666,7 @@ run_tasks() {
     ran_interactive_tasks=no
 
     if [[ -s "$configurator_dir/notices" ]]; then
-        kdialog --title "Notices - Steam Deck Configurator" --textbox "$configurator_dir/notices"
+        zenity --text-info --title="Notices - Steam Deck Configurator" --filename="$configurator_dir/notices"
         truncate -s 0 "$configurator_dir/notices"
     fi
 }
