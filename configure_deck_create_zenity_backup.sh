@@ -593,6 +593,14 @@ run_interactive_tasks() {
         qdbus $dbusRef /ProgressDialog org.kde.kdialog.ProgressDialog.value 0
     fi
 
+    #echo "#! /usr/bin/bash
+#source ./configure_deck_create_zenity.sh
+#(" > tasks_to_run
+#chmod +x tasks_to_run
+
+#    tasks_to_run="#! /usr/bin/bash
+#("
+
     tasks_to_run="("
 
     echo "${chosen_interactive_tasks[@]}"
@@ -608,10 +616,13 @@ set_tasks_to_run_interactive() {
     progress_amount="$(bc -l <<< "$percent*100")"
     tasks_to_run+="
 echo \"$progress_amount\""
+    #echo "echo \"$progress_amount\"" >> tasks_to_run
     tasks_to_run+="
 echo \"# interaction_$chosen_interactive_tasks\""
+    #echo "echo \"# interaction_$chosen_interactive_tasks\"" >> tasks_to_run
     tasks_to_run+="
 interaction_$chosen_interactive_task"
+    #echo interaction_$chosen_interactive_task >> tasks_to_run
 }
 
 set_tasks_to_run() {
@@ -624,6 +635,9 @@ echo \"$progress_amount\""
 echo \"# $chosen_task\""
     tasks_to_run+="
 $chosen_task"
+    #echo $chosen_task >> tasks_to_run
+    #$chosen_task
+    #qdbus $dbusRef Set "" value $task_number
 }
 
 
@@ -662,6 +676,14 @@ run_tasks() {
     done
     tasks_to_run+=") | zenity --progress"
     echo "$tasks_to_run"
+    #tasks_to_runction(){
+    #    $tasks_to_run
+    #}
+    #$tasks_to_run | zenity --progress
+    #zenity --progress < "$tasks_to_run"
+    #zenity --progress <<< "$tasks_to_run"
+    #echo ") | zenity --progress" >> tasks_to_run
+    #echo "$tasks_to_run" | xargs zenity --progress
     echo "$tasks_to_run" > run_zenity
     source run_zenity
 
