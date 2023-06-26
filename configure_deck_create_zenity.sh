@@ -674,7 +674,7 @@ run_tasks() {
     for chosen_task in "${chosen_tasks[@]}"; do
         set_tasks_to_run
     done
-    tasks_to_run+=")" # | zenity --progress"
+    tasks_to_run+=") | zenity --progress"
     echo "$tasks_to_run"
     #tasks_to_runction(){
     #    $tasks_to_run
@@ -684,6 +684,9 @@ run_tasks() {
     #zenity --progress <<< "$tasks_to_run"
     #echo ") | zenity --progress" >> tasks_to_run
     #echo "$tasks_to_run" | xargs zenity --progress
+    echo "$tasks_to_run" > run_zenity
+    source run_zenity
+
     ran_interactive_tasks=no
 
     if [[ -s "$configurator_dir/notices" ]]; then
