@@ -605,7 +605,7 @@ set_tasks_to_run_interactive() {
     tasks_to_run+="
 echo \"$progress_amount\""
     tasks_to_run+="
-echo \"# interaction_$chosen_interactive_tasks\""
+echo \"# interaction_$chosen_interactive_task\""
     tasks_to_run+="
 interaction_$chosen_interactive_task"
 }
