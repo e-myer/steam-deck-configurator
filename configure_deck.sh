@@ -646,10 +646,13 @@ run_tasks() {
     
     tasks_to_run="("
     
-    if [[ ! " ${chosen_tasks[*]} " =~ " load_config " ]]; then
-        if [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
-            number_of_tasks=1
-        elif [[ "$ran_interactive_tasks" != "yes" ]]; then
+    if [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
+        load_config
+    elif [[ " ${chosen_tasks[*]} " =~ " create_config " ]]; then
+        number_of_tasks=1
+        create_config
+    else
+        if [[ "$ran_interactive_tasks" != "yes" ]]; then
             run_interactive_tasks
         fi
 
@@ -659,8 +662,6 @@ run_tasks() {
         tasks_to_run+=") | zenity --progress"
         echo "$tasks_to_run" > run_zenity
         source run_zenity
-    else
-        load_config
     fi
 
     ran_interactive_tasks=no
