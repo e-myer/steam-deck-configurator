@@ -602,7 +602,7 @@ set_tasks_to_run_interactive() {
         ((task_number ++))
     fi
     percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
-    progress_amount="$(bc -l <<< "$percent*100")" #should this be quoted?
+    progress_amount="$(bc -l <<< "$percent*100")"
 
     tasks_to_run+="
 echo \"# interaction_$chosen_interactive_task\""
@@ -622,7 +622,7 @@ set_tasks_to_run() {
     fi
 
     percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
-    progress_amount="$(bc -l <<< "$percent*100")" #should this be quoted?
+    progress_amount="$(bc -l <<< "$percent*100")"
     
     tasks_to_run+="
 echo \"# $chosen_task\""
