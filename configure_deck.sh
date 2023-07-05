@@ -451,7 +451,7 @@ interaction_install_proton_ge_in_steam() {
     if [[ $number_of_proton_ge == 1 ]]; then
         proton_ge_file=$(basename "$configurator_dir"/GE-Proton*.tar.gz)
     elif [[ $number_of_proton_ge -gt 1 ]]; then
-        proton_ge_file_path=$( --zenityfile-selection --title="Select a ProtonGE version - Steam Deck Configurator" --filename="$configurator_dir/")
+        proton_ge_file_path=$( zenity --file-selection --title="Select a ProtonGE version - Steam Deck Configurator" --filename="$configurator_dir/")
         proton_ge_file=$(basename "$proton_ge_file_path")
     elif [[ $number_of_proton_ge == 0 ]]; then
         print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..." "error"
