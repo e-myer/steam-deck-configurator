@@ -1,7 +1,5 @@
 #! /usr/bin/bash
 
-#! /usr/bin/bash
-
 # Configures various functions in a Steam Deck.
 
 configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -675,7 +673,7 @@ run_tasks() {
 ) |
 zenity --progress --text=text --percentage=0"
         echo "#! /usr/bin/bash" > run_zenity
-        echo "source ./configure_deck.sh" >> run_zenity
+        echo "source ./functions.sh" >> run_zenity
         echo "$tasks_to_run" >> run_zenity
         chmod +x run_zenity
         ./run_zenity
