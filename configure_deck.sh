@@ -629,13 +629,13 @@ set_tasks_to_run() {
     progress_amount="$(bc -l <<< "$percent*100")"
 
     tasks_to_run+="
-echo \"$progress_amount\""
-    
-    tasks_to_run+="
 echo \"# $chosen_task\""
     
     tasks_to_run+="
 $chosen_task"
+
+    tasks_to_run+="
+echo \"$progress_amount\""
 }
 
 
@@ -662,11 +662,13 @@ run_tasks() {
             run_interactive_tasks
         fi
     tasks_to_run+="
-("
+(
+echo \"0\""
         for chosen_task in "${chosen_tasks[@]}"; do
             set_tasks_to_run
         done
         tasks_to_run+="
+echo \"# done\"
 ) |
 zenity --progress --text=text --percentage=0"
 #        echo "#! /usr/bin/bash" > run_zenity
