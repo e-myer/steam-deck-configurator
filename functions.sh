@@ -83,12 +83,12 @@ interaction_export_flatpaks() {
             ((number ++))
         fi
         #export_flatpaks_menu+=("$number" "$flatpak_name" off)
-        export_flatpaks_menu+=(FALSE \""$number"\" \""$flatpak_name"\")
+        export_flatpaks_menu+=(FALSE \""$number"\" \""$flatpak_name"\" \""${flatpak_ids[$number]}"\")
     done
     echo "${export_flatpaks_menu[@]}"
     #readarray -t chosen_export_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks to export" "${export_flatpaks_menu[@]}")
     #readarray -t chosen_export_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks to export" "${export_flatpaks_menu[@]}")
-    readarray -t chosen_export_flatpaks < <(echo "${export_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="status" --column="number" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to export")
+    readarray -t chosen_export_flatpaks < <(echo "${export_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="status" --column="number" --column="name" --column="id" --hide-column=4 --hide-column=2 --print-column=4 --print-column=ALL --separator=$'\n' --title="Select Flatpaks to export")
     #later make it like the flatpak link is in the dialog, but hidden, that is what is printed.
     #readarray -t chosen_export_flatpaks < <(zenity --height=800 --width=1280 --list --checklist --column="name" --separator=$'\n' --title="Select Flatpaks to export" "${export_flatpaks_menu[@]}")
 }
