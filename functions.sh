@@ -480,12 +480,14 @@ install_proton_ge_in_steam() {
     print_log "Proton GE installed, please restart Steam" "notice"
 }
 
-fix_barrier() {
-    print_log "Fixing Barrier"
+interaction_fix_barrier() {
     if ! zenity --title "Barrier Auto Config" --question --text="Are you using auto config for the ip address?"; then
         ip_address=$(zenity --entry --title "Fix Barrier - Steam Deck Configurator" --text="input server ip address from the barrier app")
     fi
+}
 
+fix_barrier() {
+    print_log "Fixing Barrier"
     touch "$HOME/.config/systemd/user/barrier.service"
 	cat <<- EOF > $HOME/.config/systemd/user/barrier.service
 	[Unit]
@@ -594,7 +596,7 @@ create_dialog() {
 }
 
 set_interactive_tasks() {
-    interactive_tasks=(import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install install_proton_ge_in_steam install_bauh create_config load_config)
+    interactive_tasks=(import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install install_proton_ge_in_steam install_bauh create_config load_config fix_barrier)
 }
 
 run_interactive_tasks() {
