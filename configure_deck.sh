@@ -604,7 +604,7 @@ run_interactive_tasks() {
     interactive_tasks=($(echo "${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
     chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
 
-    number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
+    number_of_tasks=${#chosen_tasks[@]}
 
     echo "${chosen_interactive_tasks[@]}"
     for chosen_interactive_task in "${chosen_interactive_tasks[@]}"; do
@@ -629,13 +629,13 @@ set_tasks_to_run() {
     progress_amount="$(bc -l <<< "$percent*100")"
 
     tasks_to_run+="
-echo \"$progress_amount\""
-    
-    tasks_to_run+="
 echo \"# $chosen_task\""
     
     tasks_to_run+="
 $chosen_task"
+
+    tasks_to_run+="
+echo \"$progress_amount\""
 }
 
 
@@ -662,22 +662,23 @@ run_tasks() {
             run_interactive_tasks
         fi
     tasks_to_run+="
-("
+(
+echo \"0\""
         for chosen_task in "${chosen_tasks[@]}"; do
             set_tasks_to_run
         done
         tasks_to_run+="
+echo \"# done\"
 ) |
 zenity --progress --text=text --percentage=0"
-        echo "#! /usr/bin/bash" > run_zenity
-        echo "$tasks_to_run" >> run_zenity
+        echo "$tasks_to_run" > run_zenity
         source run_zenity
     fi
 
     ran_interactive_tasks=no
 
     if [[ -s "$configurator_dir/notices" ]]; then
-        zenity --text-info --title="Notices - Steam Deck Configurator" --filename="$configurator_dir/notices"
+        zenity --text-info --height=800 --width=1280 --title="Notices - Steam Deck Configurator" --filename="$configurator_dir/notices"
         truncate -s 0 "$configurator_dir/notices"
     fi
 }
