@@ -671,7 +671,6 @@ echo \"0\""
 echo \"# done\"
 ) |
 zenity --progress --text=text --percentage=0"
-#        echo "#! /usr/bin/bash" > run_zenity
         echo "$tasks_to_run" > run_zenity
         source run_zenity
     fi
