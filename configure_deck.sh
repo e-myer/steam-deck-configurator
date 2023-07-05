@@ -678,7 +678,7 @@ zenity --progress --text=text --percentage=0"
     ran_interactive_tasks=no
 
     if [[ -s "$configurator_dir/notices" ]]; then
-        zenity --text-info --title="Notices - Steam Deck Configurator" --filename="$configurator_dir/notices"
+        zenity --text-info --height=800 --width=1280 --title="Notices - Steam Deck Configurator" --filename="$configurator_dir/notices"
         truncate -s 0 "$configurator_dir/notices"
     fi
 }
