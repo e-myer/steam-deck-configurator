@@ -604,7 +604,7 @@ run_interactive_tasks() {
     interactive_tasks=($(echo "${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
     chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
 
-    number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
+    number_of_tasks=${#chosen_tasks[@]}
 
     echo "${chosen_interactive_tasks[@]}"
     for chosen_interactive_task in "${chosen_interactive_tasks[@]}"; do
@@ -669,8 +669,8 @@ run_tasks() {
         tasks_to_run+="
 ) |
 zenity --progress --text=text --percentage=0"
-        echo "#! /usr/bin/bash" > run_zenity
-        echo "$tasks_to_run" >> run_zenity
+#        echo "#! /usr/bin/bash" > run_zenity
+        echo "$tasks_to_run" > run_zenity
         source run_zenity
     fi
 
