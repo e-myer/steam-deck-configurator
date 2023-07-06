@@ -571,7 +571,7 @@ create_config() {
         fi
     done
     print_log "Created config"
-    notify-send "Create Config - Steam Deck Configurator" --text="created config"
+    notify-send "Created config"
     
     for chosen_task in "${chosen_tasks[@]}"; do
         if [[ "$chosen_task" != "create_config" ]]; then
