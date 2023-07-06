@@ -387,14 +387,14 @@ install_refind_GUI() {
 interaction_install_refind_bootloader() {
     print_log "Install reifnd bootlader confirmation"
     if zenity --title "Install rEFInd Bootloader - Steam Deck Configurator" --question --text="It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"; then
-        install_refind=yes
+        install_refind_bootloader_run=yes
     else
-        install_refind=no
+        install_refind_bootloader_run=no
     fi
 }
 
 install_refind_bootloader() {
-    if [[ "$install_refind" != "yes" ]]; then
+    if [[ "$install_refind_bootloader_run" != "yes" ]]; then
         print_log "Didn't install refind" "error"
         return
     fi
@@ -608,7 +608,7 @@ run_interactive_tasks() {
 
     echo "${chosen_interactive_tasks[@]}"
     for chosen_interactive_task in "${chosen_interactive_tasks[@]}"; do
-        $chosen_interactive_task
+        "interaction_$chosen_interactive_task"
     done
     ran_interactive_tasks=yes
 }
@@ -638,7 +638,7 @@ echo \"$progress_amount\""
 run_tasks() {
     if [[ ${#chosen_tasks[@]} -eq 0 ]]; then
         echo "No tasks chosen, exiting..."
-        exit 0
+        #exit 0
     fi
     unset task_number
 
@@ -656,11 +656,15 @@ run_tasks() {
         if [[ "$ran_interactive_tasks" != "yes" ]]; then
             run_interactive_tasks
         fi
-    tasks_to_run+="
+        tasks_to_run+="
 (
 echo \"0\""
         for chosen_task in "${chosen_tasks[@]}"; do
-            set_tasks_to_run
+            variable_name="${chosen_task}_run"
+            value="${!variable_name}"
+            if [[ $value != "no" ]]; then
+                set_tasks_to_run
+            fi
         done
         tasks_to_run+="
 echo \"# done\"
