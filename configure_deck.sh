@@ -112,7 +112,7 @@ export_flatpaks() {
                     echo "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" > "$flatpaks_export_dir/flatpaks_exported_list"
             fi
         else
-            zenity --notification --text="export flatpaks error: $?"
+            notify-send "export flatpaks error: $?"
             print_log "export_flatpaks error $?" "error"
         fi
     done
@@ -255,15 +255,21 @@ install_flatpaks() {
     fi
 }
 
-install_bauh() {
-    print_log "Installing Bauh"
+interaction_install_bauh() {
     if [[ ! -f "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" ]]; then
         print_log "Bauh appimage doesn't exist in this folder, download it first, skipping..." "error"
-        zenity --notification --window-icon="info" --text="bauh appimage doesn't exist in this folder, download it first, skipping..."
+        notify-send "bauh appimage doesn't exist in this folder, download it first, skipping..."
         sleep 3
+        install_bauh_run=no
         return
     fi
+}
 
+install_bauh() {
+    if [[ $install_bauh_run == "no" ]]; then
+        return
+    fi
+    print_log "Installing Bauh"
     cp -v "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" "$HOME/Applications/"
     chmod -v +x "$HOME/Applications/bauh-0.10.5-x86_64.AppImage"
     cat <<- EOF > "$HOME/.local/share/applications/bauh.desktop"
@@ -342,7 +348,7 @@ install_cryoutilities() {
     fi
 
     print_log "Installing CryoUtilities... Please click on the \"ok\" button after it installs to continue"
-    zenity --notification --text="Installing CryoUtilities. Please click on the \"ok\" button after it installs to continue"
+    notify-send "Installing CryoUtilities. Please click on the \"ok\" button after it installs to continue"
     curl https://raw.githubusercontent.com/CryoByte33/steam-deck-utilities/main/install.sh --output "$configurator_dir/cryoutilities_install.sh"
     chmod -v +x "$configurator_dir/cryoutilities_install.sh"
     "$configurator_dir/cryoutilities_install.sh"
@@ -355,7 +361,7 @@ run_cryo_utilities_recommended() {
     fi
 
     print_log "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
-    zenity --info --title="Run CryoUtilities Recommended - Steam Deck Configurator" --text="Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
+    notify-send "Running Cryoutilities with recommended settings, please enter your sudo password in the terminal"
     sudo "$HOME/.cryo_utilities/cryo_utilities" recommended
 }
 
@@ -399,7 +405,7 @@ install_refind_bootloader() {
     fi
 
     print_log "Installing rEFInd bootloader, please input the sudo password when prompted"
-    zenity --notification --text="Installing rEFInd bootloader, please input the sudo password when prompted"
+    notify-send "Installing rEFInd bootloader, please input the sudo password when prompted"
     "$HOME/.SteamDeck_rEFInd/refind_install_pacman_GUI.sh"
 }
 
@@ -420,7 +426,7 @@ check_for_updates_proton_ge() {
     print_log "Checking for ProtonGE Updates"
     if ! compgen -G "$configurator_dir/GE-Proton*.tar.gz" > /dev/null; then
         print_log "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..." "error"
-        zenity --notification --text="ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
+        notify-send "ProtonGE is not downloaded, please download and place it in the $configurator_dir folder first, skipping..."
         sleep 3
         return
     fi
@@ -432,10 +438,10 @@ check_for_updates_proton_ge() {
     proton_ge_downloaded_version="$(basename $configurator_dir/GE-Proton*.tar.gz)"
     if [[ ! "$proton_ge_downloaded_version" == "$version.tar.gz" ]]; then
         print_log "ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
-        zenity --error --title="Check For ProtonGE Updates - Steam Deck Configurator" --text="ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
+        notify-send "Check For ProtonGE Updates - Steam Deck Configurator" --text="ProtonGE not up to date, \n Latest Version: $version.tar.gz \n Downloaded Version: $proton_ge_downloaded_version \n please download the latest version, and remove the currently downloaded version"
     else
         print_log "ProtonGE is up to date"
-        zenity --info --title="Check For ProtonGE Updates - Steam Deck Configurator" --text="ProtonGE is up to date"
+        notify-send "Check For ProtonGE Updates - Steam Deck Configurator" --text="ProtonGE is up to date"
     fi
 }
 
@@ -445,7 +451,7 @@ interaction_install_proton_ge_in_steam() {
     if [[ $number_of_proton_ge == 1 ]]; then
         proton_ge_file=$(basename "$configurator_dir"/GE-Proton*.tar.gz)
     elif [[ $number_of_proton_ge -gt 1 ]]; then
-        proton_ge_file_path=$(zenity --file-selection --title="Select a ProtonGE version - Steam Deck Configurator" --filename="$configurator_dir/")
+        proton_ge_file_path=$( zenity --file-selection --title="Select a ProtonGE version - Steam Deck Configurator" --filename="$configurator_dir/")
         proton_ge_file=$(basename "$proton_ge_file_path")
     elif [[ $number_of_proton_ge == 0 ]]; then
         print_log "Proton GE doesn't exist in this folder, please download and place it in the $configurator_dir first, skipping..." "error"
@@ -474,12 +480,14 @@ install_proton_ge_in_steam() {
     print_log "Proton GE installed, please restart Steam" "notice"
 }
 
-fix_barrier() {
-    print_log "Fixing Barrier"
+interaction_fix_barrier() {
     if ! zenity --title "Barrier Auto Config" --question --text="Are you using auto config for the ip address?"; then
         ip_address=$(zenity --entry --title "Fix Barrier - Steam Deck Configurator" --text="input server ip address from the barrier app")
     fi
+}
 
+fix_barrier() {
+    print_log "Fixing Barrier"
     touch "$HOME/.config/systemd/user/barrier.service"
 	cat <<- EOF > $HOME/.config/systemd/user/barrier.service
 	[Unit]
@@ -502,10 +510,10 @@ fix_barrier() {
     systemctl --user start barrier
     systemctl --user status barrier
 
-    zenity --info --text="Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
+    notify-send "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
-load_config() {
+interaction_load_config() {
     print_log "Load config"
     if [[ -d "$configurator_dir/configs" ]]; then
         set_menu
@@ -531,7 +539,11 @@ load_config() {
     fi
 }
 
-create_config() {
+load_config() {
+echo "load config"
+}
+
+interaction_create_config() {
     print_log "Create config"
     if [[ ${#chosen_tasks[@]} == 1 ]]; then
         zenity --error --title="Create Config - Steam Deck Configurator" --text="Please choose the tasks to save as a config."
@@ -542,7 +554,6 @@ create_config() {
         mkdir "$configurator_dir/configs"
     fi
     
-    local config
     if ! config=$(zenity --file-selection --save --title="Select a File - Create Config - Steam Deck Configurator" --filename="$configurator_dir/configs/"); then
         print_log "Cancelled"
         for chosen_task in "${chosen_tasks[@]}"; do
@@ -553,7 +564,9 @@ create_config() {
         chosen_tasks=()
         return
     fi
+}
 
+create_config() {
     for chosen_task in "${chosen_tasks[@]}"; do
         if [[ ! "$chosen_task" == "create_config" ]]; then
             if [[ ! "$create_config_ran" == 1 ]]; then
@@ -565,7 +578,7 @@ create_config() {
         fi
     done
     print_log "Created config"
-    zenity --info --title "Create Config - Steam Deck Configurator" --text="created config"
+    notify-send "Create Config - Steam Deck Configurator" --text="created config"
     
     for chosen_task in "${chosen_tasks[@]}"; do
         if [[ "$chosen_task" != "create_config" ]]; then
@@ -583,7 +596,7 @@ create_dialog() {
 }
 
 set_interactive_tasks() {
-    interactive_tasks=(import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install install_proton_ge_in_steam)
+    interactive_tasks=(import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install install_proton_ge_in_steam install_bauh create_config load_config fix_barrier)
 }
 
 run_interactive_tasks() {
@@ -591,7 +604,7 @@ run_interactive_tasks() {
     interactive_tasks=($(echo "${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
     chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
 
-    number_of_tasks=$((${#chosen_interactive_tasks[@]}+${#chosen_tasks[@]}))
+    number_of_tasks=${#chosen_tasks[@]}
 
     echo "${chosen_interactive_tasks[@]}"
     for chosen_interactive_task in "${chosen_interactive_tasks[@]}"; do
@@ -601,20 +614,8 @@ run_interactive_tasks() {
 }
 
 set_tasks_to_run_interactive() {
-    if [[ -z "$task_number" ]]; then
-        task_number=1
-    else
-        ((task_number ++))
-    fi
-    percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
-    progress_amount="$(bc -l <<< "$percent*100")"
-    tasks_to_run+="
-echo \"$progress_amount\""
-    tasks_to_run+="
-echo \"# interaction_$chosen_interactive_task\""
     tasks_to_run+="
 interaction_$chosen_interactive_task"
-export -f "interaction_$chosen_interactive_task"
 }
 
 set_tasks_to_run() {
@@ -628,17 +629,13 @@ set_tasks_to_run() {
     progress_amount="$(bc -l <<< "$percent*100")"
 
     tasks_to_run+="
-echo \"$progress_amount\""
-    
-    tasks_to_run+="
 echo \"# $chosen_task\""
     
     tasks_to_run+="
 $chosen_task"
-## shellcheck disable=SC2163
-#export -f "$chosen_task"
-#export -f "$chosen_task"
-#chosen_task
+
+    tasks_to_run+="
+echo \"$progress_amount\""
 }
 
 
@@ -646,7 +643,7 @@ $chosen_task"
 run_tasks() {
     if [[ ${#chosen_tasks[@]} -eq 0 ]]; then
         echo "No tasks chosen, exiting..."
-      #  exit 0
+        exit 0
     fi
     unset task_number
 
@@ -654,7 +651,6 @@ run_tasks() {
         set_menu
     fi
     
-    tasks_to_run="("
     
     if [[ " ${chosen_tasks[*]} " =~ " load_config " ]]; then
         load_config
@@ -665,25 +661,24 @@ run_tasks() {
         if [[ "$ran_interactive_tasks" != "yes" ]]; then
             run_interactive_tasks
         fi
-
+    tasks_to_run+="
+(
+echo \"0\""
         for chosen_task in "${chosen_tasks[@]}"; do
             set_tasks_to_run
         done
         tasks_to_run+="
+echo \"# done\"
 ) |
 zenity --progress --text=text --percentage=0"
-        echo "#! /usr/bin/bash" > run_zenity
-        echo "source ./functions.sh" >> run_zenity
-        echo "$tasks_to_run" >> run_zenity
-        chmod +x run_zenity
-        ./run_zenity
-        #source run_zenity
+        echo "$tasks_to_run" > run_zenity
+        source run_zenity
     fi
 
     ran_interactive_tasks=no
 
     if [[ -s "$configurator_dir/notices" ]]; then
-        zenity --text-info --title="Notices - Steam Deck Configurator" --filename="$configurator_dir/notices"
+        zenity --text-info --height=800 --width=1280 --title="Notices - Steam Deck Configurator" --filename="$configurator_dir/notices"
         truncate -s 0 "$configurator_dir/notices"
     fi
 }
