@@ -475,7 +475,7 @@ install_proton_ge_in_steam() {
         return
     fi
     
-    mkdir -p $HOME/.steam/root/compatibilitytools.d
+    mkdir -p "$HOME/.steam/root/compatibilitytools.d"
     tar -xf "$configurator_dir/$proton_ge_file" -C $HOME/.steam/root/compatibilitytools.d/
     print_log "Proton GE installed, please restart Steam" "notice"
 }
@@ -608,14 +608,9 @@ run_interactive_tasks() {
 
     echo "${chosen_interactive_tasks[@]}"
     for chosen_interactive_task in "${chosen_interactive_tasks[@]}"; do
-        set_tasks_to_run_interactive
+        $chosen_interactive_task
     done
     ran_interactive_tasks=yes
-}
-
-set_tasks_to_run_interactive() {
-    tasks_to_run+="
-interaction_$chosen_interactive_task"
 }
 
 set_tasks_to_run() {
