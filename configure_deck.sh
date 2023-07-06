@@ -513,7 +513,7 @@ fix_barrier() {
     notify-send "Applied fix, turn off SSL on both the server and host, if Barrier still doesn't work, check if you are connected on the same wifi network, and set windows resolution to 100%"
 }
 
-interaction_load_config() {
+load_config() {
     print_log "Load config"
     if [[ -d "$configurator_dir/configs" ]]; then
         set_menu
@@ -539,11 +539,7 @@ interaction_load_config() {
     fi
 }
 
-load_config() {
-echo "load config"
-}
-
-interaction_create_config() {
+create_config() {
     print_log "Create config"
     if [[ ${#chosen_tasks[@]} == 1 ]]; then
         zenity --error --title="Create Config - Steam Deck Configurator" --text="Please choose the tasks to save as a config."
@@ -564,9 +560,6 @@ interaction_create_config() {
         chosen_tasks=()
         return
     fi
-}
-
-create_config() {
     for chosen_task in "${chosen_tasks[@]}"; do
         if [[ ! "$chosen_task" == "create_config" ]]; then
             if [[ ! "$create_config_ran" == 1 ]]; then
@@ -596,7 +589,7 @@ create_dialog() {
 }
 
 set_interactive_tasks() {
-    interactive_tasks=(import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install install_proton_ge_in_steam install_bauh create_config load_config fix_barrier)
+    interactive_tasks=(import_flatpaks export_flatpaks install_refind_bootloader install_flatpaks save_flatpaks_install install_proton_ge_in_steam install_bauh fix_barrier)
 }
 
 run_interactive_tasks() {
