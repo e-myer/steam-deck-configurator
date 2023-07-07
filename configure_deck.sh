@@ -385,8 +385,8 @@ install_refind_GUI() {
 }
 
 interaction_install_refind_bootloader() {
-    print_log "Install reifnd bootlader confirmation"
-    if zenity --title "Install rEFInd Bootloader - Steam Deck Configurator" --question --text="It is recommended to install the rEFInd bootloader after installing other operating systems, install the refind bootloader?"; then
+    print_log "Install rEFInd bootlader confirmation"
+    if zenity --title "Install rEFInd Bootloader - Steam Deck Configurator" --question --text="It is recommended to install the rEFInd bootloader after installing other operating systems, install the rEFInd bootloader?"; then
         install_refind_bootloader_run=yes
     else
         install_refind_bootloader_run=no
@@ -395,7 +395,7 @@ interaction_install_refind_bootloader() {
 
 install_refind_bootloader() {
     if [[ "$install_refind_bootloader_run" != "yes" ]]; then
-        print_log "Didn't install refind" "error"
+        print_log "Didn't install rEFInd" "error"
         return
     fi
 
