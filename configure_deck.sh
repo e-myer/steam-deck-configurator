@@ -88,7 +88,6 @@ interaction_export_flatpaks() {
         fi
         export_flatpaks_menu+=(FALSE \""$number"\" \""$flatpak_name"\")
     done
-    echo "${export_flatpaks_menu[@]}"
     readarray -t chosen_export_flatpaks < <(echo "${export_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="status" --column="number" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to export")
 }
 
@@ -239,7 +238,6 @@ interaction_install_flatpaks() {
 
     readarray -t chosen_install_flatpaks < <(echo "${install_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="status" --column="link" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to install")
 
-    echo "${chosen_install_flatpaks[@]}"
 }
 
 install_flatpaks() {
@@ -603,9 +601,7 @@ run_interactive_tasks() {
         number_of_tasks=${#chosen_tasks[@]}
     fi
 
-    echo "number_of_tasks is $number_of_tasks"
 
-    echo "${chosen_interactive_tasks[@]}"
     for chosen_interactive_task in "${chosen_interactive_tasks[@]}"; do
         "interaction_$chosen_interactive_task"
     done
@@ -639,7 +635,7 @@ echo \"$progress_amount\""
 run_tasks() {
     if [[ ${#chosen_tasks[@]} -eq 0 ]]; then
         echo "No tasks chosen, exiting..."
-        #exit 0
+        exit 0
     fi
     unset task_number
 
