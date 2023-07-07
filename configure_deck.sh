@@ -229,10 +229,12 @@ interaction_install_flatpaks() {
     done
 
     for key in "${order[@]}"; do
-        install_flatpaks_menu+=("${flatpaks_install_array[$key]}" "$key" off)
+        install_flatpaks_menu+=(FALSE \""${flatpaks_install_array[$key]}"\" \""$key"\")
     done
 
-    readarray -t chosen_install_flatpaks < <(kdialog --title "Choose Flatpaks to Install - Steam Deck Configurator" --separate-output --checklist "Select Flatpaks to install" "${install_flatpaks_menu[@]}")
+    readarray -t chosen_install_flatpaks < <(echo "${install_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="status" --column="link" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to install")
+
+    echo "${chosen_install_flatpaks[@]}"
 }
 
 install_flatpaks() {
@@ -632,7 +634,7 @@ echo \"$progress_amount\""
 run_tasks() {
     if [[ ${#chosen_tasks[@]} -eq 0 ]]; then
         echo "No tasks chosen, exiting..."
-        exit 0
+        #exit 0
     fi
     unset task_number
 
