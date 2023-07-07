@@ -614,12 +614,8 @@ set_tasks_to_run() {
         ((task_number ++))
     fi
 
-    #percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
-    #progress_amount="$(bc -l <<< "$percent*100")"
-
     percent=$(calc $task_number/$number_of_tasks)
     progress_amount=$(calc $percent*100)
-
 
     tasks_to_run+="
 echo \"# $chosen_task\""
