@@ -141,10 +141,12 @@ interaction_import_flatpaks() {
     done
 
     for key in "${order[@]}"; do
-        import_flatpaks_menu+=("${flatpaks_import_array[$key]}" "$key" off)
+        #import_flatpaks_menu+=("${flatpaks_import_array[$key]}" "$key" off)
+        import_flatpaks_menu+=(FALSE \""${flatpaks_import_array[$key]}"\" \""$key"\")
     done
 
-    readarray -t chosen_import_flatpaks < <(kdialog --separate-output --checklist "Select Flatpaks to import" "${import_flatpaks_menu[@]}")
+    readarray -t chosen_import_flatpaks < <(echo "${import_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="status" --column="link" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to import")
+
 }
 
 import_flatpaks() {
@@ -184,10 +186,10 @@ interaction_save_flatpaks_install() {
         else
             ((number ++))
         fi
-        save_flatpaks_menu+=("$number" "$flatpak_name" off)
+        save_flatpaks_menu+=(FALSE "$number" "$flatpak_name")
     done
-    
-    readarray -t chosen_save_flatpaks < <(kdialog --title "Choose Flatpaks to Save - Steam Deck Configurator" --separate-output --checklist "Select Flatpaks to save" "${save_flatpaks_menu[@]}")
+
+    readarray -t chosen_save_flatpaks < <(echo "${save_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="status" --column="number" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to save")
 }
 
 save_flatpaks_install() {
