@@ -667,6 +667,7 @@ zenity --progress --text=text --percentage=0"
         source run_zenity
     fi
 
+    unset tasks_to_run
     ran_interactive_tasks=no
 
     if [[ -s "$configurator_dir/notices" ]]; then
