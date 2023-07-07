@@ -592,7 +592,11 @@ run_interactive_tasks() {
     interactive_tasks=($(echo "${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq))
     chosen_interactive_tasks=($(echo "${sorted_chosen_tasks[@]} ${interactive_tasks[@]}" | sed 's/ /\n/g' | sort | uniq -d))
 
-    number_of_tasks=${#chosen_tasks[@]}
+    if [[ -z "$number_of_tasks" ]]; then
+        number_of_tasks=${#chosen_tasks[@]}
+    fi
+
+    echo "number_of_tasks is $number_of_tasks"
 
     echo "${chosen_interactive_tasks[@]}"
     for chosen_interactive_task in "${chosen_interactive_tasks[@]}"; do
@@ -601,6 +605,8 @@ run_interactive_tasks() {
     ran_interactive_tasks=yes
 }
 
+calc() { awk "BEGIN{ printf \"%.2f\n\", $* }"; }
+
 set_tasks_to_run() {
     if [[ -z "$task_number" ]]; then
         task_number=1
@@ -608,8 +614,12 @@ set_tasks_to_run() {
         ((task_number ++))
     fi
 
-    percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
-    progress_amount="$(bc -l <<< "$percent*100")"
+    #percent=$(bc -l <<< "scale=2; $task_number/$number_of_tasks")
+    #progress_amount="$(bc -l <<< "$percent*100")"
+
+    percent=$(calc $task_number/$number_of_tasks)
+    progress_amount=$(calc $percent*100)
+
 
     tasks_to_run+="
 echo \"# $chosen_task\""
@@ -652,6 +662,10 @@ echo \"0\""
             value="${!variable_name}"
             if [[ $value != "no" ]]; then
                 set_tasks_to_run
+            else
+                number_of_tasks=$(( number_of_tasks - 1 ))
+                #task_number=$(( task_number - 1 ))
+                echo "$value is no"
             fi
         done
         tasks_to_run+="
