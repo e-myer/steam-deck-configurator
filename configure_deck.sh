@@ -29,6 +29,10 @@ add_flathub() {
 }
 
 list_flatpaks() {
+    flatpaks=()
+    flatpak_names=()
+    flatpak_ids=()
+
     readarray -t flatpak_names_unsorted < <(flatpak list --app --columns=name)
     readarray -t flatpak_ids_unsorted < <(flatpak list --app --columns=application)
 
@@ -186,7 +190,7 @@ interaction_save_flatpaks_install() {
         else
             ((number ++))
         fi
-        save_flatpaks_menu+=(FALSE "$number" "$flatpak_name")
+        save_flatpaks_menu+=(FALSE \""$number"\" \""$flatpak_name"\")
     done
 
     readarray -t chosen_save_flatpaks < <(echo "${save_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="status" --column="number" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to save")
