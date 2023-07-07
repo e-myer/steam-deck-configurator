@@ -88,7 +88,7 @@ interaction_export_flatpaks() {
         fi
         export_flatpaks_menu+=(FALSE \""$number"\" \""$flatpak_name"\")
     done
-    readarray -t chosen_export_flatpaks < <(echo "${export_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="status" --column="number" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to export")
+    readarray -t chosen_export_flatpaks < <(echo "${export_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="checkbox" --column="number" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to export")
 }
 
 export_flatpaks() {
@@ -147,7 +147,7 @@ interaction_import_flatpaks() {
         import_flatpaks_menu+=(FALSE \""${flatpaks_import_array[$key]}"\" \""$key"\")
     done
 
-    readarray -t chosen_import_flatpaks < <(echo "${import_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="status" --column="link" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to import")
+    readarray -t chosen_import_flatpaks < <(echo "${import_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="checkbox" --column="link" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to import")
 
 }
 
@@ -191,7 +191,7 @@ interaction_save_flatpaks_install() {
         save_flatpaks_menu+=(FALSE \""$number"\" \""$flatpak_name"\")
     done
 
-    readarray -t chosen_save_flatpaks < <(echo "${save_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="status" --column="number" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to save")
+    readarray -t chosen_save_flatpaks < <(echo "${save_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="checkbox" --column="number" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to save")
 }
 
 save_flatpaks_install() {
@@ -236,7 +236,7 @@ interaction_install_flatpaks() {
         install_flatpaks_menu+=(FALSE \""${flatpaks_install_array[$key]}"\" \""$key"\")
     done
 
-    readarray -t chosen_install_flatpaks < <(echo "${install_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="status" --column="link" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to install")
+    readarray -t chosen_install_flatpaks < <(echo "${install_flatpaks_menu[@]}" | xargs zenity --height=800 --width=1280 --list --checklist --column="checkbox" --column="link" --column="name" --hide-column=2 --print-column=2 --separator=$'\n' --title="Select Flatpaks to install")
 
 }
 
