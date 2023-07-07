@@ -660,12 +660,16 @@ echo \"0\""
         for chosen_task in "${chosen_tasks[@]}"; do
             variable_name="${chosen_task}_run"
             value="${!variable_name}"
+            if [[ $value == "no" ]]; then
+                number_of_tasks=$(( number_of_tasks - 1 ))
+            fi
+        done
+        
+        for chosen_task in "${chosen_tasks[@]}"; do
+            variable_name="${chosen_task}_run"
+            value="${!variable_name}"
             if [[ $value != "no" ]]; then
                 set_tasks_to_run
-            else
-                number_of_tasks=$(( number_of_tasks - 1 ))
-                #task_number=$(( task_number - 1 ))
-                echo "$value is no"
             fi
         done
         tasks_to_run+="
