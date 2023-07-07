@@ -145,7 +145,6 @@ interaction_import_flatpaks() {
     done
 
     for key in "${order[@]}"; do
-        #import_flatpaks_menu+=("${flatpaks_import_array[$key]}" "$key" off)
         import_flatpaks_menu+=(FALSE \""${flatpaks_import_array[$key]}"\" \""$key"\")
     done
 
