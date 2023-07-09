@@ -62,7 +62,7 @@ update_flatpaks() {
         return
     fi
 
-    flatpak update -y > "$current_tty"
+    flatpak update -y &> "$current_tty"
 }
 
 interaction_export_flatpaks() {
