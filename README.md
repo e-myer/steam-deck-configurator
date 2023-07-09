@@ -57,7 +57,7 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
 
 - To add a task
   - Create a function in the functions.sh file
-  - Add the name of the function to the "set_menu" function in the "menu" variable. Like this `"function_name" "Function Title" off`, replacing "function title" and "function name" with the function's title and name.
+  - Add the name of the function to the "set_menu" function in the "menu" variable. Like this `FALSE "function_name" "Function Title"`, replacing "function title" and "function name" with the function's title and name.
   - If the task is at the very end of the list, then move the single apostrophe to the end.
 
 - To remove a task from the dialog
