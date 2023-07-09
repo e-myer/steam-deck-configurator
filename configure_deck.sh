@@ -57,7 +57,7 @@ update_flatpaks() {
     list_flatpaks
 
     if [[ ${#flatpak_names[@]} == 0 ]]; then
-        print_log "Error, no Flatpaks installed" "error"
+        print_log "Update Flatpaks - Error, no Flatpaks installed" "error"
         sleep 3
         return
     fi
@@ -71,7 +71,7 @@ interaction_export_flatpaks() {
     list_flatpaks
 
     if [[ ${#flatpak_names[@]} == 0 ]]; then
-        print_log "Error, no Flatpaks installed" "error"
+        print_log "Export Flatpaks - Error, no Flatpaks installed" "error"
         export_flatpaks_run=no
         return
     fi
@@ -131,7 +131,7 @@ interaction_import_flatpaks() {
     unset order
     local -A flatpaks_import_array
     if [[ ! -f "$flatpaks_import_dir/flatpaks_exported_list" ]]; then
-        print_log "No exported Flatpak found" "error"
+        print_log "Import Flatpaks - Error - no exported Flatpak found" "error"
         import_flatpaks_run=no
         return
     fi
@@ -179,7 +179,7 @@ interaction_save_flatpaks_install() {
     list_flatpaks
 
     if [[ ${#flatpak_names[@]} == 0 ]]; then
-        print_log "Error, no Flatpaks installed" "error"
+        print_log "Save Flatpaks List - error, no Flatpaks installed" "error"
         save_flatpaks_install_run=no
         return
     fi
@@ -397,12 +397,12 @@ interaction_install_refind_bootloader() {
 
 install_refind_bootloader() {
     if [[ "$install_refind_bootloader_run" != "yes" ]]; then
-        print_log "Didn't install rEFInd" "error"
+        print_log "Install rEFInd Bootloader Error - Didn't install rEFInd" "error"
         return
     fi
 
     if [[ ! -d "$HOME/.SteamDeck_rEFInd" ]]; then
-        print_log "rEFInd isn't installed, install the GUI first" "error"
+        print_log "Install rEFInd Bootloader Error - rEFInd GUI isn't installed, install the GUI first" "error"
         return
     fi
 
