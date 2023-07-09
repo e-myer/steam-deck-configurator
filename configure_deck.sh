@@ -2,6 +2,7 @@
 
 # Configures various functions in a Steam Deck.
 
+# A portion of the following line has been taken from here: https://stackoverflow.com/a/246128
 configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 current_tty=$(tty)
@@ -275,6 +276,7 @@ install_bauh() {
     print_log "Installing Bauh"
     cp -v "$configurator_dir/applications/bauh-0.10.5-x86_64.AppImage" "$HOME/Applications/"
     chmod -v +x "$HOME/Applications/bauh-0.10.5-x86_64.AppImage"
+    # The text for the desktop file has been taken from the Bauh Repo: https://github.com/vinifmor/bauh/blob/master/bauh/desktop/bauh.desktop
     cat <<- EOF > "$HOME/.local/share/applications/bauh.desktop"
 	[Desktop Entry]
 	Type=Application
@@ -611,6 +613,7 @@ run_interactive_tasks() {
     ran_interactive_tasks=yes
 }
 
+# The following function was taken from this post: https://stackoverflow.com/a/42798975
 calc() { awk "BEGIN{ printf \"%.2f\n\", $* }"; }
 
 set_tasks_to_run() {
