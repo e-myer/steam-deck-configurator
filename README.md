@@ -84,6 +84,6 @@ Go into the steam-deck-configurator directory and run `./configure_deck.sh` in a
 
 ## Credits
 - This project includes code from [CryoByte33's steam-deck-utilities](https://github.com/CryoByte33/steam-deck-utilities/blob/main/LICENSE). The line to install CryoUtilities has been copied and modified from the desktop file in his repo.
-- This project includes the Bauh desktop file and the Bauh icon, copied from the [Bauh repo](https://github.com/vinifmor/bauh)
+- This project includes text from the Bauh desktop file and the Bauh icon, copied from the [Bauh repo](https://github.com/vinifmor/bauh)
 - This project includes a dualboot config file created by [jlobue10's SteamDeck_rEFInd tool](https://github.com/jlobue10/SteamDeck_rEFInd), and OS Icons, taken from his [repo](https://github.com/jlobue10/SteamDeck_rEFInd)
 - Credit to jlobue10 for creating the [SteamDeck_rEFInd script](https://github.com/jlobue10/SteamDeck_rEFInd). This project uses my fork, which only contains some minor edits to make it compatible with this repo.
