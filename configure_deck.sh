@@ -585,7 +585,7 @@ create_config() {
 
 create_dialog() {
     while true; do
-        readarray -t chosen_tasks < <(echo $menu | xargs zenity --height=800 --width=1280 --list --checklist --column="" --column="command" --column="Task" --hide-column=2 --print-column=2 --separator=$'\n')
+        readarray -t chosen_tasks < <(echo $menu | xargs zenity --height=800 --width=1280 --list --checklist --column="" --column="command" --column="Tasks" --hide-column=2 --print-column=2 --separator=$'\n')
         run_tasks
     done
 }
