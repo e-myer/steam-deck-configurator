@@ -691,8 +691,8 @@ zenity --progress --text=text --percentage=0"
 }
 
 set_menu() {
-    menu='FALSE "load_config" "Load Config" ""
-    FALSE "create_config" "Create Config" "Select all tasks to be included in the config and select create config"
+    menu='FALSE "load_config" "Load Config" "Load selection, you can select multiple configs"
+    FALSE "create_config" "Create Config" "Save a selection, select all tasks to be included in the config and select create config"
     FALSE "add_flathub" "Add Flathub if it does not exist" ""
     FALSE "update_flatpaks" "Update Flatpaks" ""
     FALSE "import_flatpaks" "Import Flatpaks" ""
