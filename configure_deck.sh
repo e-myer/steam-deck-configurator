@@ -4,6 +4,8 @@
 
 configurator_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+current_tty=$(tty)
+
 print_log() {
     log_message=$1
     log="$task_number/$number_of_tasks: $task - $log_message"
@@ -60,7 +62,7 @@ update_flatpaks() {
         return
     fi
 
-    flatpak update -y
+    flatpak update -y > "$current_tty"
 }
 
 interaction_export_flatpaks() {
@@ -250,7 +252,7 @@ install_flatpaks() {
     else
         for chosen_install_flatpak in "${chosen_install_flatpaks[@]}"; do
             print_log "Installing $chosen_install_flatpak"
-            flatpak install flathub $chosen_install_flatpak -y
+            flatpak install flathub $chosen_install_flatpak -y &> "$current_tty"
         done
     fi
 }
