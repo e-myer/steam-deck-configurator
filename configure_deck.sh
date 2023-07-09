@@ -112,8 +112,9 @@ export_flatpaks() {
                     echo "${flatpak_names[$chosen_export_flatpak]}=${flatpak_ids[$chosen_export_flatpak]}" > "$flatpaks_export_dir/flatpaks_exported_list"
             fi
         else
-            notify-send "export flatpaks error: $?"
-            print_log "export_flatpaks error $?" "error"
+            error_code=$?
+            notify-send "export flatpaks error: $error_code"
+            print_log "export_flatpaks error $error_code" "error"
         fi
     done
 }
