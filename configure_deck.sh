@@ -345,7 +345,7 @@ uninstall_deckyloader() {
 install_cryoutilities() {
     print_log "Checking if CryoUtilities is installed"
     if [[ -d "$HOME/.cryo_utilities" ]]; then
-        print_log "CryoUtilities is already installed"
+        print_log "CryoUtilities is already installed" "error"
         return
     fi
 
